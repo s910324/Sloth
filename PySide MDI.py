@@ -1,6 +1,7 @@
 import sys
 from PySide.QtCore import *
 from PySide.QtGui import *
+from PySide.QtGui import QFont as QFont
 import matplotlib
 #matplotlib.use('Qt4Agg')
 import pylab
@@ -58,9 +59,7 @@ class MainWindow(QMainWindow):
         self.addToolBar( Qt.BottomToolBarArea , self.plotbar)
         
         plotAction = QAction('Exit', self)
-        
         self.plotbar.addAction(plotAction)
-
 
         exitAction = QAction('Exit', self)
         openAction = QAction('Open', self)
@@ -101,6 +100,15 @@ class MainWindow(QMainWindow):
         SubWinTitle = "Untitled " + str(self.globalVal[0])
         subWinHandle.setWindowTitle(SubWinTitle)
         self.listView.addItem(SubWinTitle)
+        TableHandle.setRowCount(200)
+        TableHandle.setColumnCount(3)
+        for i in range(3):
+            for j in range(3):
+                headerItem = QTableWidgetItem('')
+                headerItem.setBackground(QColor('#2222ff'))
+                headerFont = QFont("Times", 8, QFont.Normal)
+                headerItem.setFont(headerFont)
+                TableHandle.setItem(i, j, headerItem)
             
         
     def OpenFile(self):
@@ -123,7 +131,17 @@ class MainWindow(QMainWindow):
                 ColNum = len(FileRow)
         TableHandle.setRowCount(RowNum)
         TableHandle.setColumnCount(ColNum)
-        for i in range(RowNum):
+        for i in range(3):
+            for j in range(ColNum):
+                if j < len(ReadFileArray[i]):
+                    headerItem = QTableWidgetItem(ReadFileArray[i][j])
+                else:
+                    headerItem = QTableWidgetItem('')
+                headerItem.setBackground(QColor('#2222ff'))
+                headerFont = QFont("Times", 8, QFont.Normal)
+                headerItem.setFont(headerFont)
+                TableHandle.setItem(i, j, headerItem)
+        for i in range(3, RowNum):
             for j in range(len(ReadFileArray[i])):
                 TableHandle.setItem(i, j, QTableWidgetItem(ReadFileArray[i][j]))
         FileContainer.close()
@@ -135,19 +153,14 @@ class MainWindow(QMainWindow):
         print 'b'
         
     def CreateTableSub(self):
-        
         w = QMainWindow()
         self.mdiArea.addSubWindow(w)
         tableWidget = QTableWidget()
-        tableWidget.setRowCount(100)
-        tableWidget.setColumnCount(3)
         w.setCentralWidget(tableWidget)
         tableWidget.setStyleSheet(" ")
-        tableWidget.setStyleSheet(" QTableView::item { background-color: #fFFFFF; } QTableView { background: #E0DFE3; }")
-       
+       #tableWidget.setStyleSheet(" QTableView::item { background-color: #FFFFFF;selection-background-color: red; } QTableView { background: #E0DFE3;} ")
         w.setAttribute(Qt.WA_DeleteOnClose)
         w.showMaximized()
-        
         return tableWidget, w
         
     def PlotData(self):
@@ -161,18 +174,15 @@ class MainWindow(QMainWindow):
             plotArrayX.append(float(b[i].text()))
         for i in range(len(b)/2, len(b)):
             plotArrayY.append(float(b[i].text()))
-        
         for i in range(len(b)/2):
             ary.append([plotArrayX[i], plotArrayY[i]])
-        
         print ary
 
         p = QMainWindow()
         subWinHandle = self.mdiArea.currentSubWindow()
         p.setWindowTitle('[plot]' + subWinHandle.windowTitle())
         tableHandle = subWinHandle.widget().centralWidget()
-        tableHandle.setItem(1,1, QTableWidgetItem('aaa'))        
-        
+
         self.mdiArea.addSubWindow(p)
         fig = Figure(figsize=(60,60),  facecolor=(1,1,1), edgecolor=(0,0,0))
         ax = fig.add_subplot(111)
