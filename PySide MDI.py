@@ -8,6 +8,7 @@ import pylab
 
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         self.globalVal = [0]
@@ -160,6 +161,7 @@ class MainWindow(QMainWindow):
         tableWidget.setStyleSheet(" ")
        #tableWidget.setStyleSheet(" QTableView::item { background-color: #FFFFFF;selection-background-color: red; } QTableView { background: #E0DFE3;} ")
         w.setAttribute(Qt.WA_DeleteOnClose)
+        w.setMinimumSize(QSize(250,250));
         w.showMaximized()
         return tableWidget, w
         
@@ -170,13 +172,18 @@ class MainWindow(QMainWindow):
         subWinHandle = self.mdiArea.currentSubWindow()
         tableHandle = subWinHandle.widget().centralWidget()
         b =  tableHandle.selectedItems()
+        for i in range(len(tableHandle.selectedIndexes())):
+            coordinate = ((str(tableHandle.selectedIndexes()[i]).split('<PySide.QtCore.QModelIndex('))[1].split('QTableModel')[0]).split(',')
+            print coordinate[0], coordinate[1]
+            
+            
         for i in range(len(b)/2):
             plotArrayX.append(float(b[i].text()))
         for i in range(len(b)/2, len(b)):
             plotArrayY.append(float(b[i].text()))
         for i in range(len(b)/2):
             ary.append([plotArrayX[i], plotArrayY[i]])
-        print ary
+        #print ary
 
         p = QMainWindow()
         subWinHandle = self.mdiArea.currentSubWindow()
@@ -198,3 +205,18 @@ if __name__ == '__main__':
     frame.show()    
     app.exec_()
     sys.exit
+    
+    
+    
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.arange(0, 5, 0.1);
+y1 = np.sin(x)
+y2 = np.cos(x)
+plt.plot(x, y1)
+plt.plot(x, y2)
+plt.show()
+
+"""
