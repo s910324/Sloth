@@ -115,34 +115,41 @@ class MainWindow(QMainWindow):
         
     
     def addCol(self):
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle = subWinHandle.widget().centralWidget()
-        tableHandle.insertColumn(tableHandle.currentColumn())
-        tabID = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-        self.tabColCounter[tabID] += 1
-        root = self.tabColCounter[tabID] /26
-        remainder = self.tabColCounter[tabID] % 26
-        alfabat = []
-        headerLable = 'Y('
-        alfabat.append(remainder)
-        while( root != 0 ):
-            root = root/26
-            remainder = root%26
-            alfabat.append(remainder)
-        for i in range(len(alfabat)):
-            alfabat[i] = string.ascii_uppercase[(alfabat[i])]
-        for i in range(len(alfabat)):
-            headerLable += alfabat[i]
-        headerLable += ')'  
-        print headerLable          
-        tableHandle.setHorizontalHeaderItem(tableHandle.currentColumn()-1, QTableWidgetItem(headerLable))
-        for i in range(3):
-            headerItem = QTableWidgetItem('')
-            headerItem.setBackground(QColor('#0066cc'))
-            headerItem.setForeground(QColor('#ffffff'))
-            headerFont = QFont("Times", 8, QFont.Normal)
-            headerItem.setFont(headerFont)
-            tableHandle.setItem(i, tableHandle.currentColumn()-1, headerItem)
+        try:
+            subWinHandle = self.mdiArea.currentSubWindow()
+            tableHandle  = subWinHandle.widget().centralWidget()
+            currentCol   = tableHandle.currentColumn()
+            tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+            
+            if currentCol == -1:
+                currentCol = self.tabColCounter[tabID]-1
+                
+            tableHandle.insertColumn(currentCol + 1)
+            self.tabColCounter[tabID] += 1
+    
+            alfabat = []
+            headerLable = 'Y('
+            root = self.tabColCounter[tabID]
+            while( root != 0):
+                alfabat.append(root%26)
+                root = root/26
+    
+            for i in range(len(alfabat)):
+                alfabat[i] = string.ascii_uppercase[(alfabat[i])]
+            for i in range(len(alfabat)-1, -1, -1):
+                headerLable += alfabat[i]
+            headerLable += ')'  
+            print headerLable          
+            tableHandle.setHorizontalHeaderItem(currentCol + 1, QTableWidgetItem(headerLable))
+            for i in range(3):
+                headerItem = QTableWidgetItem('')
+                headerItem.setBackground(QColor('#0066cc'))
+                headerItem.setForeground(QColor('#ffffff'))
+                headerFont = QFont("Times", 8, QFont.Normal)
+                headerItem.setFont(headerFont)
+                tableHandle.setItem(i, currentCol + 1, headerItem)
+        except AttributeError:
+            print 'No active/valid workbook for appending columns.'
         
         
     def addRow(self):
@@ -152,11 +159,18 @@ class MainWindow(QMainWindow):
             tableHandle.insertRow(tableHandle.currentRow())    
     
     def rmvCol(self):
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle = subWinHandle.widget().centralWidget()
-        tableHandle.removeColumn(tableHandle.currentColumn())
-        tabID = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-        self.tabColCounter[tabID] -= 1
+        try: 
+            subWinHandle = self.mdiArea.currentSubWindow()
+            tableHandle  = subWinHandle.widget().centralWidget()
+            tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+            currentCol   = tableHandle.currentColumn()
+            
+            if currentCol != -1:
+                tableHandle.removeColumn(currentCol)
+                self.tabColCounter[tabID] -= 1
+            
+        except AttributeError:
+            print 'No active/valid workbook for removing columns.'
 
     def rmvRow(self):
         subWinHandle = self.mdiArea.currentSubWindow()
