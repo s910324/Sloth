@@ -166,8 +166,10 @@ class MainWindow(QMainWindow):
         try:
             subWinHandle = self.mdiArea.currentSubWindow()
             tableHandle  = subWinHandle.widget().centralWidget()
+            tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
             if tableHandle.currentRow() > 2:
                 tableHandle.insertRow(tableHandle.currentRow())
+                print 'Tab #' + str(tabID) + ' append row #' + str(tableHandle.currentRow())
                 
         except AttributeError:
             print 'No active/valid workbook for  row appending.'
@@ -188,6 +190,7 @@ class MainWindow(QMainWindow):
             for i in range( len ( selectAry )):
                 tableHandle.removeColumn(selectAry[i] - i)
                 self.tabColCounter[tabID] -= 1
+                print 'Tab #' + str(tabID) + ' remove column #' + str(selectAry[i])
                 
         except AttributeError:
             print 'No active/valid workbook for column removing.'

@@ -108,8 +108,18 @@ class MainWindow(QMainWindow):
     
     
     def test(self):
-        print self.tabColCounter
-        print self.tabIDCounter
+        #print self.tabColCounter
+        #print self.tabIDCounter
+        selectAry    = []
+        subWinHandle = self.mdiArea.currentSubWindow()
+        tableHandle  = subWinHandle.widget().centralWidget()
+        
+        for i in range( len(tableHandle.selectedRanges())):
+            leftCol  = tableHandle.selectedRanges()[i].topRow()
+            colCount = tableHandle.selectedRanges()[i].rowCount()
+            for j in range( leftCol, leftCol + colCount ):
+                selectAry.append( j )
+        print selectAry
     
 
         
@@ -120,14 +130,14 @@ class MainWindow(QMainWindow):
             tableHandle  = subWinHandle.widget().centralWidget()
             currentCol   = tableHandle.currentColumn()
             tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+            alfabat      = []
             
             if currentCol == -1:
                 currentCol = self.tabColCounter[tabID]-1
                 
             tableHandle.insertColumn(currentCol + 1)
             self.tabColCounter[tabID] += 1
-    
-            alfabat = []
+
             headerLable = 'Y('
             root = self.tabColCounter[tabID]
             while( root != 0):
@@ -139,7 +149,7 @@ class MainWindow(QMainWindow):
             for i in range(len(alfabat)-1, -1, -1):
                 headerLable += alfabat[i]
             headerLable += ')'  
-            print headerLable          
+            print 'Tab #' + str(tabID) + ' append column #' + str(headerLable)
             tableHandle.setHorizontalHeaderItem(currentCol + 1, QTableWidgetItem(headerLable))
             for i in range(3):
                 headerItem = QTableWidgetItem('')
@@ -149,41 +159,67 @@ class MainWindow(QMainWindow):
                 headerItem.setFont(headerFont)
                 tableHandle.setItem(i, currentCol + 1, headerItem)
         except AttributeError:
-            print 'No active/valid workbook for appending columns.'
+            print 'No active/valid workbook for column appending.'
         
         
     def addRow(self):
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle = subWinHandle.widget().centralWidget()
-        if tableHandle.currentRow() > 2:
-            tableHandle.insertRow(tableHandle.currentRow())    
+        try:
+            subWinHandle = self.mdiArea.currentSubWindow()
+            tableHandle  = subWinHandle.widget().centralWidget()
+            tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+            if tableHandle.currentRow() > 2:
+                tableHandle.insertRow(tableHandle.currentRow())
+                print 'Tab #' + str(tabID) + ' append row #' + str(tableHandle.currentRow())
+                
+        except AttributeError:
+            print 'No active/valid workbook for  row appending.'
     
     def rmvCol(self):
         try: 
             subWinHandle = self.mdiArea.currentSubWindow()
             tableHandle  = subWinHandle.widget().centralWidget()
             tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-            currentCol   = tableHandle.currentColumn()
-            
-            if currentCol != -1:
-                tableHandle.removeColumn(currentCol)
+            selectAry    = []
+
+            for i in range( len(tableHandle.selectedRanges())):
+                leftCol  = tableHandle.selectedRanges()[i].leftColumn()
+                colCount = tableHandle.selectedRanges()[i].columnCount()
+                for j in range( leftCol, leftCol + colCount ):
+                    selectAry.append( j )
+
+            for i in range( len ( selectAry )):
+                tableHandle.removeColumn(selectAry[i] - i)
                 self.tabColCounter[tabID] -= 1
-            
+                print 'Tab #' + str(tabID) + ' remove column #' + str(selectAry[i])
+                
         except AttributeError:
-            print 'No active/valid workbook for removing columns.'
+            print 'No active/valid workbook for column removing.'
 
     def rmvRow(self):
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle = subWinHandle.widget().centralWidget()
-        if tableHandle.currentRow() > 2:
-            tableHandle.removeRow(tableHandle.currentRow())    
+        try:
+            subWinHandle = self.mdiArea.currentSubWindow()
+            tableHandle  = subWinHandle.widget().centralWidget()
+            tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+            selectAry    = []
 
+            for i in range( len(tableHandle.selectedRanges())):
+                topRow  = tableHandle.selectedRanges()[i].topRow()
+                rowCount = tableHandle.selectedRanges()[i].rowCount()
+                for j in range( topRow, topRow + rowCount ):
+                    selectAry.append( j )
+
+            for i in range( len ( selectAry )):
+                if (selectAry[i] - i) > 2:
+                    tableHandle.removeRow(selectAry[i] - i)
+                    print 'Tab #' + str(tabID) + ' remove row #' + str(selectAry[i])
+                    
+        except AttributeError:
+            print 'No active/valid workbook for row removing.'
+    
     
     def setX(self):
         print'a'
-        
-        
-        
+
     def setY(self):
         print 'a'
 
