@@ -384,29 +384,32 @@ class MainWindow(QMainWindow):
                 for j in range( leftCol, leftCol + colCount ):
                     selectAry.append( j )
             print selectAry
-    
-            for j in range(2, tableHandle.rowCount()):
-                itemX = tableHandle.item(j,0)
-                itemY = tableHandle.item(j,3)
-                if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
-                    try:
-                        [ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
-                        plotArrayX.append(float(itemX.text()))
-                        plotArrayY.append(float(itemY.text()))
-                    except ValueError:
-                        print 'ValueError at: row# '       + str(j+1)
-                    except TypeError:
-                        print 'TypeError at: row# '        + str(j+1)
-                    except AttributeError:
-                        print 'AttributionError at: row# ' + str(j+1)
-            plotArrayX = np.array(plotArrayX)
-            plotArrayY = np.array(plotArrayY)
-    
-
+            
             fig = Figure(figsize=(60,60),  facecolor=(1,1,1), edgecolor=(0,0,0))
             ax = fig.add_subplot(111)
-            ax.plot(plotArrayX, plotArrayY)
+            for i in selectAry[1:]:
+                plotArrayX = []
+                plotArrayY = []
+                for j in range(2, tableHandle.rowCount()):
+                    itemX = tableHandle.item(j,0)
+                    itemY = tableHandle.item(j,i)
+                    if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
+                        try:
+                            [ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
+                            plotArrayX.append(float(itemX.text()))
+                            plotArrayY.append(float(itemY.text()))
+                        except ValueError:
+                            print 'ValueError at: row# '       + str(j+1)
+                        except TypeError:
+                            print 'TypeError at: row# '        + str(j+1)
+                        except AttributeError:
+                            print 'AttributionError at: row# ' + str(j+1)
+                plotArrayX = np.array(plotArrayX)
+                plotArrayY = np.array(plotArrayY)
+                ax.plot(plotArrayX, plotArrayY)
+  
             plotWidget = FigureCanvas(fig)
+
             p.setCentralWidget(plotWidget)
             p.setMinimumSize(QSize(250,250))
             p.showMaximized()
@@ -469,15 +472,3 @@ if __name__ == '__main__':
     
     
     
-"""
-import numpy as np
-import matplotlib.pyplot as plt
-
-x = np.arange(0, 5, 0.1);
-y1 = np.sin(x)
-y2 = np.cos(x)
-plt.plot(x, y1)
-plt.plot(x, y2)
-plt.show()
-
-"""
