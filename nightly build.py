@@ -18,8 +18,8 @@ class MainWindow(QMainWindow):
         self.globalVal = [0]
         super(MainWindow, self).__init__(parent)
         self.mainWindow = QMainWindow()
-        self.treeView = QTreeWidget(self)
-        self.listView = QListWidget(self)
+        self.prjTreeView = QTreeWidget(self)
+        self.winTreeView = QTreeWidget(self)
         self.mdiArea = QMdiArea(self)
         self.initMenuBar()
         self.initDocker()
@@ -54,8 +54,9 @@ class MainWindow(QMainWindow):
         self.fileDockWidget.setAllowedAreas(Qt.LeftDockWidgetArea and Qt.RightDockWidgetArea)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.projDockWidget)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.fileDockWidget)
-        self.projDockWidget.setWidget(self.treeView)
-        self.fileDockWidget.setWidget(self.listView)
+        self.projDockWidget.setWidget(self.prjTreeView)
+        self.fileDockWidget.setWidget(self.winTreeView)
+        self.initWinTree()
         
         
     def initToolBar(self):
@@ -68,6 +69,7 @@ class MainWindow(QMainWindow):
         self.plotbar.addAction(plotAction)
 
         exitAction = QAction('Exit', self)
+        openPjAction = QAction('New Project', self)
         openAction = QAction('Open', self)
         newwbAction = QAction('New WorkBook', self)
         plotAction = QAction('Plot', self)
@@ -81,6 +83,7 @@ class MainWindow(QMainWindow):
         setZAction = QAction('Set As Z', self)
         
         exitAction.triggered.connect(self.CreateTableSub)
+        openPjAction.triggered.connect(self.OpenNewProject)
         openAction.triggered.connect(self.OpenFile)
         newwbAction.triggered.connect(self.OpenNewWorkBook)
         plotAction.triggered.connect(self.PlotData)
@@ -94,6 +97,7 @@ class MainWindow(QMainWindow):
         setZAction.triggered.connect(self.setZ)
         
         self.MainToolbar.addAction(exitAction)
+        self.MainToolbar.addAction(openPjAction)
         self.MainToolbar.addAction(openAction)
         self.MainToolbar.addAction(newwbAction)
         self.MainToolbar.addAction(plotAction)
@@ -105,15 +109,26 @@ class MainWindow(QMainWindow):
         self.MainToolbar.addAction(setXAction)
         self.MainToolbar.addAction(setYAction)
         self.MainToolbar.addAction(setZAction)
-    
+        
+    def initWinTree(self):
+        self.winTreeView.setColumnCount(3)
+       # winTreeHeaders = ['name', 'type', '#']
+
+        self.winTreeView.setColumnWidth(0, 90)
+        self.winTreeView.setColumnWidth(1, 90)
+        self.winTreeView.setColumnWidth(2, 25)
+        self.winTreeView.isSortingEnabled()
+        self.winTreeView.setHeaderHidden(False)
+            
     
     def test(self):
         print self.tabColCounter
         print self.tabIDCounter
         wList = self.mdiArea.subWindowList()
         for i in range( len( wList )):
-            print wList[i].widget().statusBar().showMessage('np' )
-        
+            print type(wList[i].widget().centralWidget())
+            wList[i].widget().statusBar().showMessage('np' )
+        self.mdiArea.setActiveSubWindow(wList[2])
 #        selectAry    = []
 #        subWinHandle = self.mdiArea.currentSubWindow()
 #        tableHandle  = subWinHandle.widget().centralWidget()
@@ -237,19 +252,35 @@ class MainWindow(QMainWindow):
         
         
     def OpenNewProject(self):
-        self.treeView.setColumnCount(2)
-        projFolder =  QTreeWidgetItem(self.treeView)
+        self.prjTreeView.setColumnCount(2)
+        projFolder =  QTreeWidgetItem(self.prjTreeView)
         projFolder.setText(0, "Project 1")
         projItem =  QTreeWidgetItem(projFolder)
         projItem.setText(0, "Item 1")
         projItem.setText(1, "Yes")
-            
+    
+
+    
+    def AddWinTreeItem(self, subWinTitle, wintype, tabID):
+        
+        subTreeItem =  QTreeWidgetItem(self.winTreeView)
+        subTreeItem.setText(0, subWinTitle)
+        subTreeItem.setText(1, wintype)
+        subTreeItem.setText(2, str(tabID))
+        self.winTreeView.itemDoubleClicked.connect(lambda ID=tabID: self.RaiseSubWin(ID))
+
+    def RaiseSubWin(self, tabID):
+        tabID = tabID.text(2)
+        wList = self.mdiArea.subWindowList()
+        self.mdiArea.setActiveSubWindow(wList[int(tabID)])
+        print 'Activating subwindow #' + tabID
+                
 
     def OpenNewWorkBook(self):
         tableHandle, subWinHandle, tabID = self.CreateTableSub()
         subWinTitle = "Untitled " + str(tabID)
         subWinHandle.setWindowTitle(subWinTitle)
-        self.listView.addItem(subWinTitle)
+        self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
         tableHandle.setRowCount(200)
         for i in range(3):
             self.addCol()
@@ -274,15 +305,15 @@ class MainWindow(QMainWindow):
         ReadFileArray = []
         
         FileName      = QFileDialog.getOpenFileName(self, "Open File.", "/home")
-        SubWinTitle   = str(FileName[0].split('/')[-1])
+        subWinTitle   = str(FileName[0].split('/')[-1])
         FileContainer = open(FileName[0], 'r')
         FileLines     = FileContainer.readlines()
         RowNum        = len(FileLines)
         ColNum        = 0
         
         TableHandle, subWinHandle, tabID = self.CreateTableSub()
-        subWinHandle.setWindowTitle(SubWinTitle)
-        self.listView.addItem(SubWinTitle)
+        subWinHandle.setWindowTitle(subWinTitle)
+        self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
         for i in range(RowNum):
             FileRow = (FileLines[i].strip()).split('\t')
             ReadFileArray.append(FileRow)
@@ -341,10 +372,11 @@ class MainWindow(QMainWindow):
                     
             p = QMainWindow()
             subWinHandle = self.mdiArea.currentSubWindow()
-            p.setWindowTitle('[plot]' + subWinHandle.windowTitle())
+            subWinTitle = '[plot]' + subWinHandle.windowTitle()
+            p.setWindowTitle(subWinTitle)
             tableHandle = subWinHandle.widget().centralWidget()
             self.mdiArea.addSubWindow(p)
-            
+
             selectAry = []
             for i in range( len(tableHandle.selectedRanges())):
                 leftCol  = tableHandle.selectedRanges()[i].leftColumn()
@@ -370,13 +402,18 @@ class MainWindow(QMainWindow):
             plotArrayX = np.array(plotArrayX)
             plotArrayY = np.array(plotArrayY)
     
-    
+
             fig = Figure(figsize=(60,60),  facecolor=(1,1,1), edgecolor=(0,0,0))
             ax = fig.add_subplot(111)
             ax.plot(plotArrayX, plotArrayY)
             plotWidget = FigureCanvas(fig)
             p.setCentralWidget(plotWidget)
+            p.setMinimumSize(QSize(250,250))
             p.showMaximized()
+            self.tabIDCounter += 1
+            tabID = self.tabIDCounter
+            self.tabColCounter.append(-1)
+            self.AddWinTreeItem(subWinTitle, 'Plot', tabID)
         except AttributeError:
             print 'No active/valid workbook for data plotting.'
   
