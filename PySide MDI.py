@@ -108,18 +108,22 @@ class MainWindow(QMainWindow):
     
     
     def test(self):
-        #print self.tabColCounter
-        #print self.tabIDCounter
-        selectAry    = []
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle  = subWinHandle.widget().centralWidget()
+        print self.tabColCounter
+        print self.tabIDCounter
+        wList = self.mdiArea.subWindowList()
+        for i in range( len( wList )):
+            print wList[i].widget().statusBar().showMessage('np' )
         
-        for i in range( len(tableHandle.selectedRanges())):
-            leftCol  = tableHandle.selectedRanges()[i].topRow()
-            colCount = tableHandle.selectedRanges()[i].rowCount()
-            for j in range( leftCol, leftCol + colCount ):
-                selectAry.append( j )
-        print selectAry
+#        selectAry    = []
+#        subWinHandle = self.mdiArea.currentSubWindow()
+#        tableHandle  = subWinHandle.widget().centralWidget()
+#        
+#        for i in range( len(tableHandle.selectedRanges())):
+#            leftCol  = tableHandle.selectedRanges()[i].topRow()
+#            colCount = tableHandle.selectedRanges()[i].rowCount()
+#            for j in range( leftCol, leftCol + colCount ):
+#                selectAry.append( j )
+#        print selectAry
     
 
         
@@ -131,7 +135,7 @@ class MainWindow(QMainWindow):
             currentCol   = tableHandle.currentColumn()
             tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
             alfabat      = []
-            
+            atoz         = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             if currentCol == -1:
                 currentCol = self.tabColCounter[tabID]-1
                 
@@ -141,11 +145,15 @@ class MainWindow(QMainWindow):
             headerLable = 'Y('
             root = self.tabColCounter[tabID]
             while( root != 0):
-                alfabat.append(root%26)
-                root = root/26
-    
+                if root%26 != 0:
+                    alfabat.append(root%26)
+                    root = root/26
+                else:
+                    alfabat.append(26)
+                    root = (root/26) -1
+
             for i in range(len(alfabat)):
-                alfabat[i] = string.ascii_uppercase[(alfabat[i])]
+                alfabat[i] = atoz[alfabat[i]]
             for i in range(len(alfabat)-1, -1, -1):
                 headerLable += alfabat[i]
             headerLable += ')'  
@@ -239,20 +247,21 @@ class MainWindow(QMainWindow):
 
     def OpenNewWorkBook(self):
         tableHandle, subWinHandle, tabID = self.CreateTableSub()
-        subWinTitle = "Untitled " + str(self.globalVal[0])
+        subWinTitle = "Untitled " + str(tabID)
         subWinHandle.setWindowTitle(subWinTitle)
         self.listView.addItem(subWinTitle)
         tableHandle.setRowCount(200)
-        tableHandle.setColumnCount(3)
-        self.tabColCounter[tabID] = 3
         for i in range(3):
-            for j in range(3):
-                headerItem = QTableWidgetItem('')
-                headerItem.setBackground(QColor('#0066cc'))
-                headerItem.setForeground(QColor('#ffffff'))
-                headerFont = QFont("Times", 8, QFont.Normal)
-                headerItem.setFont(headerFont)
-                tableHandle.setItem(i, j, headerItem)
+            self.addCol()
+        #self.tabColCounter[tabID] = 3
+#        for i in range(3):
+#            for j in range(3):
+#                headerItem = QTableWidgetItem('')
+#                headerItem.setBackground(QColor('#0066cc'))
+#                headerItem.setForeground(QColor('#ffffff'))
+#                headerFont = QFont("Times", 8, QFont.Normal)
+#                headerItem.setFont(headerFont)
+#                tableHandle.setItem(i, j, headerItem)
 ##################################
 #        msgCounter = ''
 #        for i in range( len( str( colCounter ))):
@@ -280,8 +289,9 @@ class MainWindow(QMainWindow):
             if len(FileRow) > ColNum:
                 ColNum = len(FileRow)
         TableHandle.setRowCount(RowNum)
-        TableHandle.setColumnCount(ColNum)
-        self.tabColCounter[tabID] = ColNum
+        for i in range(ColNum):
+            self.addCol()
+
         for i in range(3):
             for j in range(ColNum):
                 if j < len(ReadFileArray[i]):
@@ -321,62 +331,56 @@ class MainWindow(QMainWindow):
         return tableWidget, w, tabID
         
     def PlotData(self):
-        plotArrayX = []
-        plotArrayY = []
-        coordinates = []
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle = subWinHandle.widget().centralWidget()
-        selectedOnes = tableHandle.selectedRanges()
-                
-        p = QMainWindow()
-        subWinHandle = self.mdiArea.currentSubWindow()
-        p.setWindowTitle('[plot]' + subWinHandle.windowTitle())
-        tableHandle = subWinHandle.widget().centralWidget()
-        self.mdiArea.addSubWindow(p)
-        
-        selectAry = []
-        for i in range( len(tableHandle.selectedRanges())):
-            leftCol  = tableHandle.selectedRanges()[i].leftColumn()
-            colCount = tableHandle.selectedRanges()[i].columnCount()
-            for j in range( leftCol, leftCol + colCount ):
-                selectAry.append( j )
-        print selectAry
-       
-       
-        
+        try:
+            plotArrayX = []
+            plotArrayY = []
+            coordinates = []
+            subWinHandle = self.mdiArea.currentSubWindow()
+            tableHandle = subWinHandle.widget().centralWidget()
+            selectedOnes = tableHandle.selectedRanges()
+                    
+            p = QMainWindow()
+            subWinHandle = self.mdiArea.currentSubWindow()
+            p.setWindowTitle('[plot]' + subWinHandle.windowTitle())
+            tableHandle = subWinHandle.widget().centralWidget()
+            self.mdiArea.addSubWindow(p)
+            
+            selectAry = []
+            for i in range( len(tableHandle.selectedRanges())):
+                leftCol  = tableHandle.selectedRanges()[i].leftColumn()
+                colCount = tableHandle.selectedRanges()[i].columnCount()
+                for j in range( leftCol, leftCol + colCount ):
+                    selectAry.append( j )
+            print selectAry
     
-        for j in range(2, tableHandle.rowCount()):
-            itemX = tableHandle.item(j,0)
-            itemY = tableHandle.item(j,3)
-            if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
-                try:
-                    [ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
-                    plotArrayX.append(float(itemX.text()))
-                    plotArrayY.append(float(itemY.text()))
-                except ValueError:
-                    print 'ValueError at: row# '       + str(j+1)
-                except TypeError:
-                    print 'TypeError at: row# '        + str(j+1)
-                except AttributeError:
-                    print 'AttributionError at: row# ' + str(j+1)
-        plotArrayX = np.array(plotArrayX)
-        plotArrayY = np.array(plotArrayY)
-
-
-        fig = Figure(figsize=(60,60),  facecolor=(1,1,1), edgecolor=(0,0,0))
-        ax = fig.add_subplot(111)
-        ax.plot(plotArrayX, plotArrayY)
-        plotWidget = FigureCanvas(fig)
-        p.setCentralWidget(plotWidget)
-        p.showMaximized()
+            for j in range(2, tableHandle.rowCount()):
+                itemX = tableHandle.item(j,0)
+                itemY = tableHandle.item(j,3)
+                if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
+                    try:
+                        [ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
+                        plotArrayX.append(float(itemX.text()))
+                        plotArrayY.append(float(itemY.text()))
+                    except ValueError:
+                        print 'ValueError at: row# '       + str(j+1)
+                    except TypeError:
+                        print 'TypeError at: row# '        + str(j+1)
+                    except AttributeError:
+                        print 'AttributionError at: row# ' + str(j+1)
+            plotArrayX = np.array(plotArrayX)
+            plotArrayY = np.array(plotArrayY)
+    
+    
+            fig = Figure(figsize=(60,60),  facecolor=(1,1,1), edgecolor=(0,0,0))
+            ax = fig.add_subplot(111)
+            ax.plot(plotArrayX, plotArrayY)
+            plotWidget = FigureCanvas(fig)
+            p.setCentralWidget(plotWidget)
+            p.showMaximized()
+        except AttributeError:
+            print 'No active/valid workbook for data plotting.'
   
   ############better faster, stupider######################################################
-#                
-#                
-#
-#        
-#        
-#        
 #        for i in range(len(tableHandle.selectedIndexes())):
 #            coordinate = ((str(tableHandle.selectedIndexes()[i]).split('<PySide.QtCore.QModelIndex('))[1].split('QTableModel')[0]).split(',')
 #            coordinate = [int(coordinate[0]), int(coordinate[1])]
