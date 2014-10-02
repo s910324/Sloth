@@ -63,9 +63,10 @@ class MainWindow(QMainWindow):
         self.addToolBar( Qt.TopToolBarArea , self.MainToolbar)
         self.addToolBar( Qt.BottomToolBarArea , self.plotbar)
         
-        plotAction = QAction('Exit', self)
-        self.plotbar.addAction(plotAction)
-
+        nextAction = QAction('Exit', self)
+        self.plotbar.addAction(nextAction)
+        nextAction.triggered.connect(self.test2)        
+        
         exitAction = QAction('Exit', self)
         openPjAction = QAction('New Project', self)
         openAction = QAction('Open', self)
@@ -438,6 +439,8 @@ class MainWindow(QMainWindow):
             self.a =ScriptSetVal(tabID, subWinHandle)
         except AttributeError:
             print 'No active/valid workbook for script setting.'   
+    def test2(self):
+        print a
 
     def ScriptSetVal(self):
         w = QMainWindow()
@@ -459,6 +462,7 @@ class ScriptSetVal(QMainWindow):
         self.tableHandle  = subWinHandle.widget().centralWidget()
         self.initUI()
         self.initToolBar()
+        self.initDocker()
         
     def initUI(self): 
         self.t = QTextEdit()
@@ -478,18 +482,32 @@ class ScriptSetVal(QMainWindow):
     def initFont(self):
         self.tabStop = 4
         self.font = QFont('Courier')
-        
-
         self.metrics = QFontMetrics(self.font)
         self.t.setTabStopWidth(self.tabStop * self.metrics.width(' '));
-        
         self.font.setStyleHint(QFont.Monospace);
         self.font.setFixedPitch(True);
-        self.font.setPointSize(10);
+        self.font.setPointSize(12)
+        self.p = self.t.palette()
+        self.p.setColor(QPalette.Base, QColor(0, 0, 0))
+        self.p.setColor(QPalette.Text, QColor(255, 255, 255))
+        self.t.setPalette(self.p)
         self.t.setFont(self.font)
+        self.highlighter = Highlighter(self.t.document())
 
+    def initDocker(self):
+        self.elog = QTextEdit()
+        self.elogDockWidget = QDockWidget("  ::  error log ::", self)
+        self.elogDockWidget.setFeatures(QDockWidget.DockWidgetMovable)
+        self.elogDockWidget.setAllowedAreas(Qt.TopDockWidgetArea and Qt.BottomDockWidgetArea)
+        self.addDockWidget(Qt.BottomDockWidgetArea, self.elogDockWidget)
+        self.elogDockWidget.setWidget(self.elog)
+        self.p = self.elog.palette()
+        self.p.setColor(QPalette.Base, QColor(0, 0, 0))
+        self.p.setColor(QPalette.Text, QColor(255, 0, 0))
+        self.elog.setPalette(self.p)
+        self.elog.setReadOnly(True)
 
-        
+          
 
     def RelectRng(self):
         try:
@@ -500,33 +518,123 @@ class ScriptSetVal(QMainWindow):
                     self.colCount = self.tableHandle.selectedRanges()[i].columnCount()
                     for currentCol in range( self.leftCol, self.leftCol + self.colCount ):
                         self.selectAry.append( currentCol )
-                
+                self.leftCol  = self.tableHandle.selectedRanges()[0].leftColumn()
+                self.colCount = self.tableHandle.selectedRanges()[0].columnCount()
                 self.topRow   = self.tableHandle.selectedRanges()[0].topRow()
                 self.rowCount = self.tableHandle.selectedRanges()[0].rowCount()
-                print self.selectAry
-                print self.topRow, self.rowCount
+                
+                rows = []
+                cols = []
+                for i in range(self.topRow,  self.topRow  + self.rowCount, 1):
+                    rows.append(i)
+                for i in range(self.leftCol, self.leftCol + self.colCount, 1):
+                    cols.append(i)
+
                 try:
                     exec(self.t.toPlainText())
                 except Exception, e:
+                    self.elog.moveCursor(QTextCursor.End)
+                    self.elog.textCursor().insertHtml('<span style="color:#FF0000">Error: '+str(e)+'</span><br>')
+                    
+
                     print str(e)
             else:
                 print 'workbook hava not been selected.'
 
         except AttributeError:
             print 'No active/valid workbook for script setting.'
+    
+    def setItem(self, col, row, val):
+        try:
+            self.tableHandle.setItem(col, row, QTableWidgetItem(str(val)))
+        except Exception, e:
+            print str(e)       
+            
+    def view(self, text):
+        self.elog.moveCursor(QTextCursor.End)
+        self.elog.textCursor().insertHtml('<span style="color:#FFFFFF">'+text+'</span><br>')
 
-        
-#        self.wList = MainWindow.mdiArea.subWindowList()
-#        self.mdiArea.setActiveSubWindow(wList[int(tabID)])
-#        print 'Activating subwindow #' + tabID
-        
-
+class Highlighter( QSyntaxHighlighter):
+    def __init__(self, parent=None):
+        super(Highlighter, self).__init__(parent)
+ 
+        keywordFormat =  QTextCharFormat()
+        keywordFormat.setForeground( Qt.darkBlue)
+        keywordFormat.setFontWeight( QFont.Bold)
+ 
+        keywordPatterns = ["\\bchar\\b", "\\bclass\\b", "\\bconst\\b",
+                "\\bdouble\\b", "\\benum\\b", "\\bexplicit\\b", "\\bfriend\\b",
+                "\\binline\\b", "\\bint\\b", "\\blong\\b", "\\bnamespace\\b",
+                "\\boperator\\b", "\\bprivate\\b", "\\bprotected\\b",
+                "\\bpublic\\b", "\\bshort\\b", "\\bsignals\\b", "\\bsigned\\b",
+                "\\bslots\\b", "\\bstatic\\b", "\\bstruct\\b",
+                "\\btemplate\\b", "\\btypedef\\b", "\\btypename\\b",
+                "\\bunion\\b", "\\bunsigned\\b", "\\bvirtual\\b", "\\bvoid\\b",
+                "\\bvolatile\\b"]
+ 
+        self.highlightingRules = [( QRegExp(pattern), keywordFormat)
+                for pattern in keywordPatterns]
+ 
+        classFormat =  QTextCharFormat()
+        classFormat.setFontWeight( QFont.Bold)
+        classFormat.setForeground( Qt.darkMagenta)
+        self.highlightingRules.append(( QRegExp("\\bQ[A-Za-z]+\\b"),
+                classFormat))
+ 
+        singleLineCommentFormat =  QTextCharFormat()
+        singleLineCommentFormat.setForeground( Qt.red)
+        self.highlightingRules.append(( QRegExp("//[^\n]*"),
+                singleLineCommentFormat))
+ 
+        self.multiLineCommentFormat =  QTextCharFormat()
+        self.multiLineCommentFormat.setForeground( Qt.red)
+ 
+        quotationFormat =  QTextCharFormat()
+        quotationFormat.setForeground( Qt.darkGreen)
+        self.highlightingRules.append(( QRegExp("\".*\""),
+                quotationFormat))
+ 
+        functionFormat =  QTextCharFormat()
+        functionFormat.setFontItalic(True)
+        functionFormat.setForeground( Qt.blue)
+        self.highlightingRules.append(( QRegExp("\\b[A-Za-z0-9_]+(?=\\()"),
+                functionFormat))
+ 
+        self.commentStartExpression =  QRegExp("/\\*")
+        self.commentEndExpression =  QRegExp("\\*/")
+ 
+    def highlightBlock(self, text):
+        for pattern, format in self.highlightingRules:
+            expression =  QRegExp(pattern)
+            index = expression.indexIn(text)
+            while index >= 0:
+                length = expression.matchedLength()
+                self.setFormat(index, length, format)
+                index = expression.indexIn(text, index + length)
+ 
+        self.setCurrentBlockState(0)
+ 
+        startIndex = 0
+        if self.previousBlockState() != 1:
+            startIndex = self.commentStartExpression.indexIn(text)
+ 
+        while startIndex >= 0:
+            endIndex = self.commentEndExpression.indexIn(text, startIndex)
+ 
+            if endIndex == -1:
+                self.setCurrentBlockState(1)
+                commentLength = text.length() - startIndex
+            else:
+                commentLength = endIndex - startIndex + self.commentEndExpression.matchedLength()
+ 
+            self.setFormat(startIndex, commentLength,
+                    self.multiLineCommentFormat)
+            startIndex = self.commentStartExpression.indexIn(text,
+                    startIndex + commentLength);
+ 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     frame = MainWindow()
     frame.show()    
     app.exec_()
     sys.exit
-    
-    
-    
