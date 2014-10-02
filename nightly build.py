@@ -119,26 +119,26 @@ class MainWindow(QMainWindow):
         self.winTreeView.setHeaderHidden(False)
             
     
-    def test(self):
-        
-        subWinHandle = self.mdiArea.currentSubWindow()
-        tableHandle  = subWinHandle.widget().centralWidget()
-        tableHandle.close()
-        selectAry = []
-        axisAry   = []
-        clusters  = []
-        cnt = 0
-        for i in tableHandle.selectedRanges():
-            print i
-        
-        for i in range( len(tableHandle.selectedRanges())):
-            leftCol  = tableHandle.selectedRanges()[i].leftColumn()
-            colCount = tableHandle.selectedRanges()[i].columnCount()
-            for currentCol in range( leftCol, leftCol + colCount ):
-                selectAry.append( currentCol )
-                if (str(tableHandle.horizontalHeaderItem(currentCol).text())[0]) == 'X':
-                    axisAry.append(cnt)
-        print selectAry 
+#    def test(self):
+#        print 'a'
+#        subWinHandle = self.mdiArea.currentSubWindow()
+#        tableHandle  = subWinHandle.widget().centralWidget()
+#        tableHandle.close()
+#        selectAry = []
+#        axisAry   = []
+#        clusters  = []
+#        cnt = 0
+#        for i in tableHandle.selectedRanges():
+#            print i
+#        
+#        for i in range( len(tableHandle.selectedRanges())):
+#            leftCol  = tableHandle.selectedRanges()[i].leftColumn()
+#            colCount = tableHandle.selectedRanges()[i].columnCount()
+#            for currentCol in range( leftCol, leftCol + colCount ):
+#                selectAry.append( currentCol )
+#                if (str(tableHandle.horizontalHeaderItem(currentCol).text())[0]) == 'X':
+#                    axisAry.append(cnt)
+#        print selectAry 
     
     def addCol(self):
         try:
@@ -429,7 +429,97 @@ class MainWindow(QMainWindow):
         if reply ==  QMessageBox.Yes:
             event.accept()
         else:
-            event.ignore()    
+            event.ignore()  
+            
+    def test(self):
+        try:
+            subWinHandle = self.mdiArea.currentSubWindow()
+            tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+            self.a =ScriptSetVal(tabID, subWinHandle)
+        except AttributeError:
+            print 'No active/valid workbook for script setting.'   
+
+    def ScriptSetVal(self):
+        w = QMainWindow()
+        t = QTextEdit()
+        self.mdiArea.addSubWindow(w)
+        w.setCentralWidget(t)
+        w.setAttribute(Qt.WA_DeleteOnClose)
+        w.setMinimumSize(QSize(250,250))
+        w.setGeometry(QRect(200, 200, 500, 500))
+        
+        w.show()
+        
+        
+class ScriptSetVal(QMainWindow):
+    def __init__(self, tabID, subWinHandle, parent=None):
+        super(ScriptSetVal,  self).__init__(parent)
+        self.tabID = tabID    
+        self.subWinHandle = subWinHandle
+        self.tableHandle  = subWinHandle.widget().centralWidget()
+        self.initUI()
+        self.initToolBar()
+        
+    def initUI(self): 
+        self.t = QTextEdit()
+        self.initFont()
+        self.setCentralWidget(self.t)
+        self.setGeometry(QRect(200, 200, 410, 610))
+        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.show()
+    
+    def initToolBar(self):
+        self.scriptbar    = QToolBar('plot options') 
+        self.addToolBar( Qt.BottomToolBarArea , self.scriptbar)
+        scriptAction = QAction('set script', self)
+        self.scriptbar.addAction(scriptAction)
+        scriptAction.triggered.connect(self.RelectRng)
+
+    def initFont(self):
+        self.tabStop = 4
+        self.font = QFont('Courier')
+        
+
+        self.metrics = QFontMetrics(self.font)
+        self.t.setTabStopWidth(self.tabStop * self.metrics.width(' '));
+        
+        self.font.setStyleHint(QFont.Monospace);
+        self.font.setFixedPitch(True);
+        self.font.setPointSize(10);
+        self.t.setFont(self.font)
+
+
+        
+
+    def RelectRng(self):
+        try:
+            self.selectAry = []
+            if len(self.tableHandle.selectedRanges()) != 0:
+                for i in range( len(self.tableHandle.selectedRanges())):
+                    self.leftCol  = self.tableHandle.selectedRanges()[i].leftColumn()
+                    self.colCount = self.tableHandle.selectedRanges()[i].columnCount()
+                    for currentCol in range( self.leftCol, self.leftCol + self.colCount ):
+                        self.selectAry.append( currentCol )
+                
+                self.topRow   = self.tableHandle.selectedRanges()[0].topRow()
+                self.rowCount = self.tableHandle.selectedRanges()[0].rowCount()
+                print self.selectAry
+                print self.topRow, self.rowCount
+                try:
+                    exec(self.t.toPlainText())
+                except Exception, e:
+                    print str(e)
+            else:
+                print 'workbook hava not been selected.'
+
+        except AttributeError:
+            print 'No active/valid workbook for script setting.'
+
+        
+#        self.wList = MainWindow.mdiArea.subWindowList()
+#        self.mdiArea.setActiveSubWindow(wList[int(tabID)])
+#        print 'Activating subwindow #' + tabID
+        
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
