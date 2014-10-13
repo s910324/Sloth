@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         self.tabColCounter = []
         self.globalVal = [0]
         super(MainWindow, self).__init__(parent)
-        self.mainWindow = QMainWindow()
+        #self.mainWindow = QMainWindow()
         self.prjTreeView = QTreeWidget(self)
         self.winTreeView = QTreeWidget(self)
         self.mdiArea = QMdiArea(self)

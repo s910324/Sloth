@@ -1,4 +1,8 @@
-Sloth
+#Super Awesome Scientific Plotting Freeware
 =====
 
-Sloth
+<h3>Which is powered by Python and Qt Framework.
+
+
+
+
