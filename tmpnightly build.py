@@ -362,8 +362,8 @@ class MainWindow(QMainWindow):
         try:
             subWinHandle = self.mdiArea.currentSubWindow()
             tableHandle  = subWinHandle.widget().centralWidget()
-            qtplt.MainWindow()
-            p = QMainWindow()
+
+            p = qtplt.MainWindow()
             subWinTitle = '[plot]' + subWinHandle.windowTitle()
             p.setWindowTitle(subWinTitle)
             self.mdiArea.addSubWindow(p)
@@ -387,8 +387,7 @@ class MainWindow(QMainWindow):
                 except IndexError:
                     clusters.append( selectAry[axisAry[-1] :             ] )
             
-            fig = Figure(figsize=(60,60),  facecolor=(1,1,1), edgecolor=(0,0,0))
-            ax = fig.add_subplot(111)
+
 
             for k in clusters:
                 for i in k[1:]:
@@ -408,13 +407,10 @@ class MainWindow(QMainWindow):
                                 print 'TypeError at: row# '        + str(j+1)
                             except AttributeError:
                                 print 'AttributionError at: row# ' + str(j+1)
-                    plotArrayX = np.array(plotArrayX)
-                    plotArrayY = np.array(plotArrayY)
-                    ax.plot(plotArrayX, plotArrayY)
-      
-            plotWidget = FigureCanvas(fig)
+                    p.addPlot(plotArrayX, plotArrayY)
+            p.finitPlotArea()
 
-            p.setCentralWidget(plotWidget)
+
             p.setMinimumSize(QSize(250,250))
             p.showMaximized()
             self.tabIDCounter += 1

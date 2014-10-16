@@ -2,6 +2,7 @@ import sys
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
+from types import *
 from PySide.QtCore import *
 from PySide.QtGui  import *
 
@@ -10,66 +11,152 @@ from PySide.QtGui  import *
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        plotSym = [ 'o', 's', 't', 'd', '+' ]
-        self.initSettingDocker()
-        self.resize(850,650)
-        self.tb = QToolBar('plot options')
-        self.addToolBar( Qt.TopToolBarArea , self.tb)
-        ######
-        vb = CustomViewBox()
+        self.mainWindow = QMainWindow()
+        self.resize(1000,800)
+        self.plotCounter = 0
+#        self.initSettingDocker()
+        self.initSettingToolbar()
+        self.initPlotArea()
+        '''        
+        p6 = win.addPlot(title="Updating plot")
+        curve = p6.plot(pen='y')
+        data = np.random.normal(size=(10,1000))
+        ptr = 0
+        def update():
+            global curve, data, ptr, p6
+            curve.setData(data[ptr%10])
+            if ptr == 0:
+                p6.enableAutoRange('xy', False)  ## stop auto-scaling after the first data set is plotted
+            ptr += 1
+        timer = QtCore.QTimer()
+        timer.timeout.connect(update)
+        timer.start(50)
 
+        
+        lr = pg.LinearRegionItem([400,700])
+        lr.setZValue(-10)
+        p8.addItem(lr)
+        
+        p9 = win.addPlot(title="Zoom on selected region")
+        p9.plot(data2)
+        def updatePlot():
+            p9.setXRange(*lr.getRegion(), padding=0)
+        def updateRegion():
+            lr.setRegion(p9.getViewBox().viewRange()[0])
+        lr.sigRegionChanged.connect(updatePlot)
+        p9.sigXRangeChanged.connect(updateRegion)
+        updatePlot()
+        '''
+                
+        xAry = [2,3,5,7,11,15,21]
+        yAry = (xAry)
+        self.setWindowTitle('good')
+      
+
+        # self.addPlot( xAry         )
+        # self.addPlot( xAry,   yAry )
+#        self.addPlot( xAry,   2+yAry)
+#        self.addPlot( xAry, 2*yAry,  Legend = True, plotName = 'Curv 1', dotSize = 8, dotColor = [0,0,0,255], dotSym = 2)
+        self.finitPlotArea( axisNameAry = ['x','y'], unitAry = ['a.u.','a.u.'], showAxis = [1,1,1,1])
+        
+        
+        #self.setCentralWidget(view)
+        #self.setWindowTitle(winTitle)
+    
+#    def initSettingDocker(self):
+#        self.settingDockWidget = QDockWidget("  ::  Settings ::", self)
+#        self.settingDockWidget.setFeatures(QDockWidget.DockWidgetMovable)
+#        self.settingDockWidget.setAllowedAreas(Qt.BottomDockWidgetArea and Qt.TopDockWidgetArea)
+#        self.addDockWidget(Qt.BottomDockWidgetArea, self.settingDockWidget)
+#        self.settings = PlotSettings()
+#        self.settingDockWidget.setWidget(self.settings)
+        
+    def initSettingToolbar(self):
+        self.graphBar = QToolBar('plot options')
+        self.addToolBar( Qt.TopToolBarArea , self.graphBar)
+
+        selectAction    = QAction('Select area', self)
+        crosshairAction = QAction('Enable CrossHair', self)
+        addHLineAction = QAction('Insert Horizontal Line', self)
+        addVLineAction = QAction('Insert Verticle Line', self)
+        
+        self.graphBar.addAction(selectAction)
+        self.graphBar.addAction(crosshairAction)
+        self.graphBar.addAction(addHLineAction)
+        self.graphBar.addAction(addVLineAction)
+        #nextAction.triggered.connect(self.test2)    
+        
+                    
+        
+    def initPlotArea(self, winTitle = 'Untitled', graphTitle = ''):
+        vb = CustomViewBox()
         pg.setConfigOption('background', 'w')
         pg.setConfigOption('foreground', 'k')
-        ######
-        self.view = pg.GraphicsLayoutWidget()         
-        self.setCentralWidget(self.view)
-        self.setWindowTitle('pyqtgraph example: ScatterPlot')
-        self.w1 = self.view.addPlot(viewBox=vb, enableMenu=False, title="PlotItem with custom axis and ViewBox<br>Menu disabled, mouse behavior changed: left-drag to zoom, right-click to reset zoom")
+        view = pg.GraphicsLayoutWidget()         
+        self.setCentralWidget(view)
+        self.setWindowTitle(winTitle)
+        self.w = view.addPlot( viewBox = vb, enableMenu = False, title = graphTitle)
+        self.l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
+        self.l.setParentItem(self.w.graphicsItem())   # Note we do NOT call plt.addItem in this case
         
-        l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
-        l.setParentItem(self.w1.graphicsItem())   # Note we do NOT call plt.addItem in this case
-
-        self.s1 = pg.ScatterPlotItem( name = 'sample', pxMode = True, antialias = True, size=8, pen=pg.mkPen(None), brush=pg.mkBrush(0, 0, 0, 255), symbol = plotSym[2])
-        self.s2 = pg.ScatterPlotItem( name = 'sample', pxMode = True, antialias = True, size=8, pen=pg.mkPen(None), brush=pg.mkBrush(0, 0, 0, 255), symbol = plotSym[3])
         
-        self.x = np.array([0,1,2,3,4,5])
-        self.y = np.exp(self.x)
-        self.z = self.x
-        self.s1.addPoints(self.x,self.y)
-        self.s2.addPoints(self.x, self.z)
-        self.w1.addItem(self.s1)
-        self.w1.addItem(self.s2)
-        
-        l.addItem(self.s1, 'red plot')
-        l.addItem(self.s2, 'green plot')
-        ######
-
-        self.w1.setLabel(axis = 'left', text= 'y', units= 'a.u.', unitPrefix=None )
-        self.w1.setLabel(axis = 'bottom', text= 'x', units= 'a.u.', unitPrefix=None )
-        self.w1.setTitle(title='super awsome')
-        
-        self.w1.showAxis('top', show=True)
-        self.w1.showAxis('right', show=True)
-        ######
-        '''crosshair'''
         
 
+    def addPlot(self, xAry = None, yAry = None, plotName = None, 
+                lineColor = (0,0,0,255), lineWidth = 1, lineStyle = QtCore.Qt.SolidLine, 
+                dotColor  = (0,0,0,255), dotSize   = 4,  dotSym = 0    ):
+                    
+            Sym = [ 'o', 's', 't', 'd', '+' ]
+            if plotName == None:
+                plotName = 'Untitle {0}'.format(self.plotCounter)
+                self.plotCounter += 1
+            if ( xAry != None and yAry != None):
+                line = self.w.plot( np.array(xAry), np.array(yAry), name = plotName,
+                                  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
+            else:
+                plotAry = xAry if xAry != None else yAry
+                xAry = np.linspace( 0, len( plotAry )-1, len( plotAry ))
+                yAry = np.array( plotAry )
+                line = self.w.plot( np.array(xAry), np.array(yAry), name = plotName,
+                                  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
 
-    
-    def initSettingDocker(self):
-        self.settingDockWidget = QDockWidget("  ::  Settings ::", self)
-        self.settingDockWidget.setFeatures(QDockWidget.DockWidgetMovable)
-        self.settingDockWidget.setAllowedAreas(Qt.LeftDockWidgetArea and Qt.RightDockWidgetArea)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.settingDockWidget)
-        self.settings = PlotSettings()
-        self.settingDockWidget.setWidget(self.settings)
+            line.setSymbolBrush( pg.mkBrush(  color = dotColor ))
+            line.setSymbolPen(   None )
+            line.setSymbolSize( dotSize )
+            self.w.showGrid(x=True, y=True)
+#            line.setPen(pg.mkPen(color = (255,0,0,255), width=5, style=QtCore.Qt.SolidLine))
+#            self.w.setLabel('left', "Y Axis", units='A')
+#            self.w.setLabel('bottom', "Y Axis", units='s')
+#            self.w.setLogMode(x=True, y=False)
+            self.l.addItem( line, plotName )        
 
+
+    def finitPlotArea(self,Area = None, axisNameAry = None, unitAry = None, showAxis = [1, 1, 1, 1]):
+        axisNameAry = axisNameAry if type(axisNameAry) == ListType else ['','','','']
+        unitAry     = unitAry     if type(unitAry)     == ListType else ['','','','']
+        showAxis    = showAxis    if type(showAxis)    == ListType else [ 1, 1, 1, 1]
+
+        for i in range( 0, len(unitAry) - len(axisNameAry)):
+            unitAry.append('')
+        if len(axisNameAry) > 0:
+            self.w.setLabel(axis = 'bottom', text = axisNameAry[0], units = unitAry[0], unitPrefix = None )
+        if len(axisNameAry) > 1:
+            self.w.setLabel(axis = 'left',   text = axisNameAry[1], units = unitAry[1], unitPrefix = None )
+        if len(axisNameAry) > 2:
+            self.w.setLabel(axis = 'top',    text = axisNameAry[2], units = unitAry[2], unitPrefix = None )
+        if len(axisNameAry) > 3:
+            self.w.setLabel(axis = 'right',  text = axisNameAry[3], units = unitAry[3], unitPrefix = None )
+        self.w.showAxis('bottom', show= showAxis[0])
+        self.w.showAxis('left',   show= showAxis[1])                
+        self.w.showAxis('top',    show= showAxis[2])
+        self.w.showAxis('right',  show= showAxis[3])
+      
+        
 class CustomViewBox(pg.ViewBox):
     def __init__(self, *args, **kwds):
         pg.ViewBox.__init__(self, *args, **kwds)
         self.setMouseMode(self.RectMode)
-        
-    ## reimplement right-click to zoom out
+
     def mouseClickEvent(self, ev):
         if ev.button() == QtCore.Qt.RightButton:
             self.autoRange()
@@ -80,31 +167,104 @@ class CustomViewBox(pg.ViewBox):
         else:
             pg.ViewBox.mouseDragEvent(self, ev)   
 
-        
-                        
-class PlotSettings(QWidget):
-    def __init__(self, parent = None):
-        super(PlotSettings, self).__init__(parent)
-        XAxisLabel = QLabel()
-        YAxisLabel = QLabel()
-        XUnitLabel = QLabel()
-        YUnitLabel = QLabel()
-        XMaxLabel  = QLabel()
-        YMaxLabel  = QLabel() 
-        XMinLabel  = QLabel() 
-        YMinLabel  = QLabel()
-        
-        XAxisText  = QLineEdit()       
-        XUnitText  = QLineEdit()
-        YAxisText  = QLineEdit()
-        YUnitText  = QLineEdit()
-        
-
-        grid = QGridLayout()
-        grid.setSpacing(10)
-        grid.addWidget(XAxisText, 1,0)
-        self.setLayout( grid )
-        #self.show()
+#        
+#                        
+#class PlotSettings(QWidget):
+#    def __init__(self, parent = None):
+#        super(PlotSettings, self).__init__(parent)
+#        self.XAxisLabel = QLabel('bottom Range:')
+#        self.YAxisLabel = QLabel('left   Range:')
+#        self.TAxisLabel = QLabel('top    Range:')
+#        self.RAxisLabel = QLabel('right  Range:')
+#        self.LDashLabel  = QLabel('<-')
+#        self.RDashLabel  = QLabel('->')
+#        self.UnitLabel  = QLabel(' ||    Label / Unit: ')
+#        self.SlashLabel  = QLabel('/')
+#        
+#        self.XMaxEdit   = QLineEdit() 
+#        self.XTickEdit  = QLineEdit() 
+#        self.XMinEdit   = QLineEdit() 
+#        self.XUnitEdit  = QLineEdit() 
+#        self.XLabelEdit = QLineEdit() 
+#        
+#        self.YMaxEdit   = QLineEdit() 
+#        self.YTickEdit  = QLineEdit() 
+#        self.YMinEdit   = QLineEdit() 
+#        self.YUnitEdit  = QLineEdit() 
+#        self.YLabelEdit = QLineEdit() 
+#        
+#        self.TMaxEdit   = QLineEdit() 
+#        self.TTickEdit  = QLineEdit() 
+#        self.TMinEdit   = QLineEdit() 
+#        self.TUnitEdit  = QLineEdit() 
+#        self.TLabelEdit = QLineEdit()
+#        
+#        self.RMaxEdit   = QLineEdit() 
+#        self.RTickEdit  = QLineEdit() 
+#        self.RMinEdit   = QLineEdit() 
+#        self.RUnitEdit  = QLineEdit() 
+#        self.RLabelEdit = QLineEdit()
+#        
+#        self.Vbox  = QVBoxLayout()
+#        self.Vbox.addLayout(self.HboxB)
+#        self.Vbox.addLayout(self.HboxL)
+#        self.Vbox.addLayout(self.HboxT)
+#        self.Vbox.addLayout(self.HboxR)
+#        self.HboxB = QHBoxLayout()
+#        self.HboxL = QHBoxLayout()
+#        self.HboxT = QHBoxLayout()
+#        self.HboxR = QHBoxLayout()
+#        
+#        self.HboxB.addWidget( self.XAxisLabel  )
+#        self.VboxB.addWidget( self.Xma    )
+#        grid = QGridLayout()
+#        grid.setSpacing(10)
+#        grid.addWidget(XAxisLabel, 0,0)
+#        grid.addWidget(XMaxEdit,   0,1)
+#        #grid.addWidget(LDashLabel, 0,2)
+#        grid.addWidget(XTickEdit,  0,3)
+#        #grid.addWidget(RDashLabel, 0,4)
+#        grid.addWidget(XMinEdit,   0,5)
+#        #grid.addWidget(UnitLabel,  0,6)
+#        grid.addWidget(XLabelEdit, 0,7)
+#        #grid.addWidget(SlashLabel, 0,8)
+#        grid.addWidget(XUnitEdit,  0,9)
+#        
+#        grid.addWidget(LAxisLabel, 1,0)
+#        grid.addWidget(YMaxEdit,   1,1)
+#        grid.addWidget(LDashLabel, 1,2)
+#        grid.addWidget(YTickEdit,  1,3)
+#        grid.addWidget(RDashLabel, 1,4)
+#        grid.addWidget(YMinEdit,   1,5)
+#        grid.addWidget(UnitLabel,  1,6)
+#        grid.addWidget(YLabelEdit, 1,7)
+#        grid.addWidget(SlashLabel, 1,8)
+#        grid.addWidget(YUnitEdit,  1,9)
+#        
+#        grid.addWidget(TAxisLabel, 2,0)
+#        grid.addWidget(TMaxEdit,   2,1)
+#        #grid.addWidget(LDashLabel, 2,2)
+#        grid.addWidget(TTickEdit,  2,3)
+#        #grid.addWidget(RDashLabel, 2,4)
+#        grid.addWidget(TMinEdit,   2,5)
+#        #grid.addWidget(UnitLabel,  2,6)
+#        grid.addWidget(TLabelEdit, 2,7)
+#        #grid.addWidget(SlashLabel, 2,8)
+#        grid.addWidget(TUnitEdit,  2,9)
+#        
+#        grid.addWidget(RAxisLabel, 3,0)
+#        grid.addWidget(RMaxEdit,   3,1)
+#        #grid.addWidget(DashLabel, 3,2)
+#        grid.addWidget(RTickEdit,  3,3)
+#        #grid.addWidget(RDashLabel, 3,4)
+#        grid.addWidget(RMinEdit,   3,5)
+#        #grid.addWidget(UnitLabel,  3,6)
+#        grid.addWidget(RLabelEdit, 3,7)
+#        #grid.addWidget(SlashLabel, 3,8)
+#        grid.addWidget(RUnitEdit,  3,9)
+#        
+#        self.setLayout( grid )
+#        #self.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
