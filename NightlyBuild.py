@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import plotSubWin as qtplt
+import OpenFileOptions as oFile
 from PySide.QtCore import *
 from PySide.QtGui  import *
 from PySide.QtGui  import QFont as QFont
@@ -59,34 +60,38 @@ class MainWindow(QMainWindow):
         
         
     def initToolBar(self):
+        
         self.MainToolbar = QToolBar('Main operations') 
         self.plotbar     = QToolBar('plot options') 
         self.addToolBar( Qt.TopToolBarArea , self.MainToolbar)
         self.addToolBar( Qt.BottomToolBarArea , self.plotbar)
-        
+        self.initPlotLineButton()
+
         nextAction = QAction('Exit', self)
         self.plotbar.addAction(nextAction)
-        nextAction.triggered.connect(self.test2)        
+        nextAction.triggered.connect(self.test2)
         
-        exitAction = QAction('Exit', self)
-        openPjAction = QAction('New Project', self)
-        openAction = QAction('Open', self)
-        newwbAction = QAction('New WorkBook', self)
-        plotAction = QAction('Plot', self)
-        testAction = QAction('Test', self)
-        addColAction = QAction('Add Column', self)
-        addRowAction = QAction('Add Row', self)
-        rmvColAction = QAction('remove Column', self)
-        rmvRowAction = QAction('remove Row', self)        
-        setXAction = QAction('Set As X', self)
-        setYAction = QAction('Set As Y', self)
-        setZAction = QAction('Set As Z', self)
+        exitAction      = QAction('Exit', self)
+        openPjAction    = QAction('New Project', self)
+        openAction      = QAction('Open', self)
+        newwbAction     = QAction('New WorkBook', self)
+        plotAction      = QAction('Plot', self)
+        stackPlotAction = QAction('Stack Plot', self)
+        testAction      = QAction('Test', self)
+        addColAction    = QAction('Add Column', self)
+        addRowAction    = QAction('Add Row', self)
+        rmvColAction    = QAction('remove Column', self)
+        rmvRowAction    = QAction('remove Row', self)        
+        setXAction      = QAction('Set As X', self)
+        setYAction      = QAction('Set As Y', self)
+        setZAction      = QAction('Set As Z', self)
         
         exitAction.triggered.connect(self.CreateTableSub)
         openPjAction.triggered.connect(self.OpenNewProject)
         openAction.triggered.connect(self.OpenFile)
         newwbAction.triggered.connect(self.OpenNewWorkBook)
-        plotAction.triggered.connect(self.PlotData)
+        plotAction.triggered.connect(     lambda stack = 0 : self.PlotData(stack))
+        stackPlotAction.triggered.connect(lambda stack = 1 : self.PlotData(stack))
         testAction.triggered.connect(self.test)
         addColAction.triggered.connect(self.addCol)
         addRowAction.triggered.connect(self.addRow)
@@ -102,6 +107,7 @@ class MainWindow(QMainWindow):
         self.MainToolbar.addAction(openAction)
         self.MainToolbar.addAction(newwbAction)
         self.MainToolbar.addAction(plotAction)
+        self.MainToolbar.addAction(stackPlotAction)
         self.MainToolbar.addAction(testAction)
         self.MainToolbar.addAction(addColAction)
         self.MainToolbar.addAction(addRowAction)
@@ -110,6 +116,75 @@ class MainWindow(QMainWindow):
         self.MainToolbar.addAction(setXAction)
         self.MainToolbar.addAction(setYAction)
         self.MainToolbar.addAction(setZAction)
+        
+        
+    def initPlotLineButton(self):
+        lineMenu    = QMenu()        
+        dotMenu     = QMenu()
+        dotLineMenu = QMenu()
+        
+        linePlotButton    = QToolButton()
+        dotPlotButton     = QToolButton()
+        dotLinePlotButton = QToolButton()
+        self.plotbar.addWidget(linePlotButton)
+        self.plotbar.addSeparator()
+        self.plotbar.addWidget(dotPlotButton)
+        self.plotbar.addSeparator()
+        self.plotbar.addWidget(dotLinePlotButton)
+        self.plotbar.addSeparator()
+        
+        lineAction        = QAction('Line', self)
+        hStepsAction      = QAction('Horizontal Step', self)
+        vStepsAction      = QAction('Vertical Step', self)
+        spineAction       = QAction('Spine Connect', self)
+        
+        dotAction        = QAction('Scatter', self)
+        yErrorAction     = QAction('Y Error', self)
+        xyErrorAction    = QAction('XY Error', self)
+        vDropLineAction  = QAction('Verticle Drpo Line', self)
+        bubbleAction     = QAction('Bubble', self)
+        colorMapAction   = QAction('Color Map', self)        
+        bPlusCMapAction  = QAction('Bubble + Color Map', self)        
+        
+        dotLineAction      = QAction('Line + Symbol', self)
+        lineSeriesAction   = QAction('Line Series', self)
+        twoSegmentAction   = QAction('2 Point Segment', self)
+        threeSegmentAction = QAction('3 Point Segment', self)
+        
+        linePlotButton.setPopupMode(    QToolButton.MenuButtonPopup )
+        dotPlotButton.setPopupMode(     QToolButton.MenuButtonPopup )
+        dotLinePlotButton.setPopupMode( QToolButton.MenuButtonPopup )
+        
+        linePlotButton.setDefaultAction(    lineAction    )
+        dotPlotButton.setDefaultAction(     dotAction    )
+        dotLinePlotButton.setDefaultAction( dotLineAction )
+        
+        lineMenu.addAction(lineAction)
+        lineMenu.addAction(hStepsAction)
+        lineMenu.addAction(vStepsAction)
+        lineMenu.addAction(spineAction)
+        
+        dotMenu.addAction(dotAction       )
+        dotMenu.addAction(yErrorAction    )
+        dotMenu.addAction(xyErrorAction   )
+        dotMenu.addAction(vDropLineAction )
+        dotMenu.addAction(bubbleAction    )
+        dotMenu.addAction(colorMapAction  )
+        dotMenu.addAction(bPlusCMapAction )
+        
+        dotLineMenu.addAction(dotLineAction      )
+        dotLineMenu.addAction(lineSeriesAction   )
+        dotLineMenu.addAction(twoSegmentAction   )
+        dotLineMenu.addAction(threeSegmentAction )
+        
+        
+        linePlotButton.setMenu(    lineMenu    )
+        dotPlotButton.setMenu(     dotMenu     )        
+        dotLinePlotButton.setMenu( dotLineMenu )
+        
+        lineAction.triggered.connect(self.test2)
+                
+        
         
     def initWinTree(self):
         self.winTreeView.setColumnCount(3)
@@ -295,42 +370,87 @@ class MainWindow(QMainWindow):
 
 
     def OpenFile(self):
-        ReadFileArray = []
+        self.preViewWin = oFile.PreView()
+        self.preViewWin.OpenFile()
         
-        FileName      = QFileDialog.getOpenFileName(self, "Open File.", "/home")
-        subWinTitle   = str(FileName[0].split('/')[-1])
-        FileContainer = open(FileName[0], 'r')
-        FileLines     = FileContainer.readlines()
-        RowNum        = len(FileLines)
-        ColNum        = 0
+        if self.preViewWin.exec_() == QDialog.Accepted :
+            filePath, headerSize = self.preViewWin.Submit()
+            print filePath, headerSize
+            if len(filePath) != 0:
+                ReadFileArray = []
+                subWinTitle   = str(filePath.split('/')[-1])
+                FileContainer = open(filePath, 'r')
+                FileLines     = FileContainer.readlines()
+                RowNum        = len(FileLines)
+                ColNum        = 0
+                
+                TableHandle, subWinHandle, tabID = self.CreateTableSub()
+                subWinHandle.setWindowTitle(subWinTitle)
+                self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
+                for i in range(RowNum):
+                    FileRow = (FileLines[i].strip()).split('\t')
+                    ReadFileArray.append(FileRow)
+                    if len(FileRow) > ColNum:
+                        ColNum = len(FileRow)
+                TableHandle.setRowCount(RowNum)
+                for i in range(ColNum):
+                    self.addCol()
         
-        TableHandle, subWinHandle, tabID = self.CreateTableSub()
-        subWinHandle.setWindowTitle(subWinTitle)
-        self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
-        for i in range(RowNum):
-            FileRow = (FileLines[i].strip()).split('\t')
-            ReadFileArray.append(FileRow)
-            if len(FileRow) > ColNum:
-                ColNum = len(FileRow)
-        TableHandle.setRowCount(RowNum)
-        for i in range(ColNum):
-            self.addCol()
-
-        for i in range(3):
-            for j in range(ColNum):
-                if j < len(ReadFileArray[i]):
-                    headerItem = QTableWidgetItem(ReadFileArray[i][j])
-                else:
-                    headerItem = QTableWidgetItem('')
-                headerItem.setBackground(QColor('#0066cc'))
-                headerItem.setForeground(QColor('#ffffff'))
-                headerFont = QFont("Times", 8, QFont.Normal)
-                headerItem.setFont(headerFont)
-                TableHandle.setItem(i, j, headerItem)
-        for i in range(3, RowNum):
-            for j in range(len(ReadFileArray[i])):
-                TableHandle.setItem(i, j, QTableWidgetItem(ReadFileArray[i][j]))
-        FileContainer.close()
+                for i in range(headerSize):
+                    for j in range(ColNum):
+                        if j < len(ReadFileArray[i]):
+                            headerItem = QTableWidgetItem(ReadFileArray[i][j])
+                        else:
+                            headerItem = QTableWidgetItem('')
+                        headerItem.setBackground(QColor('#0066cc'))
+                        headerItem.setForeground(QColor('#ffffff'))
+                        headerFont = QFont("Times", 8, QFont.Normal)
+                        headerItem.setFont(headerFont)
+                        TableHandle.setItem(i, j, headerItem)
+                for i in range(headerSize, RowNum):
+                    for j in range(len(ReadFileArray[i])):
+                        TableHandle.setItem(i, j, QTableWidgetItem(ReadFileArray[i][j]))
+                FileContainer.close()
+                      
+    
+#    def LoadFile(self, filePath, headerSize):
+#        print 'a'
+#        if len(filePath) != 0:
+#            ReadFileArray = []
+#            subWinTitle   = str(filePath.split('/')[-1])
+#            FileContainer = open(filePath, 'r')
+#            FileLines     = FileContainer.readlines()
+#            RowNum        = len(FileLines)
+#            ColNum        = 0
+#            
+#            TableHandle, subWinHandle, tabID = self.CreateTableSub()
+#            subWinHandle.setWindowTitle(subWinTitle)
+#            self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
+#            for i in range(RowNum):
+#                FileRow = (FileLines[i].strip()).split('\t')
+#                ReadFileArray.append(FileRow)
+#                if len(FileRow) > ColNum:
+#                    ColNum = len(FileRow)
+#            TableHandle.setRowCount(RowNum)
+#            for i in range(ColNum):
+#                self.addCol()
+#    
+#            for i in range(headerSize):
+#                for j in range(ColNum):
+#                    if j < len(ReadFileArray[i]):
+#                        headerItem = QTableWidgetItem(ReadFileArray[i][j])
+#                    else:
+#                        headerItem = QTableWidgetItem('')
+#                    headerItem.setBackground(QColor('#0066cc'))
+#                    headerItem.setForeground(QColor('#ffffff'))
+#                    headerFont = QFont("Times", 8, QFont.Normal)
+#                    headerItem.setFont(headerFont)
+#                    TableHandle.setItem(i, j, headerItem)
+#            for i in range(headerSize, RowNum):
+#                for j in range(len(ReadFileArray[i])):
+#                    TableHandle.setItem(i, j, QTableWidgetItem(ReadFileArray[i][j]))
+#            FileContainer.close()
+#            print 'b'
         
     def SaveFile(self):
         print 'a'
@@ -358,16 +478,21 @@ class MainWindow(QMainWindow):
 
         
         
-    def PlotData(self):
+    def PlotData(self, stack):
         try:
+            print stack
             subWinHandle = self.mdiArea.currentSubWindow()
             tableHandle  = subWinHandle.widget().centralWidget()
 
-            p = qtplt.MainWindow()
+            plotWindow = qtplt.MainWindow()
+            
             subWinTitle = '[plot]' + subWinHandle.windowTitle()
-            p.setWindowTitle(subWinTitle)
-            self.mdiArea.addSubWindow(p)
-
+            plotWindow.setWindowTitle(subWinTitle)
+            self.mdiArea.addSubWindow(plotWindow)
+            colorMap = [ (255,255,255,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
+                    (255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
+                    (255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
+                    (130,0,217,255), (85,0,212,255)]  
             selectAry = []
             axisAry   = []
             clusters  = []
@@ -388,7 +513,8 @@ class MainWindow(QMainWindow):
                     clusters.append( selectAry[axisAry[-1] :             ] )
             
 
-
+            if stack == 1: 
+                p,l = plotWindow.addPlotArea('graphtitle')  #stack
             for k in clusters:
                 for i in k[1:]:
                     plotArrayX = []
@@ -407,12 +533,18 @@ class MainWindow(QMainWindow):
                                 print 'TypeError at: row# '        + str(j+1)
                             except AttributeError:
                                 print 'AttributionError at: row# ' + str(j+1)
-                    p.addPlot(plotArrayX, plotArrayY)
-            p.finitPlotArea()
+                    if stack == 1:
+                        plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+                    if stack == 0:
+                        p,l = plotWindow.addPlotArea('graphtitle')
+                        plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+                        plotWindow.finitPlotArea(plotArea = p, legend = l) #'multiplot'
+            if stack == 1:
+                plotWindow.finitPlotArea(plotArea = p, legend = l)
 
 
-            p.setMinimumSize(QSize(250,250))
-            p.showMaximized()
+            plotWindow.setMinimumSize(QSize(250,250))
+            plotWindow.showMaximized()
             self.tabIDCounter += 1
             tabID = self.tabIDCounter
             self.tabColCounter.append(-1)
@@ -438,7 +570,7 @@ class MainWindow(QMainWindow):
         except AttributeError:
             print 'No active/valid workbook for script setting.'   
     def test2(self):
-        print a
+        print 'a'
 
     def ScriptSetVal(self):
         w = QMainWindow()
@@ -633,6 +765,6 @@ class Highlighter( QSyntaxHighlighter):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     frame = MainWindow()
-    frame.show()    
+    frame.showMaximized()    
     app.exec_()
     sys.exit

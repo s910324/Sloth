@@ -17,6 +17,7 @@ class MainWindow(QMainWindow):
 #        self.initSettingDocker()
         self.initSettingToolbar()
         self.initPlotArea()
+        self.plotLineHolder = []
         '''        
         p6 = win.addPlot(title="Updating plot")
         curve = p6.plot(pen='y')
@@ -47,22 +48,18 @@ class MainWindow(QMainWindow):
         p9.sigXRangeChanged.connect(updateRegion)
         updatePlot()
         '''
-                
-        xAry = [2,3,5,7,11,15,21]
-        yAry = (xAry)
-        self.setWindowTitle('good')
-      
-
-        # self.addPlot( xAry         )
-        # self.addPlot( xAry,   yAry )
-#        self.addPlot( xAry,   2+yAry)
-#        self.addPlot( xAry, 2*yAry,  Legend = True, plotName = 'Curv 1', dotSize = 8, dotColor = [0,0,0,255], dotSym = 2)
-        self.finitPlotArea( axisNameAry = ['x','y'], unitAry = ['a.u.','a.u.'], showAxis = [1,1,1,1])
-        
-        
-        #self.setCentralWidget(view)
-        #self.setWindowTitle(winTitle)
-    
+              
+#        xAry = [2,3,5,7,11,15,21]
+#        yAry = (xAry) 
+#        zAry = [4,6,3,6,234,3,23]
+#        w,l = self.addPlotArea()
+#        self.insertPlot(xAry, yAry, w, l)
+#        self.view.nextRow()        
+#        w,l = self.addPlotArea()
+#        self.insertPlot(xAry, zAry, w, l)
+#        self.finitPlotArea(w)
+#
+#    
 #    def initSettingDocker(self):
 #        self.settingDockWidget = QDockWidget("  ::  Settings ::", self)
 #        self.settingDockWidget.setFeatures(QDockWidget.DockWidgetMovable)
@@ -88,50 +85,63 @@ class MainWindow(QMainWindow):
         
                     
         
-    def initPlotArea(self, winTitle = 'Untitled', graphTitle = ''):
-        vb = CustomViewBox()
+    def initPlotArea(self):
         pg.setConfigOption('background', 'w')
         pg.setConfigOption('foreground', 'k')
-        view = pg.GraphicsLayoutWidget()         
-        self.setCentralWidget(view)
-        self.setWindowTitle(winTitle)
-        self.w = view.addPlot( viewBox = vb, enableMenu = False, title = graphTitle)
+        self.view = pg.GraphicsLayoutWidget()         
+        scrollBarH = QScrollBar()
+        scrollBarV = QScrollBar()
+        self.view.setHorizontalScrollBar(scrollBarH)
+        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.view.setVerticalScrollBar(scrollBarV)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        
+#        self.view.setBaseSize(2000,2000)
+#        self.view.scale(1.5,1)
+#        self.view.setFixedSize(self.size().height()*1.5, self.size().height())
+        self.setCentralWidget(self.view)
+#        self.setWindowTitle(winTitle)
+
+    
+    def addPlotArea(self, graphTitle = ''):
+        self.vb = CustomViewBox()
+        self.w = self.view.addPlot( viewBox = self.vb, enableMenu = False, title = graphTitle)
+        self.view.nextRow()
         self.l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
         self.l.setParentItem(self.w.graphicsItem())   # Note we do NOT call plt.addItem in this case
-        
-        
+        return self.w, self.l
         
 
-    def addPlot(self, xAry = None, yAry = None, plotName = None, 
+    def insertPlot(self, xAry = None, yAry = None, plotArea = None, legend = None, plotName = None, 
                 lineColor = (0,0,0,255), lineWidth = 1, lineStyle = QtCore.Qt.SolidLine, 
                 dotColor  = (0,0,0,255), dotSize   = 4,  dotSym = 0    ):
-                    
             Sym = [ 'o', 's', 't', 'd', '+' ]
             if plotName == None:
                 plotName = 'Untitle {0}'.format(self.plotCounter)
                 self.plotCounter += 1
             if ( xAry != None and yAry != None):
-                line = self.w.plot( np.array(xAry), np.array(yAry), name = plotName,
+                line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
                                   pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
+                self.plotLineHolder.append(line)
             else:
                 plotAry = xAry if xAry != None else yAry
                 xAry = np.linspace( 0, len( plotAry )-1, len( plotAry ))
                 yAry = np.array( plotAry )
-                line = self.w.plot( np.array(xAry), np.array(yAry), name = plotName,
+                line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
                                   pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
-
+                self.plotLineHolder.append(line)
             line.setSymbolBrush( pg.mkBrush(  color = dotColor ))
             line.setSymbolPen(   None )
             line.setSymbolSize( dotSize )
-            self.w.showGrid(x=True, y=True)
+            plotArea.showGrid(x=True, y=True)
 #            line.setPen(pg.mkPen(color = (255,0,0,255), width=5, style=QtCore.Qt.SolidLine))
 #            self.w.setLabel('left', "Y Axis", units='A')
 #            self.w.setLabel('bottom', "Y Axis", units='s')
 #            self.w.setLogMode(x=True, y=False)
-            self.l.addItem( line, plotName )        
+            legend.addItem( line, plotName )        
 
 
-    def finitPlotArea(self,Area = None, axisNameAry = None, unitAry = None, showAxis = [1, 1, 1, 1]):
+    def finitPlotArea(self, plotArea = None, legend = None, axisNameAry = None, unitAry = None, showAxis = [1, 1, 1, 1]):
         axisNameAry = axisNameAry if type(axisNameAry) == ListType else ['','','','']
         unitAry     = unitAry     if type(unitAry)     == ListType else ['','','','']
         showAxis    = showAxis    if type(showAxis)    == ListType else [ 1, 1, 1, 1]
@@ -139,17 +149,25 @@ class MainWindow(QMainWindow):
         for i in range( 0, len(unitAry) - len(axisNameAry)):
             unitAry.append('')
         if len(axisNameAry) > 0:
-            self.w.setLabel(axis = 'bottom', text = axisNameAry[0], units = unitAry[0], unitPrefix = None )
+            plotArea.setLabel(axis = 'bottom', text = axisNameAry[0], units = unitAry[0], unitPrefix = None )
         if len(axisNameAry) > 1:
-            self.w.setLabel(axis = 'left',   text = axisNameAry[1], units = unitAry[1], unitPrefix = None )
+            plotArea.setLabel(axis = 'left',   text = axisNameAry[1], units = unitAry[1], unitPrefix = None )
         if len(axisNameAry) > 2:
-            self.w.setLabel(axis = 'top',    text = axisNameAry[2], units = unitAry[2], unitPrefix = None )
+            plotArea.setLabel(axis = 'top',    text = axisNameAry[2], units = unitAry[2], unitPrefix = None )
         if len(axisNameAry) > 3:
-            self.w.setLabel(axis = 'right',  text = axisNameAry[3], units = unitAry[3], unitPrefix = None )
+            plotArea.setLabel(axis = 'right',  text = axisNameAry[3], units = unitAry[3], unitPrefix = None )
         self.w.showAxis('bottom', show= showAxis[0])
         self.w.showAxis('left',   show= showAxis[1])                
         self.w.showAxis('top',    show= showAxis[2])
         self.w.showAxis('right',  show= showAxis[3])
+        
+    def modifyPlot(self):
+        print 'a'
+#
+#    def resizeEvent(self, event):
+#        print 'a'
+#        self.view.setFixedSize(self.size().height() * 1.5, self.size().height() * 0.95)
+
       
         
 class CustomViewBox(pg.ViewBox):
