@@ -1,8 +1,11 @@
 import sys
 import NightlyBuild as Main
+import pandas as pd
 from PySide.QtCore import *
 from PySide.QtGui  import *
-
+# from QtVariant import QtGui, QtCore
+#from PyQt4.QtCore import *
+#from PyQt4.QtGui  import *
 
 
 class PreView(QDialog):
@@ -99,6 +102,8 @@ class PreView(QDialog):
         if len(self.FileName[0]) != 0:
             FileContainer = open(self.FileName[0], 'r')
             FileLines     = FileContainer.readlines()
+                 
+                
             RowNum = 25 if len(FileLines) >= 25 else len(FileLines)
             ColNum        = 0
             headerSize   = self.fileHeaderSlider.value()

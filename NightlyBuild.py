@@ -1,15 +1,24 @@
 import sys
 import numpy as np
+import pandas as pd
 import plotSubWin as qtplt
-import OpenFileOptions as oFile
+#import OpenFileOptions as oFile
+import pandasOpenfile  as oFile
 from PySide.QtCore import *
 from PySide.QtGui  import *
 from PySide.QtGui  import QFont as QFont
+#from PyQt4.QtCore import *
+#from PyQt4.QtGui  import *
+#from PyQt4.QtGui  import QFont as QFont
+
+# from QtVariant import QtGui, QtCore
+# from QtVariant import QFont as QFont
+
 #import matplotlib
 #matplotlib.use('Qt4Agg')
 #import pylab
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
+#from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+#from matplotlib.figure import Figure
 import types
 
 class MainWindow(QMainWindow):
@@ -217,44 +226,45 @@ class MainWindow(QMainWindow):
 #                    axisAry.append(cnt)
 #        print selectAry 
     
-    def addCol(self):
+    def addCol(self, num = 1):
         try:
             subWinHandle = self.mdiArea.currentSubWindow()
             tableHandle  = subWinHandle.widget().centralWidget()
             currentCol   = tableHandle.currentColumn()
             tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-            alfabat      = []
             atoz         = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            if currentCol == -1:
-                currentCol = self.tabColCounter[tabID]-1
-                
-            tableHandle.insertColumn(currentCol + 1)
-            self.tabColCounter[tabID] += 1
-
-            headerLable = 'Y('
-            root = self.tabColCounter[tabID]
-            while( root != 0):
-                if root%26 != 0:
-                    alfabat.append(root%26)
-                    root = root/26
-                else:
-                    alfabat.append(26)
-                    root = (root/26) -1
-
-            for i in range(len(alfabat)):
-                alfabat[i] = atoz[alfabat[i]]
-            for i in range(len(alfabat)-1, -1, -1):
-                headerLable += alfabat[i]
-            headerLable += ')'  
-            print 'Tab #' + str(tabID) + ' append column #' + str(headerLable)
-            tableHandle.setHorizontalHeaderItem(currentCol + 1, QTableWidgetItem(headerLable))
-            for i in range(3):
-                headerItem = QTableWidgetItem('')
-                headerItem.setBackground(QColor('#0066cc'))
-                headerItem.setForeground(QColor('#ffffff'))
-                headerFont = QFont("Times", 8, QFont.Normal)
-                headerItem.setFont(headerFont)
-                tableHandle.setItem(i, currentCol + 1, headerItem)
+            for i in range(num):
+                alfabat      = []
+                if currentCol == -1:
+                    currentCol = self.tabColCounter[tabID]-1
+                    
+                tableHandle.insertColumn(currentCol + 1)
+                self.tabColCounter[tabID] += 1
+    
+                headerLable = 'Y('
+                root = self.tabColCounter[tabID]
+                while( root != 0):
+                    if root%26 != 0:
+                        alfabat.append(root%26)
+                        root = root/26
+                    else:
+                        alfabat.append(26)
+                        root = (root/26) -1
+    
+                for i in range(len(alfabat)):
+                    alfabat[i] = atoz[alfabat[i]]
+                for i in range(len(alfabat)-1, -1, -1):
+                    headerLable += alfabat[i]
+                headerLable += ')'  
+                print 'Tab #' + str(tabID) + ' append column #' + str(headerLable)
+                tableHandle.setHorizontalHeaderItem(currentCol + 1, QTableWidgetItem(headerLable))
+                for i in range(3):
+                    headerItem = QTableWidgetItem('')
+                    headerItem.setBackground(QColor('#0066cc'))
+                    headerItem.setForeground(QColor('#ffffff'))
+                    headerFont = QFont("Times", 8, QFont.Normal)
+                    headerItem.setFont(headerFont)
+                    tableHandle.setItem(i, currentCol + 1, headerItem)
         except AttributeError:
             print 'No active/valid workbook for column appending.'
         
@@ -365,93 +375,34 @@ class MainWindow(QMainWindow):
         subWinHandle.setWindowTitle(subWinTitle)
         self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
         tableHandle.setRowCount(200)
-        for i in range(3):
-            self.addCol()
+        self.addCol(3)
 
 
     def OpenFile(self):
         self.preViewWin = oFile.PreView()
         self.preViewWin.OpenFile()
-        
         if self.preViewWin.exec_() == QDialog.Accepted :
-            filePath, headerSize = self.preViewWin.Submit()
-            print filePath, headerSize
-            if len(filePath) != 0:
-                ReadFileArray = []
-                subWinTitle   = str(filePath.split('/')[-1])
-                FileContainer = open(filePath, 'r')
-                FileLines     = FileContainer.readlines()
-                RowNum        = len(FileLines)
-                ColNum        = 0
-                
+            filePath, fileContainArray, headerSize = self.preViewWin.Submit()
+            subWinTitle   = str(filePath.split('/')[-1])
+            for fileContainer in fileContainArray:
                 TableHandle, subWinHandle, tabID = self.CreateTableSub()
-                subWinHandle.setWindowTitle(subWinTitle)
+                (rowNum, colNum) = fileContainer.shape
                 self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
-                for i in range(RowNum):
-                    FileRow = (FileLines[i].strip()).split('\t')
-                    ReadFileArray.append(FileRow)
-                    if len(FileRow) > ColNum:
-                        ColNum = len(FileRow)
-                TableHandle.setRowCount(RowNum)
-                for i in range(ColNum):
-                    self.addCol()
+                TableHandle.setRowCount(rowNum)
+                self.addCol(colNum)
         
-                for i in range(headerSize):
-                    for j in range(ColNum):
-                        if j < len(ReadFileArray[i]):
-                            headerItem = QTableWidgetItem(ReadFileArray[i][j])
-                        else:
-                            headerItem = QTableWidgetItem('')
-                        headerItem.setBackground(QColor('#0066cc'))
-                        headerItem.setForeground(QColor('#ffffff'))
-                        headerFont = QFont("Times", 8, QFont.Normal)
-                        headerItem.setFont(headerFont)
-                        TableHandle.setItem(i, j, headerItem)
-                for i in range(headerSize, RowNum):
-                    for j in range(len(ReadFileArray[i])):
-                        TableHandle.setItem(i, j, QTableWidgetItem(ReadFileArray[i][j]))
-                FileContainer.close()
-                      
-    
-#    def LoadFile(self, filePath, headerSize):
-#        print 'a'
-#        if len(filePath) != 0:
-#            ReadFileArray = []
-#            subWinTitle   = str(filePath.split('/')[-1])
-#            FileContainer = open(filePath, 'r')
-#            FileLines     = FileContainer.readlines()
-#            RowNum        = len(FileLines)
-#            ColNum        = 0
-#            
-#            TableHandle, subWinHandle, tabID = self.CreateTableSub()
-#            subWinHandle.setWindowTitle(subWinTitle)
-#            self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
-#            for i in range(RowNum):
-#                FileRow = (FileLines[i].strip()).split('\t')
-#                ReadFileArray.append(FileRow)
-#                if len(FileRow) > ColNum:
-#                    ColNum = len(FileRow)
-#            TableHandle.setRowCount(RowNum)
-#            for i in range(ColNum):
-#                self.addCol()
-#    
-#            for i in range(headerSize):
-#                for j in range(ColNum):
-#                    if j < len(ReadFileArray[i]):
-#                        headerItem = QTableWidgetItem(ReadFileArray[i][j])
-#                    else:
-#                        headerItem = QTableWidgetItem('')
-#                    headerItem.setBackground(QColor('#0066cc'))
-#                    headerItem.setForeground(QColor('#ffffff'))
-#                    headerFont = QFont("Times", 8, QFont.Normal)
-#                    headerItem.setFont(headerFont)
-#                    TableHandle.setItem(i, j, headerItem)
-#            for i in range(headerSize, RowNum):
-#                for j in range(len(ReadFileArray[i])):
-#                    TableHandle.setItem(i, j, QTableWidgetItem(ReadFileArray[i][j]))
-#            FileContainer.close()
-#            print 'b'
-        
+                for col in range(colNum):
+                    for row in range(rowNum):
+                        try:
+                            contnent =  QTableWidgetItem(unicode(str(fileContainer[col][row])))
+                        except UnicodeEncodeError:
+                            contnent =  QTableWidgetItem(unicode(fileContainer[col][row]))
+                        if row < headerSize:
+                            contnent.setBackground(QColor('#0066cc'))
+                            contnent.setForeground(QColor('#ffffff'))
+                        TableHandle.setItem(row, col, contnent)
+
+
     def SaveFile(self):
         print 'a'
         

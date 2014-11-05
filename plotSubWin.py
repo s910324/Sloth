@@ -1,11 +1,18 @@
 import sys
+import PySide
+from PySide.QtCore import *
+from PySide.QtGui  import *
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
 from types import *
-from PySide.QtCore import *
-from PySide.QtGui  import *
 
+# from QtVariant import QtGui, QtCore
+# from PyQt4.QtCore import *
+# from PyQt4.QtGui  import *
+
+#from scipy.stats import futil
+#from scipy.sparse.csgraph import _validation
 
 
 class MainWindow(QMainWindow):
