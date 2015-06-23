@@ -2,6 +2,8 @@ import sys
 import numpy as np
 import pandas as pd
 import plotSubWin as qtplt
+import expTableWidget as tw
+import expTableWindow as tww
 #import OpenFileOptions as oFile
 import pandasOpenfile  as oFile
 from PySide.QtCore import *
@@ -413,8 +415,10 @@ class MainWindow(QMainWindow):
         self.tabIDCounter += 1
         tabID = self.tabIDCounter
         w = QMainWindow()
+        # w = tww.TableWidgetCustom()           #fix this buggggg
         self.mdiArea.addSubWindow(w)
-        tableWidget = QTableWidget()
+        # tableWidget = QTableWidget()
+        tableWidget = tw.TableWidgetCustom()
         w.setCentralWidget(tableWidget)
        #tableWidget.setStyleSheet(" ")
        #tableWidget.setStyleSheet(" QTableView::item { background-color: #FFFFFF;selection-background-color: red; } QTableView { background: #E0DFE3;} ")
@@ -431,7 +435,7 @@ class MainWindow(QMainWindow):
         
     def PlotData(self, stack):
         try:
-            print stack
+
             subWinHandle = self.mdiArea.currentSubWindow()
             tableHandle  = subWinHandle.widget().centralWidget()
 
@@ -440,32 +444,42 @@ class MainWindow(QMainWindow):
             subWinTitle = '[plot]' + subWinHandle.windowTitle()
             plotWindow.setWindowTitle(subWinTitle)
             self.mdiArea.addSubWindow(plotWindow)
-            colorMap = [ (255,255,255,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
+            colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
                     (255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
                     (255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
                     (130,0,217,255), (85,0,212,255)]  
-            selectAry = []
-            axisAry   = []
-            clusters  = []
+            selectAry  = []
+            axisAry    = []
+            clusters   = [[]]
+            clusterNum = 0
             cnt = 0
+
             for i in range( len(tableHandle.selectedRanges())):
                 leftCol  = tableHandle.selectedRanges()[i].leftColumn()
                 colCount = tableHandle.selectedRanges()[i].columnCount()
-                for currentCol in range( leftCol, leftCol + colCount ):
-                    selectAry.append( currentCol )
-                    if (str(tableHandle.horizontalHeaderItem(currentCol).text())[0]) == 'X':
-                        axisAry.append(cnt)
-                    cnt += 1
 
-            for i in range(len(axisAry)):
-                try:
-                    clusters.append( selectAry[axisAry[i]  : axisAry[i+1]] )        
-                except IndexError:
-                    clusters.append( selectAry[axisAry[-1] :             ] )
-            
+                selectAry.append(leftCol)
+
+
+            selectAry = sorted(selectAry)
+            print 'selected Columns: ' + str(selectAry) + '\n' + 'X-Axis: ' + str(axisAry)
+
+            for i in (selectAry):
+                if (str(tableHandle.horizontalHeaderItem(i).text())[0]) == 'X':
+                    axisAry.append(i)
+                    clusters.append([i])
+                    clusterNum += 1
+
+                elif (str(tableHandle.horizontalHeaderItem(i).text())[0]) == 'Y':
+                	clusters[clusterNum].append(i)
+
+            print 'clusters: ' + str(clusters)
+
+
 
             if stack == 1: 
                 p,l = plotWindow.addPlotArea('graphtitle')  #stack
+
             for k in clusters:
                 for i in k[1:]:
                     plotArrayX = []
@@ -484,12 +498,16 @@ class MainWindow(QMainWindow):
                                 print 'TypeError at: row# '        + str(j+1)
                             except AttributeError:
                                 print 'AttributionError at: row# ' + str(j+1)
+
                     if stack == 1:
-                        plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+            			print 'plot stacked plots'
+            			plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+                    
                     if stack == 0:
-                        p,l = plotWindow.addPlotArea('graphtitle')
-                        plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
-                        plotWindow.finitPlotArea(plotArea = p, legend = l) #'multiplot'
+            			print 'plot unstacked plots'
+            			p,l = plotWindow.addPlotArea('graphtitle')
+            			plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+            			plotWindow.finitPlotArea(plotArea = p, legend = l) #'multiplot'
             if stack == 1:
                 plotWindow.finitPlotArea(plotArea = p, legend = l)
 
