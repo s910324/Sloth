@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import pandas as pd
+import qdarkstyle
 import plotSubWin as qtplt
 import expTableWidget as tw
 import expTableWindow as tww
@@ -735,5 +736,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     frame = MainWindow()
     frame.showMaximized()    
+    app.setStyleSheet(qdarkstyle.load_stylesheet())
     app.exec_()
     sys.exit
