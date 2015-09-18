@@ -84,6 +84,9 @@ class SubWinList(QMainWindow):
 
 
 class CListWidget(QWidget):
+	doubleClicked = Signal()
+	selfDestory   = Signal()
+
 	def __init__(self, host, count, subType, name, time, path, parent = None):
 		super(CListWidget, self).__init__(parent)
 		self.host    = host
@@ -128,7 +131,7 @@ class CListWidget(QWidget):
 				self.subWin.showMaximized()
 			else:
 				self.subWin.hide()
-			print 'Activating subwindow #' + self.tabIDtabID
+			print 'Activating subwindow #' + self.tabID
 
 
 	def setDesign(self):
@@ -164,6 +167,7 @@ class CListWidget(QWidget):
 				listwidget = self.host.itemWidget (listItem)
 				listwidget.moveUp()
 			self.host.takeItem(self.count - 1)
+			self.selfDestory.emit()
 
 
 	def moveUp(self):
@@ -198,8 +202,8 @@ class CListWidget(QWidget):
 			return False
 
 	def mouseDoubleClickEvent(self, event):
-		print 'a'
-		self.raiseSubWin()
+		self.doubleClicked.emit()
+		# self.raiseSubWin()
 		event.accept()
 
 def run():

@@ -19,7 +19,7 @@ class WorkBookWindow(QMainWindow):
 
 		else:
 			self.showMaximized()
-			return self.closeChecker(event)
+			# return self.closeChecker(event)
 
 	def closeChecker(self, event):
 		closeChk = QMessageBox()

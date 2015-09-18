@@ -331,13 +331,12 @@ class MainWindow(QMainWindow):
 		lt   = localtime()
 		now  = u'{0}/{1}/{2}-{3}:{4}'.format(lt.tm_year, str(lt.tm_mon), str(lt.tm_mday), str(lt.tm_hour), str(lt.tm_min))
 		
-		subWinHandle = self.subWinList.addCrew([int(tabID), wintype, subWinTitle, now, path])
-		wList  = self.mdiArea.subWindowList()
-		window = wList[int(tabID)]
-		subWinHandle.setSubWin(window, self.mdiArea, int(tabID))
-		
+		subWinHandle = self.subWinList.addCrew( [int(tabID), wintype, subWinTitle, now, path] )
+		subWinHandle.doubleClicked.connect(      lambda ID=tabID  :  self.RaiseSubWin(ID)     )
+		subWinHandle.selfDestory.connect(        lambda ID=tabID  :  self.DestorySubWin(ID)   )
 # -------------------------------[  currently unable to activate  ]-----------------------------------------		
-		
+
+		# subWinHandle.setSubWin(window, self.mdiArea, int(tabID))      ****which move back fromsubwinlist o prevent polution.
 		# self.subWinList .itemDoubleClicked.connect(lambda ID=tabID: self.RaiseSubWin(ID))
 		# self.subWinList .itemClicked.connect(lambda ID=tabID: self.DestorySubWin(ID))
 
@@ -351,20 +350,21 @@ class MainWindow(QMainWindow):
 
 
 	def RaiseSubWin(self, tabID):
-		tabID  = tabID.text(2)
+		
+		# tabID  = tabID.text(2)
 		wList  = self.mdiArea.subWindowList()
 		window = wList[int(tabID)]
-		if window.isHidden():
-			window.show()
+		if window.isHidden() or not window.isMaximized():
+			self.mdiArea.setActiveSubWindow(window)
+			window.showMaximized()
 		else:
 			window.hide()
-
-		self.mdiArea.setActiveSubWindow(window)
-		print 'Activating subwindow #' + tabID
+		
+		print 'Activating subwindow #' + str(tabID)
 
 
 	def DestorySubWin(self, tabID):
-		tabID = int(tabID.text(2))
+		# tabID = int(tabID.text(2))
 		wList = self.mdiArea.subWindowList()
 		if wList[tabID].close():
 			self.mdiArea.removeSubWindow(wList[tabID])
