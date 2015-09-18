@@ -5,7 +5,9 @@ import qdarkstyle
 import plotSubWin as qtplt
 import expTableWidget as tw
 import expTableWindow as tww
+from time import localtime
 from  wbSubWin import WorkBookWindow
+from SubWinList import SubWinList
 #import OpenFileOptions as oFile
 import pandasOpenfile  as oFile
 from PySide.QtCore import *
@@ -31,9 +33,9 @@ class MainWindow(QMainWindow):
 		self.tabColCounter = []
 		self.globalVal = [0]
 		super(MainWindow, self).__init__(parent)
-		#self.mainWindow = QMainWindow()
+
 		self.prjTreeView = QTreeWidget(self)
-		self.winTreeView = QTreeWidget(self)
+		self.subWinList  = SubWinList(self)
 		self.mdiArea = QMdiArea(self)
 		self.initMenuBar()
 		self.initDocker()
@@ -68,8 +70,8 @@ class MainWindow(QMainWindow):
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.projDockWidget)
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.fileDockWidget)
 		self.projDockWidget.setWidget(self.prjTreeView)
-		self.fileDockWidget.setWidget(self.winTreeView)
-		self.initWinTree()
+		self.fileDockWidget.setWidget(self.subWinList )
+
 		
 		
 	def initToolBar(self):
@@ -190,46 +192,13 @@ class MainWindow(QMainWindow):
 		dotLineMenu.addAction(twoSegmentAction   )
 		dotLineMenu.addAction(threeSegmentAction )
 		
-		
 		linePlotButton.setMenu(    lineMenu    )
 		dotPlotButton.setMenu(     dotMenu     )        
 		dotLinePlotButton.setMenu( dotLineMenu )
 		
 		lineAction.triggered.connect(self.test2)
 				
-		
-		
-	def initWinTree(self):
-		self.winTreeView.setColumnCount(3)
 
-		self.winTreeView.setColumnWidth(0, 90)
-		self.winTreeView.setColumnWidth(1, 90)
-		self.winTreeView.setColumnWidth(2, 25)
-		self.winTreeView.isSortingEnabled()
-		self.winTreeView.setHeaderHidden(False)
-			
-	
-#    def test(self):
-#        print 'a'
-#        subWinHandle = self.mdiArea.currentSubWindow()
-#        tableHandle  = subWinHandle.widget().centralWidget()
-#        tableHandle.close()
-#        selectAry = []
-#        axisAry   = []
-#        clusters  = []
-#        cnt = 0
-#        for i in tableHandle.selectedRanges():
-#            print i
-#        
-#        for i in range( len(tableHandle.selectedRanges())):
-#            leftCol  = tableHandle.selectedRanges()[i].leftColumn()
-#            colCount = tableHandle.selectedRanges()[i].columnCount()
-#            for currentCol in range( leftCol, leftCol + colCount ):
-#                selectAry.append( currentCol )
-#                if (str(tableHandle.horizontalHeaderItem(currentCol).text())[0]) == 'X':
-#                    axisAry.append(cnt)
-#        print selectAry 
-	
 	def addCol(self, num = 1):
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
@@ -358,17 +327,26 @@ class MainWindow(QMainWindow):
 	
 
 	
-	def AddWinTreeItem(self, subWinTitle, wintype, tabID):
+	def AddWinListItem(self, subWinTitle, wintype, tabID, path = ''):
+		lt   = localtime()
+		now  = u'{0}/{1}/{2}-{3}:{4}'.format(lt.tm_year, str(lt.tm_mon), str(lt.tm_mday), str(lt.tm_hour), str(lt.tm_min))
 		
-		subTreeItem =  QTreeWidgetItem(self.winTreeView)
-		subTreeItem.setText(0, subWinTitle)
-		subTreeItem.setText(1, wintype)
-		subTreeItem.setText(2, str(tabID))
-		self.winTreeView.itemDoubleClicked.connect(lambda ID=tabID: self.RaiseSubWin(ID))
-		self.winTreeView.itemClicked.connect(lambda ID=tabID: self.DestorySubWin(ID))
+		subWinHandle = self.subWinList.addCrew([int(tabID), wintype, subWinTitle, now, path])
+		wList  = self.mdiArea.subWindowList()
+		window = wList[int(tabID)]
+		subWinHandle.setSubWin(window, self.mdiArea, int(tabID))
+		
+# -------------------------------[  currently unable to activate  ]-----------------------------------------		
+		
+		# self.subWinList .itemDoubleClicked.connect(lambda ID=tabID: self.RaiseSubWin(ID))
+		# self.subWinList .itemClicked.connect(lambda ID=tabID: self.DestorySubWin(ID))
+
+# -------------------------------[  currently unable to activate  ]-----------------------------------------		
+
 
 	def DelWinTreeItem(self, ID):
-		self.winTreeView.removeItemWidget(ID, 0)
+		self.subWinList .removeItemWidget(ID, 0)
+
 
 
 
@@ -402,7 +380,7 @@ class MainWindow(QMainWindow):
 		tableHandle, subWinHandle, tabID = self.CreateTableSub()
 		subWinTitle = "Untitled " + str(tabID)
 		subWinHandle.setWindowTitle(subWinTitle)
-		self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
+		self.AddWinListItem(subWinTitle, 'Work Book', tabID)
 		tableHandle.setRowCount(200)
 		self.addCol(3)
 
@@ -416,7 +394,7 @@ class MainWindow(QMainWindow):
 			for fileContainer in fileContainArray:
 				TableHandle, subWinHandle, tabID = self.CreateTableSub()
 				(rowNum, colNum) = fileContainer.shape
-				self.AddWinTreeItem(subWinTitle, 'Work Book', tabID)
+				self.AddWinListItem(subWinTitle, 'Work Book', tabID)
 				TableHandle.setRowCount(rowNum)
 				self.addCol(colNum)
 		
@@ -539,20 +517,23 @@ class MainWindow(QMainWindow):
 			self.tabIDCounter += 1
 			tabID = self.tabIDCounter
 			self.tabColCounter.append(-1)
-			self.AddWinTreeItem(subWinTitle, 'Plot', tabID)
+			self.AddWinListItem(subWinTitle, 'Plot', tabID)
 		except AttributeError:
 			print 'No active/valid workbook for data plotting.'
+
+# ----------------------------------------remove for rapid gui test-------------------------------------------------------		
+	# def closeEvent(self, event):
 		
-	def closeEvent(self, event):
-		
-		reply = QMessageBox.question(self, 'Message',
-			"Are you sure to quit?", QMessageBox.Yes | 
-			QMessageBox.No, QMessageBox.No)
-		if reply ==  QMessageBox.Yes:
-			event.accept()
-		else:
-			event.ignore()  
-			
+		# reply = QMessageBox.question(self, 'Message',
+		# 	"Are you sure to quit?", QMessageBox.Yes | 
+		# 	QMessageBox.No, QMessageBox.No)
+		# if reply ==  QMessageBox.Yes:
+		# 	event.accept()
+		# else:
+		# 	event.ignore()  
+# -----------------------------------------------------------------------------------------------
+
+
 	def test(self):
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
@@ -757,6 +738,15 @@ if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	frame = MainWindow()
 	frame.showMaximized()    
-	app.setStyleSheet(qdarkstyle.load_stylesheet())
+	def load_stylesheet(pyside=True):
+		f = QFile("./settings/style.qss")
+		if not f.exists():
+			return ""
+		else:
+			f.open(QFile.ReadOnly | QFile.Text)
+			ts = QTextStream(f)
+			stylesheet = ts.readAll()
+			return stylesheet	
+	app.setStyleSheet(load_stylesheet())
 	app.exec_()
 	sys.exit
