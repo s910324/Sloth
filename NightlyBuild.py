@@ -29,9 +29,10 @@ import types
 
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
-		self.tabIDCounter = -1
+		self.tabIDCounter  = -1
 		self.tabColCounter = []
-		self.globalVal = [0]
+		self.subWinDict    = {}
+		self.globalVal     = [0]
 		super(MainWindow, self).__init__(parent)
 
 		self.prjTreeView = QTreeWidget(self)
@@ -319,11 +320,11 @@ class MainWindow(QMainWindow):
 		
 	def OpenNewProject(self):
 		self.prjTreeView.setColumnCount(2)
-		projFolder =  QTreeWidgetItem(self.prjTreeView)
-		projFolder.setText(0, "Project 1")
-		projItem =  QTreeWidgetItem(projFolder)
-		projItem.setText(0, "Item 1")
-		projItem.setText(1, "Yes")
+		projFolder =  QTreeWidgetItem( self.prjTreeView  )
+		projItem   =  QTreeWidgetItem( projFolder        )
+		projFolder.setText( 0, "Project 1" )
+		projItem.setText(   0, "Item 1"    )
+		projItem.setText(   1, "Yes"       )
 	
 
 	
@@ -331,29 +332,13 @@ class MainWindow(QMainWindow):
 		lt   = localtime()
 		now  = u'{0}/{1}/{2}-{3}:{4}'.format(lt.tm_year, str(lt.tm_mon), str(lt.tm_mday), str(lt.tm_hour), str(lt.tm_min))
 		
-		subWinHandle = self.subWinList.addCrew( [int(tabID), wintype, subWinTitle, now, path] )
+		subWinHandle = self.subWinList.addCrew( [ wintype, subWinTitle, now, path ] )
 		subWinHandle.doubleClicked.connect(      lambda ID=tabID  :  self.RaiseSubWin(ID)     )
 		subWinHandle.selfDestory.connect(        lambda ID=tabID  :  self.DestorySubWin(ID)   )
-# -------------------------------[  currently unable to activate  ]-----------------------------------------		
-
-		# subWinHandle.setSubWin(window, self.mdiArea, int(tabID))      ****which move back fromsubwinlist o prevent polution.
-		# self.subWinList .itemDoubleClicked.connect(lambda ID=tabID: self.RaiseSubWin(ID))
-		# self.subWinList .itemClicked.connect(lambda ID=tabID: self.DestorySubWin(ID))
-
-# -------------------------------[  currently unable to activate  ]-----------------------------------------		
-
-
-	def DelWinTreeItem(self, ID):
-		self.subWinList .removeItemWidget(ID, 0)
-
-
 
 
 	def RaiseSubWin(self, tabID):
-		
-		# tabID  = tabID.text(2)
-		wList  = self.mdiArea.subWindowList()
-		window = wList[int(tabID)]
+		window = self.subWinDict[tabID]
 		if window.isHidden() or not window.isMaximized():
 			self.mdiArea.setActiveSubWindow(window)
 			window.showMaximized()
@@ -364,23 +349,20 @@ class MainWindow(QMainWindow):
 
 
 	def DestorySubWin(self, tabID):
-		# tabID = int(tabID.text(2))
-		wList = self.mdiArea.subWindowList()
-		if wList[tabID].close():
-			self.mdiArea.removeSubWindow(wList[tabID])
-			for index in xrange(tabID+1, len(wList), 1):
-				wList[index].widget().recurrence()
-			self.DelWinTreeItem(tabID)
-			print 'Subwindow #' + int(tabID) + 'destoried.'
+		window = self.subWinDict[tabID]
+		if window.close():
+			# self.mdiArea.removeSubWindow(window) **content has been deleted, this will GC by system
+			print 'Destory Subwindow #' + str(tabID)
+
 		else:
-			print 'Subwindow #' + int(tabID) + 'stay untouched.'
+			print 'Unhook  Subwindow #' + str(tabID)
 
 
 	def OpenNewWorkBook(self):
 		tableHandle, subWinHandle, tabID = self.CreateTableSub()
 		subWinTitle = "Untitled " + str(tabID)
 		subWinHandle.setWindowTitle(subWinTitle)
-		self.AddWinListItem(subWinTitle, 'Work Book', tabID)
+		self.AddWinListItem(subWinTitle, 'sheet', tabID)
 		tableHandle.setRowCount(200)
 		self.addCol(3)
 
@@ -394,7 +376,7 @@ class MainWindow(QMainWindow):
 			for fileContainer in fileContainArray:
 				TableHandle, subWinHandle, tabID = self.CreateTableSub()
 				(rowNum, colNum) = fileContainer.shape
-				self.AddWinListItem(subWinTitle, 'Work Book', tabID)
+				self.AddWinListItem(subWinTitle, 'sheet', tabID)
 				TableHandle.setRowCount(rowNum)
 				self.addCol(colNum)
 		
@@ -420,10 +402,13 @@ class MainWindow(QMainWindow):
 		self.tabIDCounter += 1
 		tabID       = self.tabIDCounter
 		wbWin       = WorkBookWindow()
-		wbWin.ID    = tabID
 		tableWidget = tw.TableWidgetCustom()
 
 		self.mdiArea.addSubWindow(wbWin)
+		wlist  = self.mdiArea.subWindowList()
+		subWin = wlist[-1]
+
+		self.subWinDict[tabID] = subWin
 
 		wbWin.setCentralWidget(tableWidget)
 		wbWin.setAttribute(Qt.WA_DeleteOnClose)
@@ -440,8 +425,8 @@ class MainWindow(QMainWindow):
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
 			tableHandle  = subWinHandle.widget().centralWidget()
-			plotWindow = qtplt.MainWindow()
-			subWinTitle = '[plot]' + subWinHandle.windowTitle()
+			plotWindow   = qtplt.MainWindow()
+			subWinTitle  = '[plot]' + subWinHandle.windowTitle()
 			plotWindow.setWindowTitle(subWinTitle)
 			self.mdiArea.addSubWindow(plotWindow)
 			colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),

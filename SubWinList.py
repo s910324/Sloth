@@ -37,9 +37,9 @@ class SubWinList(QMainWindow):
 		ClistWidgetItem = QListWidgetItem()
 
 		if value == None:
-			ClistWidget	= CListWidget(self.listWidget, self.listWidget.count() + 1, 'type', u'subname', 'time', 'path',)
+			ClistWidget	= CListWidget(self.listWidget, ClistWidgetItem, 'type', u'subname', 'time', 'path')
 		else:
-			ClistWidget = CListWidget(self.listWidget, self.listWidget.count() + 1, value[1], value[2], value[3], value[4])
+			ClistWidget = CListWidget(self.listWidget, ClistWidgetItem, value[0], value[1], value[2], value[3])
 
 		ClistWidgetItem.setSizeHint(ClistWidget.sizeHint())
 
@@ -87,10 +87,10 @@ class CListWidget(QWidget):
 	doubleClicked = Signal()
 	selfDestory   = Signal()
 
-	def __init__(self, host, count, subType, name, time, path, parent = None):
+	def __init__(self, host, holder, subType, name, time, path, parent = None):
 		super(CListWidget, self).__init__(parent)
 		self.host    = host
-		self.count   = count
+		self.holder  = holder
 		self.subType = subType
 		self.name    = name
 		self.time    = time
@@ -98,18 +98,16 @@ class CListWidget(QWidget):
 		self.subWin  = None
 		self.mdiArea = None
 
-		self.numLabel   = QLabel()
 		self.typLabel   = QLabel()
 		self.nameLineE  = QLineEdit()
 		self.timeLabel  = QLabel()
 		self.deleButton = QPushButton('x')
 		
 		self.setStyle()
-		self.setValue(self.count, self.subType, self.name, self.time, self.path)
+		self.setValue( self.subType, self.name, self.time, self.path )
 		self.setDesign()
 
-	def setValue(self, num, subType, name, time, path):
-		self.numLabel.setText(str(num).zfill(2))
+	def setValue(self, subType, name, time, path):
 		self.typLabel.setText(subType)
 		self.nameLineE.setText(name)
 		self.timeLabel.setText(time)
@@ -139,7 +137,6 @@ class CListWidget(QWidget):
 		self.hbox1 = QHBoxLayout()
 		self.vbox0 = QVBoxLayout()
 
-		self.hbox0.addWidget(self.numLabel)
 		self.hbox0.addWidget(self.typLabel)
 		self.hbox0.addWidget(self.nameLineE)
 		self.hbox0.addWidget(self.timeLabel)
@@ -152,31 +149,33 @@ class CListWidget(QWidget):
 		self.setLayout(self.hbox1)
 
 	def setStyle(self):
-		self.numLabel.setStyleSheet(  "QLabel    { font-weight: bold; font-size: 14px; }" )
-		self.typLabel.setStyleSheet(  "QLabel    { font-weight: bold; font-size: 14px; }" )
-		self.timeLabel.setStyleSheet( "QLabel    { font-weight: bold; font-size: 14px; }" )
-		self.nameLineE.setStyleSheet( "QLineEdit { font-weight: bold; font-size: 14px; }" )
+		self.typLabel.setStyleSheet(  "QLabel     { font-weight: bold; font-size: 14px; }" )
+		self.timeLabel.setStyleSheet( "QLabel     { font-weight: bold; font-size: 14px; }" )
+		self.nameLineE.setStyleSheet( "QLineEdit  { font-weight: bold; font-size: 14px; }" )
 
-		self.nameLineE.setFixedHeight(25)
-		self.deleButton.setFixedSize(18,18)
+		style = 'QPushButton{background-color: #992020; border-radius: 8px; color: #212121; }'
+		self.deleButton.setStyleSheet( style )
+
+		self.nameLineE.setFixedHeight(20)
+		self.typLabel.setFixedHeight(20)
+		self.timeLabel.setFixedHeight(20)
+		self.deleButton.setFixedSize(16,16)
+
+
 
 	def distory(self):
 		if self.closeChecker():
-			for index in xrange(int(self.count), self.host.count(), 1):
-				listItem   = self.host.item(index)
-				listwidget = self.host.itemWidget (listItem)
-				listwidget.moveUp()
-			self.host.takeItem(self.count - 1)
+		# 	for index in xrange(int(self.count), self.host.count(), 1):
+		# 		listItem   = self.host.item(index)
+		# 		listwidget = self.host.itemWidget (listItem)
+		# 		listwidget.moveUp()
+			index = self.host.indexFromItem(self.holder).row()
+			self.host.takeItem(index)
 			self.selfDestory.emit()
 
 
-	def moveUp(self):
-		self.count -= 1
-		self.numLabel.setText(str(self.count).zfill(2))
-
-
 	def returnVal(self):
-		return [ self.count, self.typLabel.text(), self.nameLineE.text(), self.time ]
+		return [ self.typLabel.text(), self.nameLineE.text(), self.time ]
 
 
 	def closeChecker(self):
@@ -193,17 +192,11 @@ class CListWidget(QWidget):
 		if closeChk.clickedButton()   == yes:
 			return True
 
-		elif closeChk.clickedButton() == no:
-			# self.showMinimized()
-			# event.ignore()
-			return False
-
 		else:
 			return False
 
 	def mouseDoubleClickEvent(self, event):
 		self.doubleClicked.emit()
-		# self.raiseSubWin()
 		event.accept()
 
 def run():
