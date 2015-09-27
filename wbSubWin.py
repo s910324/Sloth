@@ -16,10 +16,17 @@ class WorkBookWindow(QMainWindow):
 		if self.lock:
 			self.showMinimized()
 			event.ignore()
-
+			
 		else:
+			print 'yes'
+			event.accept()
 			self.showMaximized()
 
+	def unlock(self) :
+		self.lock = False
+
+	def lock(self) :
+		self.lock = True
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

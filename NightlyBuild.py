@@ -350,11 +350,15 @@ class MainWindow(QMainWindow):
 
 	def DestorySubWin(self, tabID):
 		window = self.subWinDict[tabID]
+		window.widget().unlock()
 		if window.close():
-			# self.mdiArea.removeSubWindow(window) **content has been deleted, this will GC by system
+
+			# self.mdiArea.removeSubWindow(window) #**content has been deleted, this will GC by system
+			window.widget().close()
 			print 'Destory Subwindow #' + str(tabID)
 
 		else:
+			window.widget().lock()
 			print 'Unhook  Subwindow #' + str(tabID)
 
 
@@ -423,12 +427,19 @@ class MainWindow(QMainWindow):
 		
 	def PlotData(self, stack):
 		try:
+			self.tabIDCounter += 1 #--dd
+			tabID        = self.tabIDCounter #-dd
 			subWinHandle = self.mdiArea.currentSubWindow()
 			tableHandle  = subWinHandle.widget().centralWidget()
 			plotWindow   = qtplt.MainWindow()
 			subWinTitle  = '[plot]' + subWinHandle.windowTitle()
 			plotWindow.setWindowTitle(subWinTitle)
+
 			self.mdiArea.addSubWindow(plotWindow)
+			wlist  = self.mdiArea.subWindowList() #--dd
+			subWin = wlist[-1] #--dd
+			self.subWinDict[tabID] = subWin #--dd
+
 			colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
 					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
 					(255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
@@ -499,8 +510,6 @@ class MainWindow(QMainWindow):
 
 			plotWindow.setMinimumSize(QSize(250,250))
 			plotWindow.showMaximized()
-			self.tabIDCounter += 1
-			tabID = self.tabIDCounter
 			self.tabColCounter.append(-1)
 			self.AddWinListItem(subWinTitle, 'Plot', tabID)
 		except AttributeError:
