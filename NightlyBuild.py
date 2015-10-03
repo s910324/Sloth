@@ -6,7 +6,7 @@ import plotSubWin as qtplt
 import expTableWidget as tw
 import expTableWindow as tww
 from time import localtime
-from  wbSubWin import WorkBookWindow
+from  wbSubWin  import WorkBookWindow
 from SubWinList import SubWinList
 #import OpenFileOptions as oFile
 import pandasOpenfile  as oFile
@@ -203,42 +203,13 @@ class MainWindow(QMainWindow):
 	def addCol(self, num = 1):
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
-			tableHandle  = subWinHandle.widget().centralWidget()
-			currentCol   = tableHandle.currentColumn()
-			tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-			atoz         = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-			for i in range(num):
-				alfabat      = []
-				if currentCol == -1:
-					currentCol = self.tabColCounter[tabID]-1
-					
-				tableHandle.insertColumn(currentCol + 1)
-				self.tabColCounter[tabID] += 1
-	
-				headerLable = 'Y('
-				root = self.tabColCounter[tabID]
-				while( root != 0):
-					if root%26 != 0:
-						alfabat.append(root%26)
-						root = root/26
-					else:
-						alfabat.append(26)
-						root = (root/26) -1
-	
-				for i in range(len(alfabat)):
-					alfabat[i] = atoz[alfabat[i]]
-				for i in range(len(alfabat)-1, -1, -1):
-					headerLable += alfabat[i]
-				headerLable += ')'  
-				print 'Tab #' + str(tabID) + ' append column #' + str(headerLable)
-				tableHandle.setHorizontalHeaderItem(currentCol + 1, QTableWidgetItem(headerLable))
-				for i in range(3):
-					headerItem = QTableWidgetItem('')
-					headerItem.setBackground(QColor('#0066cc'))
-					headerItem.setForeground(QColor('#ffffff'))
-					headerFont = QFont("Times", 8, QFont.Normal)
-					headerItem.setFont(headerFont)
-					tableHandle.setItem(i, currentCol + 1, headerItem)
+			workBookWin  = subWinHandle.widget()
+			tableHandle  = workBookWin.centralWidget()
+			labelList    = tableHandle.addCol(num)
+
+			for label in labelList:
+				print 'Tab #{0} append column #{1}'.format(workBookWin.getID(), label)
+
 		except AttributeError:
 			print 'No active/valid workbook for column appending.'
 		
@@ -246,32 +217,26 @@ class MainWindow(QMainWindow):
 	def addRow(self):
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
-			tableHandle  = subWinHandle.widget().centralWidget()
-			tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
+			workBookWin  = subWinHandle.widget()
+			tableHandle  = workBookWin.centralWidget()
+			
 			if tableHandle.currentRow() > 2:
 				tableHandle.insertRow(tableHandle.currentRow())
-				print 'Tab #' + str(tabID) + ' append row #' + str(tableHandle.currentRow())
+				print 'Tab #{0} append row #{1}'.format(workBookWin.getID(),  + tableHandle.currentRow())
 				
 		except AttributeError:
 			print 'No active/valid workbook for  row appending.'
 	
+	
 	def rmvCol(self):
 		try: 
 			subWinHandle = self.mdiArea.currentSubWindow()
-			tableHandle  = subWinHandle.widget().centralWidget()
-			tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-			selectAry    = []
+			workBookWin  = subWinHandle.widget()
+			tableHandle  = workBookWin.centralWidget()
+			labelList    = tableHandle.rmvCol()
 
-			for i in range( len(tableHandle.selectedRanges())):
-				leftCol  = tableHandle.selectedRanges()[i].leftColumn()
-				colCount = tableHandle.selectedRanges()[i].columnCount()
-				for j in range( leftCol, leftCol + colCount ):
-					selectAry.append( j )
-
-			for i in range( len ( selectAry )):
-				tableHandle.removeColumn(selectAry[i] - i)
-				self.tabColCounter[tabID] -= 1
-				print 'Tab #' + str(tabID) + ' remove column #' + str(selectAry[i])
+			for label in labelList:
+				print 'Tab #{0} remove column #{1}'.format(workBookWin.getID(), label)
 				
 		except AttributeError:
 			print 'No active/valid workbook for column removing.'
@@ -279,45 +244,25 @@ class MainWindow(QMainWindow):
 	def rmvRow(self):
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
-			tableHandle  = subWinHandle.widget().centralWidget()
-			tabID        = int(subWinHandle.widget().statusBar().currentMessage().split('#')[1])
-			selectAry    = []
+			workBookWin  = subWinHandle.widget()
+			tableHandle  = workBookWin.centralWidget()
+			labelList    = tableHandle.rmvRow()
+			
+			for label in labelList:
+				print 'Tab #{0} remove row #{1}'.format(workBookWin.getID(), label)
 
-			for i in range( len(tableHandle.selectedRanges())):
-				topRow  = tableHandle.selectedRanges()[i].topRow()
-				rowCount = tableHandle.selectedRanges()[i].rowCount()
-				for j in range( topRow, topRow + rowCount ):
-					selectAry.append( j )
-
-			for i in range( len ( selectAry )):
-				if (selectAry[i] - i) > 2:
-					tableHandle.removeRow(selectAry[i] - i)
-					print 'Tab #' + str(tabID) + ' remove row #' + str(selectAry[i])
-					
 		except AttributeError:
 			print 'No active/valid workbook for row removing.'
 	
 	
 	def setAxis(self, axis):
-		axisAry      = [ 'X', 'Y', 'Z' ]
 		try:
 			subWinHandle = self.mdiArea.currentSubWindow()
 			tableHandle  = subWinHandle.widget().centralWidget()
-			selectAry    = []
-			for i in range( len(tableHandle.selectedRanges())):
-				leftCol  = tableHandle.selectedRanges()[i].leftColumn()
-				colCount = tableHandle.selectedRanges()[i].columnCount()
-				for j in range( leftCol, leftCol + colCount ):
-					selectAry.append( j )
-			for currentCol in selectAry:
-				headerLable = axisAry[axis]
-				headerLable += str(tableHandle.horizontalHeaderItem(currentCol).text())[1:]
-				tableHandle.setHorizontalHeaderItem(currentCol, QTableWidgetItem(headerLable))
+			tableHandle.setAxis(axis)
 		except AttributeError:
-			print 'No active/valid workbook for set as %s operation.' % axisAry[axis]
+			print 'No active/valid workbook for set axis operation.'
 
-		
-		
 	def OpenNewProject(self):
 		self.prjTreeView.setColumnCount(2)
 		projFolder =  QTreeWidgetItem( self.prjTreeView  )
@@ -409,6 +354,7 @@ class MainWindow(QMainWindow):
 		tableWidget = tw.TableWidgetCustom()
 
 		self.mdiArea.addSubWindow(wbWin)
+		wbWin.setID(tabID)
 		wlist  = self.mdiArea.subWindowList()
 		subWin = wlist[-1]
 

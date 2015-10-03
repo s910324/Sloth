@@ -182,14 +182,16 @@ class MainWindow(QMainWindow):
 			event.ignore()
 
 		else:
-			print 'yes'
 			self.showMaximized()
 			event.accept()
+
 	def unlock(self) :
 		self.lock = False
 
 	def lock(self) :
 		self.lock = True		
+
+		
 class CustomViewBox(pg.ViewBox):
 	def __init__(self, *args, **kwds):
 		pg.ViewBox.__init__(self, *args, **kwds)

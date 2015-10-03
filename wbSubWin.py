@@ -8,9 +8,11 @@ class WorkBookWindow(QMainWindow):
 		self.lock = True
 		self.ID   = -1
 
-	def recurrence(self):
-		self.ID -= 1
+	def getID(self):
 		return self.ID
+		
+	def setID(self, newID):
+		self.ID = newID
 
 	def closeEvent(self, event):
 		if self.lock:
@@ -18,7 +20,6 @@ class WorkBookWindow(QMainWindow):
 			event.ignore()
 			
 		else:
-			print 'yes'
 			event.accept()
 			self.showMaximized()
 
