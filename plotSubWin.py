@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
 		self.initPlotArea()
 		self.plotLineHolder = []
 
-		self.colormap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
+		self.colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
 					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
 					(255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
 					(130,0,217,255), (85,0,212,255)] 
@@ -116,9 +116,6 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(self.view)
 #        self.setWindowTitle(winTitle)
 
-	def colorMap(self):
-		return self.colormap
-
 
 	def addPlotArea(self, graphTitle = ''):
 		self.vb = CustomViewBox()
@@ -187,17 +184,17 @@ class MainWindow(QMainWindow):
 				plotArrayX, plotArrayY = data
 				if stack:
 					print 'plot stacked plots'
-					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colormap[i%14], dotColor = self.colormap[i%14])
+					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
 				
 				if not stack:
 					print 'plot unstacked plots'
 					p,l = self.addPlotArea('graphtitle')
-					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colormap[i%14], dotColor = self.colormap[i%14])
+					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
 					self.finitPlotArea(plotArea = p, legend = l) #'multiplot'				
 
 			if stack:
 				self.finitPlotArea(plotArea = p, legend = l)
-				
+
 		except AttributeError:
 			raise AttributeError
 			
@@ -343,3 +340,35 @@ if __name__ == '__main__':
 	frame.show()    
 	app.exec_()
 	sys.exit
+
+class DebugWindow(QMainWindow):
+	def __init__(self, parent=None):
+		super(DebugWindow, self).__init__(parent)
+		self.table       = TableWidgetCustom()
+		self.toolbar     = QToolBar('main function')
+		self.selectAction  = QAction('select', self)
+		self.addColAction  = QAction('add Col', self)
+		self.rmvColAction  = QAction('rmv Col', self)
+
+		self.toolbar.addAction(self.selectAction)
+		self.toolbar.addAction(self.addColAction)
+		self.toolbar.addAction(self.rmvColAction)
+
+		self.selectAction.triggered.connect(self.table.getSelectData)
+		self.addColAction.triggered.connect(self.table.rmvCol)
+		self.rmvColAction.triggered.connect(self.table.addCol)
+
+		self.addToolBar( Qt.TopToolBarArea , self.toolbar)
+
+		self.table.setRowCount(200)
+		self.table.addCol(15)
+
+		self.setCentralWidget(self.table)
+		self.resize(800,800)
+
+def Debugger():
+	app  = QApplication(sys.argv)
+	form = DebugWindow()
+	form.show()
+	app.exec_()
+# Debugger()

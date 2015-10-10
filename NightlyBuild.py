@@ -348,17 +348,10 @@ class MainWindow(QMainWindow):
 		print 'b'
 		
 	def CreateTableSub(self):
-		self.tabIDCounter += 1
-		tabID       = self.tabIDCounter
 		wbWin       = WorkBookWindow()
 		tableWidget = tw.TableWidgetCustom()
-
-		self.mdiArea.addSubWindow(wbWin)
+		tabID       = self.AddMdiSubWindow(wbWin)
 		wbWin.setID(tabID)
-		wlist  = self.mdiArea.subWindowList()
-		subWin = wlist[-1]
-
-		self.subWinDict[tabID] = subWin
 
 		wbWin.setCentralWidget(tableWidget)
 		wbWin.setAttribute(Qt.WA_DeleteOnClose)
@@ -369,29 +362,35 @@ class MainWindow(QMainWindow):
 
 		return tableWidget, wbWin, tabID
 
-		
-		
+
+	def AddMdiSubWindow(self, subWindow):
+		self.tabIDCounter += 1
+		self.mdiArea.addSubWindow(subWindow)
+		tabID  = self.tabIDCounter
+		wlist  = self.mdiArea.subWindowList() 
+		subWin = wlist[-1]
+
+		self.subWinDict[tabID] = subWin		
+
+		return self.tabIDCounter
+
+
 	def PlotData(self, stack):
 		try:
-			self.tabIDCounter += 1 #--dd
-			tabID        = self.tabIDCounter #-dd
 			subWinHandle = self.mdiArea.currentSubWindow()
-			tableHandle  = subWinHandle.widget().centralWidget()
-			plotWindow   = qtplt.MainWindow()
 			subWinTitle  = '[plot]' + subWinHandle.windowTitle()
-			plotWindow.setWindowTitle(subWinTitle)
+			tableHandle  = subWinHandle.widget().centralWidget()
 
-			self.mdiArea.addSubWindow(plotWindow)
-			wlist  = self.mdiArea.subWindowList() 
-			subWin = wlist[-1]
-			self.subWinDict[tabID] = subWin
+			plotWindow   = qtplt.MainWindow()
+			tabID        = self.AddMdiSubWindow(plotWindow)
+
 
 			selectArray, dataSet = tableHandle.getSelectedData()
 			for column in selectArray:
 					print 'selected Columns: {0}'.format(column)
 
 			plotWindow.plotData(stack, dataSet)
-			
+
 			plotWindow.setMinimumSize(QSize(250,250))
 			plotWindow.showMaximized()
 			self.tabColCounter.append(-1)
