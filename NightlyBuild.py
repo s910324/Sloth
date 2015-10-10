@@ -25,7 +25,7 @@ from PySide.QtGui  import QFont as QFont
 #import pylab
 #from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 #from matplotlib.figure import Figure
-import types
+
 
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
@@ -382,74 +382,48 @@ class MainWindow(QMainWindow):
 			plotWindow.setWindowTitle(subWinTitle)
 
 			self.mdiArea.addSubWindow(plotWindow)
-			wlist  = self.mdiArea.subWindowList() #--dd
-			subWin = wlist[-1] #--dd
-			self.subWinDict[tabID] = subWin #--dd
+			wlist  = self.mdiArea.subWindowList() 
+			subWin = wlist[-1]
+			self.subWinDict[tabID] = subWin
 
-			colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
-					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
-					(255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
-					(130,0,217,255), (85,0,212,255)]  
-			selectAry  = []
-			axisAry    = []
-			clusters   = [[]]
-			clusterNum = 0
-			cnt = 0
+			colorMap = plotWindow.colorMap()  
 
-			for i in range( len(tableHandle.selectedRanges())):
-				leftCol  = tableHandle.selectedRanges()[i].leftColumn()
-				colCount = tableHandle.selectedRanges()[i].columnCount()
-
-				selectAry.append(leftCol)
-
-			print selectAry
-			selectAry = sorted(selectAry)
-			print 'selected Columns: ' + str(selectAry) + '\n' + 'X-Axis: ' + str(axisAry)
-
-			for i in (selectAry):
-				if (str(tableHandle.horizontalHeaderItem(i).text())[0]) == 'X':
-					axisAry.append(i)
-					clusters.append([i])
-					clusterNum += 1
-
-				elif (str(tableHandle.horizontalHeaderItem(i).text())[0]) == 'Y':
-					clusters[clusterNum].append(i)
-
-			print 'clusters: ' + str(clusters)
-
-
+			selectArray, dataSet = tableHandle.getSelectedData()
+			for column in selectArray:
+					print 'selected Columns: {0}'.format(column)
 
 			if stack == 1: 
 				p,l = plotWindow.addPlotArea('graphtitle')  #stack
 
-			for k in clusters:
-				for i in k[1:]:
-					plotArrayX = []
-					plotArrayY = []
-					for j in range(2, tableHandle.rowCount()):
-						itemX = tableHandle.item(j,k[0])
-						itemY = tableHandle.item(j,i)
-						if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
-							try:
-								[ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
-								plotArrayX.append(float(itemX.text()))
-								plotArrayY.append(float(itemY.text()))
-							except ValueError:
-								print 'ValueError at: row# '       + str(j+1)
-							except TypeError:
-								print 'TypeError at: row# '        + str(j+1)
-							except AttributeError:
-								print 'AttributionError at: row# ' + str(j+1)
-
-					if stack == 1:
-						print 'plot stacked plots'
-						plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
-					
-					if stack == 0:
-						print 'plot unstacked plots'
-						p,l = plotWindow.addPlotArea('graphtitle')
-						plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
-						plotWindow.finitPlotArea(plotArea = p, legend = l) #'multiplot'
+			# for k in clusters:
+			# 	for i in k[1:]:
+			# 		plotArrayX = []
+			# 		plotArrayY = []
+			# 		for j in range(2, tableHandle.rowCount()):
+			# 			itemX = tableHandle.item(j,k[0])
+			# 			itemY = tableHandle.item(j,i)
+			# 			if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
+			# 				try:
+			# 					[ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
+			# 					plotArrayX.append(float(itemX.text()))
+			# 					plotArrayY.append(float(itemY.text()))
+			# 				except ValueError:
+			# 					print 'ValueError at: row# '       + str(j+1)
+			# 				except TypeError:
+			# 					print 'TypeError at: row# '        + str(j+1)
+			# 				except AttributeError:
+			# 					print 'AttributionError at: row# ' + str(j+l1)
+			for i, data in enumerate( dataSet):
+				plotArrayX, plotArrayY = data
+				if stack == 1:
+					print 'plot stacked plots'
+					plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+				
+				if stack == 0:
+					print 'plot unstacked plots'
+					p,l = plotWindow.addPlotArea('graphtitle')
+					plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
+					plotWindow.finitPlotArea(plotArea = p, legend = l) #'multiplot'
 			if stack == 1:
 				plotWindow.finitPlotArea(plotArea = p, legend = l)
 

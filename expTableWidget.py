@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-
-import sys
-from PySide.QtCore import *
-from PySide.QtGui import *
 import os
+import sys
+import types
+from   PySide.QtCore import *
+from   PySide.QtGui import *
+
 
 class TableWidgetCustom(QTableWidget):
 	def __init__(self, parent=None):
@@ -115,6 +116,55 @@ class TableWidgetCustom(QTableWidget):
 			raise AttributeError
 
 
+	def getSelectedData(self):
+		try:
+			dataSet     = []
+			selectArray = []
+			axisArray   = []
+			clusters    = [[]]
+			clusterNum  = 0
+
+			for selected in self.selectedRanges():
+				leftCol  = selected.leftColumn()
+				colCount = selected.columnCount()
+				for index in range(leftCol, leftCol+colCount, 1):
+					selectArray.append(index)
+
+			selectArray = sorted(selectArray)
+
+			for i in (selectArray):
+				if (str(self.horizontalHeaderItem(i).text())[0]) == 'X':
+					axisArray.append(i)
+					clusters.append([i])
+					clusterNum += 1
+
+				elif (str(self.horizontalHeaderItem(i).text())[0]) == 'Y':
+					clusters[clusterNum].append(i)
+
+			# return selectArray, clusters
+			for k in clusters:
+				for i in k[1:]:
+					plotArrayX = []
+					plotArrayY = []
+					for j in range(2, self.rowCount()):
+						itemX = self.item(j,k[0])
+						itemY = self.item(j,i)
+						if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
+							try:
+								[ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
+								plotArrayX.append(float(itemX.text()))
+								plotArrayY.append(float(itemY.text()))
+							except ValueError:
+								print 'ValueError at: row# '       + str(j+1)
+							except TypeError:
+								print 'TypeError at: row# '        + str(j+1)
+							except AttributeError:
+								print 'AttributionError at: row# ' + str(j+1)
+					dataSet.append([plotArrayX, plotArrayY])
+			return selectArray, dataSet
+		except AttributeError:
+			raise AttributeError
+
 
 	def keyPressEvent(self, event):
 		if event.matches(QKeySequence.Copy):
@@ -215,8 +265,37 @@ class TableWidgetCustom(QTableWidget):
 			col = i[0]
 			for row in i[1]:
 				self.setItem(row, col, QTableWidgetItem(''))
-		
-# app = QApplication(sys.argv)
-# form = Form()
-# form.show()
-# app.exec_()
+
+
+class DebugWindow(QMainWindow):
+	def __init__(self, parent=None):
+		super(DebugWindow, self).__init__(parent)
+		self.table       = TableWidgetCustom()
+		self.toolbar     = QToolBar('main function')
+		self.selectAction  = QAction('select', self)
+		self.addColAction  = QAction('add Col', self)
+		self.rmvColAction  = QAction('rmv Col', self)
+
+		self.toolbar.addAction(self.selectAction)
+		self.toolbar.addAction(self.addColAction)
+		self.toolbar.addAction(self.rmvColAction)
+
+		self.selectAction.triggered.connect(self.table.getSelectData)
+		self.addColAction.triggered.connect(self.table.rmvCol)
+		self.rmvColAction.triggered.connect(self.table.addCol)
+
+		self.addToolBar( Qt.TopToolBarArea , self.toolbar)
+
+		self.table.setRowCount(200)
+		self.table.addCol(15)
+
+		self.setCentralWidget(self.table)
+		self.resize(800,800)
+
+def Debugger():
+	app  = QApplication(sys.argv)
+	form = DebugWindow()
+	form.show()
+	app.exec_()
+
+# Debugger()

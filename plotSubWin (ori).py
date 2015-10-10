@@ -27,11 +27,6 @@ class MainWindow(QMainWindow):
 		self.initSettingToolbar()
 		self.initPlotArea()
 		self.plotLineHolder = []
-
-		self.colormap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
-					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
-					(255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
-					(130,0,217,255), (85,0,212,255)] 
 		'''        
 		p6 = win.addPlot(title="Updating plot")
 		curve = p6.plot(pen='y')
@@ -84,7 +79,7 @@ class MainWindow(QMainWindow):
 		
 	def initSettingToolbar(self):
 		self.graphBar   = QToolBar('plot options')
-		self.addToolBar( Qt.TopToolBarArea , self.graphBar )
+		self.addToolBar( Qt.TopToolBarArea , self.graphBar)
 
 		selectAction    = QAction('Select area', self)
 		crosshairAction = QAction('Enable CrossHair', self)
@@ -116,10 +111,7 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(self.view)
 #        self.setWindowTitle(winTitle)
 
-	def colorMap(self):
-		return self.colormap
-
-
+	
 	def addPlotArea(self, graphTitle = ''):
 		self.vb = CustomViewBox()
 		self.w = self.view.addPlot( viewBox = self.vb, enableMenu = False, title = graphTitle)
@@ -177,14 +169,6 @@ class MainWindow(QMainWindow):
 		self.w.showAxis('left',   show= showAxis[1])                
 		self.w.showAxis('top',    show= showAxis[2])
 		self.w.showAxis('right',  show= showAxis[3])
-
-	def plotData(self, stack, data):
-		try:
-			if stack:
-				p,l = self.addPlotArea('graphtitle')
-				
-		except AttributeError:
-			raise AttributeError
 			
 	def modifyPlot(self):
 		print 'a'
