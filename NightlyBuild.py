@@ -4,36 +4,24 @@ import pandas as pd
 import qdarkstyle
 import plotSubWin as qtplt
 import expTableWidget as tw
-import expTableWindow as tww
+# import expTableWindow as tww #not currently in use
 from time import localtime
 from  wbSubWin  import WorkBookWindow
 from SubWinList import SubWinList
-#import OpenFileOptions as oFile
+#import OpenFileOptions as oFile #old, move to tempfles
 import pandasOpenfile  as oFile
 from PySide.QtCore import *
 from PySide.QtGui  import *
 from PySide.QtGui  import QFont as QFont
-#from PyQt4.QtCore import *
-#from PyQt4.QtGui  import *
-#from PyQt4.QtGui  import QFont as QFont
-
-# from QtVariant import QtGui, QtCore
-# from QtVariant import QFont as QFont
-
-#import matplotlib
-#matplotlib.use('Qt4Agg')
-#import pylab
-#from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-#from matplotlib.figure import Figure
 
 
-class MainWindow(QMainWindow):
+class Sloth(QMainWindow):
 	def __init__(self, parent=None):
+		super(Sloth, self).__init__(parent)
+
 		self.tabIDCounter  = -1
 		self.tabColCounter = []
 		self.subWinDict    = {}
-		self.globalVal     = [0]
-		super(MainWindow, self).__init__(parent)
 
 		self.prjTreeView = QTreeWidget(self)
 		self.subWinList  = SubWinList(self)
@@ -613,7 +601,7 @@ class Highlighter( QSyntaxHighlighter):
  
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
-	frame = MainWindow()
+	frame = Sloth()
 	frame.showMaximized()    
 	def load_stylesheet(pyside=True):
 		f = QFile("./settings/style.qss")

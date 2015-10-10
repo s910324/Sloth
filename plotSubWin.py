@@ -334,18 +334,19 @@ class CustomViewBox(pg.ViewBox):
 #        self.setLayout( grid )
 #        #self.show()
 
-if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	frame = MainWindow()
-	frame.show()    
-	app.exec_()
-	sys.exit
+# if __name__ == '__main__':
+# 	app = QApplication(sys.argv)
+# 	frame = MainWindow()
+# 	frame.show()    
+# 	app.exec_()
+# 	sys.exit
 
 class DebugWindow(QMainWindow):
 	def __init__(self, parent=None):
 		super(DebugWindow, self).__init__(parent)
-		self.table       = TableWidgetCustom()
-		self.toolbar     = QToolBar('main function')
+		self.plot          = MainWindow()
+		self.plot.lock     = False
+		self.toolbar       = QToolBar('main function')
 		self.selectAction  = QAction('select', self)
 		self.addColAction  = QAction('add Col', self)
 		self.rmvColAction  = QAction('rmv Col', self)
@@ -354,16 +355,16 @@ class DebugWindow(QMainWindow):
 		self.toolbar.addAction(self.addColAction)
 		self.toolbar.addAction(self.rmvColAction)
 
-		self.selectAction.triggered.connect(self.table.getSelectData)
-		self.addColAction.triggered.connect(self.table.rmvCol)
-		self.rmvColAction.triggered.connect(self.table.addCol)
+		# self.selectAction.triggered.connect(self.table.getSelectData)
+		# self.addColAction.triggered.connect(self.table.rmvCol)
+		# self.rmvColAction.triggered.connect(self.table.addCol)
 
 		self.addToolBar( Qt.TopToolBarArea , self.toolbar)
 
-		self.table.setRowCount(200)
-		self.table.addCol(15)
+		# self.table.setRowCount(200)
+		# self.table.addCol(15)
 
-		self.setCentralWidget(self.table)
+		self.setCentralWidget(self.plot)
 		self.resize(800,800)
 
 def Debugger():
