@@ -386,48 +386,12 @@ class MainWindow(QMainWindow):
 			subWin = wlist[-1]
 			self.subWinDict[tabID] = subWin
 
-			colorMap = plotWindow.colorMap()  
-
 			selectArray, dataSet = tableHandle.getSelectedData()
 			for column in selectArray:
 					print 'selected Columns: {0}'.format(column)
 
-			if stack == 1: 
-				p,l = plotWindow.addPlotArea('graphtitle')  #stack
-
-			# for k in clusters:
-			# 	for i in k[1:]:
-			# 		plotArrayX = []
-			# 		plotArrayY = []
-			# 		for j in range(2, tableHandle.rowCount()):
-			# 			itemX = tableHandle.item(j,k[0])
-			# 			itemY = tableHandle.item(j,i)
-			# 			if ((type(itemX) == types.NoneType) + (type(itemY) == types.NoneType)) == 0:
-			# 				try:
-			# 					[ItemXChk, ItemYChk] = [float(itemX.text()), float(itemY.text())]
-			# 					plotArrayX.append(float(itemX.text()))
-			# 					plotArrayY.append(float(itemY.text()))
-			# 				except ValueError:
-			# 					print 'ValueError at: row# '       + str(j+1)
-			# 				except TypeError:
-			# 					print 'TypeError at: row# '        + str(j+1)
-			# 				except AttributeError:
-			# 					print 'AttributionError at: row# ' + str(j+l1)
-			for i, data in enumerate( dataSet):
-				plotArrayX, plotArrayY = data
-				if stack == 1:
-					print 'plot stacked plots'
-					plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
-				
-				if stack == 0:
-					print 'plot unstacked plots'
-					p,l = plotWindow.addPlotArea('graphtitle')
-					plotWindow.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = colorMap[i%14], dotColor = colorMap[i%14])
-					plotWindow.finitPlotArea(plotArea = p, legend = l) #'multiplot'
-			if stack == 1:
-				plotWindow.finitPlotArea(plotArea = p, legend = l)
-
-
+			plotWindow.plotData(stack, dataSet)
+			
 			plotWindow.setMinimumSize(QSize(250,250))
 			plotWindow.showMaximized()
 			self.tabColCounter.append(-1)

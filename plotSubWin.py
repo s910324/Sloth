@@ -178,10 +178,25 @@ class MainWindow(QMainWindow):
 		self.w.showAxis('top',    show= showAxis[2])
 		self.w.showAxis('right',  show= showAxis[3])
 
-	def plotData(self, stack, data):
+	def plotData(self, stack, dataSet):
 		try:
 			if stack:
 				p,l = self.addPlotArea('graphtitle')
+
+			for i, data in enumerate(dataSet):
+				plotArrayX, plotArrayY = data
+				if stack:
+					print 'plot stacked plots'
+					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colormap[i%14], dotColor = self.colormap[i%14])
+				
+				if not stack:
+					print 'plot unstacked plots'
+					p,l = self.addPlotArea('graphtitle')
+					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colormap[i%14], dotColor = self.colormap[i%14])
+					self.finitPlotArea(plotArea = p, legend = l) #'multiplot'				
+
+			if stack:
+				self.finitPlotArea(plotArea = p, legend = l)
 				
 		except AttributeError:
 			raise AttributeError
