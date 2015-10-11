@@ -109,6 +109,8 @@ class MainWindow(QMainWindow):
 		addHLineAction.triggered.connect(self.addLine)    
 
 	def showOptionPanel(self):
+		for index in self.lineIDDict:
+			self.option.addPlotItem(self.lineIDDict[index])
 		self.option.show()
 
 	def addLineHolder(self, line):	
@@ -228,12 +230,19 @@ class MainWindow(QMainWindow):
 		penStyle = pg.mkPen(color=(200, 200, 255), style=QtCore.Qt.DotLine)
 		symbols  = ['x','x']
 
-		line.setData(pos=position, adj=adjust, pen=penStyle, size=1, symbol=symbols, pxMode=True)
-		
+		line.setData(pos=position, adj=adjust, pen=penStyle, size=1, symbol=symbols, pxMode=True,)
 		self.vb.addItem(line)
 		self.addLineHolder(line)
+		
+		def additional_name_method( name = None):
+			if name:
+				self.name = name
+			return self.name
+			
+		line.name = additional_name_method
+		line.name('line{0}'.format(self.lineIDCounter))
 		return line
-
+	
 
 	def modifyPlot(self):
 		print 'a'
@@ -254,7 +263,10 @@ class MainWindow(QMainWindow):
 		self.lock = False
 
 	def lock(self) :
-		self.lock = True		
+		self.lock = True	
+
+
+
 
 		
 class CustomViewBox(pg.ViewBox):
@@ -273,110 +285,6 @@ class CustomViewBox(pg.ViewBox):
 			pg.ViewBox.mouseDragEvent(self, ev)   
 
 #        
-#                        
-#class PlotSettings(QWidget):
-#    def __init__(self, parent = None):
-#        super(PlotSettings, self).__init__(parent)
-#        self.XAxisLabel = QLabel('bottom Range:')
-#        self.YAxisLabel = QLabel('left   Range:')
-#        self.TAxisLabel = QLabel('top    Range:')
-#        self.RAxisLabel = QLabel('right  Range:')
-#        self.LDashLabel  = QLabel('<-')
-#        self.RDashLabel  = QLabel('->')
-#        self.UnitLabel  = QLabel(' ||    Label / Unit: ')
-#        self.SlashLabel  = QLabel('/')
-#        
-#        self.XMaxEdit   = QLineEdit() 
-#        self.XTickEdit  = QLineEdit() 
-#        self.XMinEdit   = QLineEdit() 
-#        self.XUnitEdit  = QLineEdit() 
-#        self.XLabelEdit = QLineEdit() 
-#        
-#        self.YMaxEdit   = QLineEdit() 
-#        self.YTickEdit  = QLineEdit() 
-#        self.YMinEdit   = QLineEdit() 
-#        self.YUnitEdit  = QLineEdit() 
-#        self.YLabelEdit = QLineEdit() 
-#        
-#        self.TMaxEdit   = QLineEdit() 
-#        self.TTickEdit  = QLineEdit() 
-#        self.TMinEdit   = QLineEdit() 
-#        self.TUnitEdit  = QLineEdit() 
-#        self.TLabelEdit = QLineEdit()
-#        
-#        self.RMaxEdit   = QLineEdit() 
-#        self.RTickEdit  = QLineEdit() 
-#        self.RMinEdit   = QLineEdit() 
-#        self.RUnitEdit  = QLineEdit() 
-#        self.RLabelEdit = QLineEdit()
-#        
-#        self.Vbox  = QVBoxLayout()
-#        self.Vbox.addLayout(self.HboxB)
-#        self.Vbox.addLayout(self.HboxL)
-#        self.Vbox.addLayout(self.HboxT)
-#        self.Vbox.addLayout(self.HboxR)
-#        self.HboxB = QHBoxLayout()
-#        self.HboxL = QHBoxLayout()
-#        self.HboxT = QHBoxLayout()
-#        self.HboxR = QHBoxLayout()
-#        
-#        self.HboxB.addWidget( self.XAxisLabel  )
-#        self.VboxB.addWidget( self.Xma    )
-#        grid = QGridLayout()
-#        grid.setSpacing(10)
-#        grid.addWidget(XAxisLabel, 0,0)
-#        grid.addWidget(XMaxEdit,   0,1)
-#        #grid.addWidget(LDashLabel, 0,2)
-#        grid.addWidget(XTickEdit,  0,3)
-#        #grid.addWidget(RDashLabel, 0,4)
-#        grid.addWidget(XMinEdit,   0,5)
-#        #grid.addWidget(UnitLabel,  0,6)
-#        grid.addWidget(XLabelEdit, 0,7)
-#        #grid.addWidget(SlashLabel, 0,8)
-#        grid.addWidget(XUnitEdit,  0,9)
-#        
-#        grid.addWidget(LAxisLabel, 1,0)
-#        grid.addWidget(YMaxEdit,   1,1)
-#        grid.addWidget(LDashLabel, 1,2)
-#        grid.addWidget(YTickEdit,  1,3)
-#        grid.addWidget(RDashLabel, 1,4)
-#        grid.addWidget(YMinEdit,   1,5)
-#        grid.addWidget(UnitLabel,  1,6)
-#        grid.addWidget(YLabelEdit, 1,7)
-#        grid.addWidget(SlashLabel, 1,8)
-#        grid.addWidget(YUnitEdit,  1,9)
-#        
-#        grid.addWidget(TAxisLabel, 2,0)
-#        grid.addWidget(TMaxEdit,   2,1)
-#        #grid.addWidget(LDashLabel, 2,2)
-#        grid.addWidget(TTickEdit,  2,3)
-#        #grid.addWidget(RDashLabel, 2,4)
-#        grid.addWidget(TMinEdit,   2,5)
-#        #grid.addWidget(UnitLabel,  2,6)
-#        grid.addWidget(TLabelEdit, 2,7)
-#        #grid.addWidget(SlashLabel, 2,8)
-#        grid.addWidget(TUnitEdit,  2,9)
-#        
-#        grid.addWidget(RAxisLabel, 3,0)
-#        grid.addWidget(RMaxEdit,   3,1)
-#        #grid.addWidget(DashLabel, 3,2)
-#        grid.addWidget(RTickEdit,  3,3)
-#        #grid.addWidget(RDashLabel, 3,4)
-#        grid.addWidget(RMinEdit,   3,5)
-#        #grid.addWidget(UnitLabel,  3,6)
-#        grid.addWidget(RLabelEdit, 3,7)
-#        #grid.addWidget(SlashLabel, 3,8)
-#        grid.addWidget(RUnitEdit,  3,9)
-#        
-#        self.setLayout( grid )
-#        #self.show()
-
-# if __name__ == '__main__':
-# 	app = QApplication(sys.argv)
-# 	frame = MainWindow()
-# 	frame.show()    
-# 	app.exec_()
-# 	sys.exit
 
 class DebugWindow(QMainWindow):
 	def __init__(self, parent=None):
