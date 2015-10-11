@@ -1,11 +1,13 @@
 import sys
+import pickle
 import PySide
-from PySide.QtCore import *
-from PySide.QtGui  import *
-from pyqtgraph.Qt import QtGui, QtCore
+from   types import *
+from   PySide.QtCore import *
+from   PySide.QtGui  import *
+from   pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
-from types import *
+
 
 # from QtVariant import QtGui, QtCore
 # from PyQt4.QtCore import *
@@ -95,13 +97,14 @@ class MainWindow(QMainWindow):
 		self.graphBar.addAction(crosshairAction)
 		self.graphBar.addAction(addHLineAction)
 		self.graphBar.addAction(addVLineAction)
-		#nextAction.triggered.connect(self.test2)    
+
+		addHLineAction.triggered.connect(self.addLine)    
 		
 					
 		
 	def initPlotArea(self):
-		pg.setConfigOption('background', 'w')
-		pg.setConfigOption('foreground', 'k')
+		pg.setConfigOption('background', '#001133')
+		pg.setConfigOption('foreground', '#888888')
 		self.view = pg.GraphicsLayoutWidget()         
 		scrollBarH = QScrollBar()
 		scrollBarV = QScrollBar()
@@ -197,7 +200,21 @@ class MainWindow(QMainWindow):
 
 		except AttributeError:
 			raise AttributeError
-			
+
+	def addLine(self):
+		point1, point2 = [-1.6, 151.6], [1.6, 151.6]
+		line     = pg.GraphItem()
+		position = np.array([ point1, point2 ])
+		adjust   = np.array([[ 0, 1 ]])
+		penStyle = pg.mkPen(color=(200, 200, 255), style=QtCore.Qt.DotLine)
+		symbols  = ['x','x']
+
+		line.setData(pos=position, adj=adjust, pen=penStyle, size=1, symbol=symbols, pxMode=True)
+		
+		self.vb.addItem(line)
+		return line
+
+
 	def modifyPlot(self):
 		print 'a'
 #
@@ -364,12 +381,33 @@ class DebugWindow(QMainWindow):
 		# self.table.setRowCount(200)
 		# self.table.addCol(15)
 
-		self.setCentralWidget(self.plot)
-		self.resize(800,800)
 
+		data = self.loadCrew()
+		self.plot.plotData(1, data)
+
+		self.setCentralWidget(self.plot)
+		self.resize(900,700)
+
+	def saveData(self, data):
+		fileName   = './savedData.pkl'
+		fileHolder = open(fileName, 'wb')
+		try:
+			pickle.dump(data, fileHolder)
+		except (EnvironmentError, pickle.PicklingError) as err:
+			raise SaveError(str(err))
+		
+		fileHolder.close()
+
+	def loadCrew(self):
+		fileName = './savedData.pkl'
+		package  = open( fileName, 'rb' )
+		data = pickle.load( package )
+
+		package.close()
+		return data
 def Debugger():
 	app  = QApplication(sys.argv)
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-# Debugger()
+Debugger()

@@ -1,4 +1,5 @@
 import sys
+import pickle
 import numpy as np
 import pandas as pd
 import qdarkstyle
@@ -376,6 +377,8 @@ class Sloth(QMainWindow):
 			selectArray, dataSet = tableHandle.getSelectedData()
 			for column in selectArray:
 					print 'selected Columns: {0}'.format(column)
+			self.saveData(dataSet) 
+
 
 			plotWindow.plotData(stack, dataSet)
 
@@ -386,6 +389,15 @@ class Sloth(QMainWindow):
 		except AttributeError:
 			print 'No active/valid workbook for data plotting.'
 
+	def saveData(self, data):
+		fileName   = './savedData.pkl'
+		fileHolder = open(fileName, 'wb')
+		try:
+			pickle.dump(data, fileHolder)
+		except (EnvironmentError, pickle.PicklingError) as err:
+			raise SaveError(str(err))
+		
+		fileHolder.close()
 # ----------------------------------------remove for rapid gui test-------------------------------------------------------		
 	# def closeEvent(self, event):
 		
