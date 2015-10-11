@@ -2,6 +2,7 @@ import sys
 import pickle
 import PySide
 from   types import *
+import   graphOptions as gOption
 from   PySide.QtCore import *
 from   PySide.QtGui  import *
 from   pyqtgraph.Qt import QtGui, QtCore
@@ -29,6 +30,10 @@ class MainWindow(QMainWindow):
 		self.initSettingToolbar()
 		self.initPlotArea()
 		self.plotLineHolder = []
+
+		self.option  = gOption.graphProperty()
+		self.lineIDCounter = -1
+		self.lineIDDict    = {}
 
 		self.colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
 					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
@@ -89,17 +94,28 @@ class MainWindow(QMainWindow):
 		self.addToolBar( Qt.TopToolBarArea , self.graphBar )
 
 		selectAction    = QAction('Select area', self)
+		optionAction    = QAction('Optons', self)
 		crosshairAction = QAction('Enable CrossHair', self)
 		addHLineAction  = QAction('Insert Horizontal Line', self)
 		addVLineAction  = QAction('Insert Verticle Line', self)
 		
+		self.graphBar.addAction(optionAction)
 		self.graphBar.addAction(selectAction)
 		self.graphBar.addAction(crosshairAction)
 		self.graphBar.addAction(addHLineAction)
 		self.graphBar.addAction(addVLineAction)
 
+		optionAction.triggered.connect(self.showOptionPanel)
 		addHLineAction.triggered.connect(self.addLine)    
-		
+
+	def showOptionPanel(self):
+		self.option.show()
+
+	def addLineHolder(self, line):	
+		self.lineIDCounter += 1
+		lineID  = self.lineIDCounter
+		self.lineIDDict[lineID] = line		
+		return self.lineIDCounter	
 					
 		
 	def initPlotArea(self):
@@ -139,14 +155,17 @@ class MainWindow(QMainWindow):
 			if ( xAry != None and yAry != None):
 				line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
 								  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
-				self.plotLineHolder.append(line)
+				# self.plotLineHolder.append(line) oldone, replace with dictionary
+
+				self.addLineHolder(line)
 			else:
 				plotAry = xAry if xAry != None else yAry
 				xAry = np.linspace( 0, len( plotAry )-1, len( plotAry ))
 				yAry = np.array( plotAry )
 				line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
 								  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
-				self.plotLineHolder.append(line)
+				# self.plotLineHolder.append(line) oldone, replace with dictionary
+				self.addLineHolder(line)
 			line.setSymbolBrush( pg.mkBrush(  color = dotColor ))
 			line.setSymbolPen(   None )
 			line.setSymbolSize( dotSize )
@@ -212,6 +231,7 @@ class MainWindow(QMainWindow):
 		line.setData(pos=position, adj=adjust, pen=penStyle, size=1, symbol=symbols, pxMode=True)
 		
 		self.vb.addItem(line)
+		self.addLineHolder(line)
 		return line
 
 
@@ -372,7 +392,7 @@ class DebugWindow(QMainWindow):
 		self.toolbar.addAction(self.addColAction)
 		self.toolbar.addAction(self.rmvColAction)
 
-		# self.selectAction.triggered.connect(self.table.getSelectData)
+		self.selectAction.triggered.connect(self.setPen)
 		# self.addColAction.triggered.connect(self.table.rmvCol)
 		# self.rmvColAction.triggered.connect(self.table.addCol)
 
@@ -387,6 +407,11 @@ class DebugWindow(QMainWindow):
 
 		self.setCentralWidget(self.plot)
 		self.resize(900,700)
+
+
+	def setPen(self):
+		line = self.plot.lineIDDict[0]
+		line.setPen(pg.mkPen(color = (0,255,0,255) ))
 
 	def saveData(self, data):
 		fileName   = './savedData.pkl'
