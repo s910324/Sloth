@@ -109,8 +109,8 @@ class MainWindow(QMainWindow):
 		addHLineAction.triggered.connect(self.addLine)    
 
 	def showOptionPanel(self):
-		for index in self.lineIDDict:
-			self.option.addPlotItem(self.lineIDDict[index])
+		self.option.importPlotItems(self.lineIDDict)
+
 		self.option.show()
 
 	def addLineHolder(self, line):	
@@ -145,7 +145,40 @@ class MainWindow(QMainWindow):
 		self.l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
 		self.l.setParentItem(self.w.graphicsItem())   # Note we do NOT call plt.addItem in this case
 		return self.w, self.l
-		
+	
+
+	def reWrapp(self, line, name, color, width, style, symbol):
+
+		def reWrapp_line_name( name = None ):
+			if name:
+				self.line_name = name
+			return self.line_name
+
+		def reWrapp_line_color( color = None ):
+			if color:
+				self.line_color = color
+			return self.line_color
+
+		def reWrapp_line_width( width = None ):
+			if width:
+				self.line_width = width
+			return self.line_width	
+
+		def reWrapp_line_style( style = None ):
+			if width:
+				self.line_style = style
+			return self.line_style	
+
+		def reWrapp_line_symbol( symbol = None ):
+			if width:
+				self.line_symbol = symbol
+			return self.line_symbol			
+
+		line.line_name   = reWrapp_line_name
+		line.line_color  = reWrapp_line_color
+		line.line_width  = reWrapp_line_width
+		line.line_style  = reWrapp_line_style
+		line.line_symbol = reWrapp_line_symbol
 
 	def insertPlot(self, xAry = None, yAry = None, plotArea = None, legend = None, plotName = None, 
 				lineColor = (0,0,0,255), lineWidth = 1, lineStyle = QtCore.Qt.SolidLine, 
@@ -234,12 +267,12 @@ class MainWindow(QMainWindow):
 		self.vb.addItem(line)
 		self.addLineHolder(line)
 		
-		def additional_name_method( name = None):
+		def rewrapp_name( name = None ):
 			if name:
 				self.name = name
 			return self.name
 			
-		line.name = additional_name_method
+		line.name = rewrapp_name
 		line.name('line{0}'.format(self.lineIDCounter))
 		return line
 	
@@ -315,11 +348,14 @@ class DebugWindow(QMainWindow):
 
 		self.setCentralWidget(self.plot)
 		self.resize(900,700)
-
+		self.a = 0
 
 	def setPen(self):
 		line = self.plot.lineIDDict[0]
-		line.setPen(pg.mkPen(color = (0,255,0,255) ))
+		print line.curve.setPen('#009900')
+		# print dir(line.curve.setPen())
+
+		# line.setPen(pg.mkPen(color = (0,255,0,255) ))
 
 	def saveData(self, data):
 		fileName   = './savedData.pkl'

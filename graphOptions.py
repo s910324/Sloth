@@ -14,10 +14,27 @@ class graphProperty(QMainWindow):
 		self.setCentralWidget(self.tabWidget)
 		self.resize(450, 650)
 
-	def addPlotItem(self, line = None):
+	def importPlotItem(self, line = None):
 		ItemWidget = self.plotTab.addPlotItem(line)
-		values = ItemWidget.getLineValues()
+		values     = ItemWidget.getLineValues()
 		ItemWidget.doubleClicked.connect(lambda val = values :self.plotTab.setPanelVal(val))
+		return ItemWidget
+
+
+
+	def importPlotItems(self, lineDict = None):
+		ItemWidgets = []
+		try:
+			self.plotTab.plotListWidget.clear()
+			for index in lineDict:
+				ItemWidget = self.importPlotItem(lineDict[index])
+				ItemWidgets.append(ItemWidget)
+			return ItemWidgets
+		except:
+			print  'importPlorItemError'
+			return []
+
+
 
 class graphTabWidget(QTabWidget):
 	def __init__(self, parent = None):
@@ -45,17 +62,26 @@ class PlotPropertyTab(QWidget):
 
 
 	def controlPanelUI(self):
-		self.applyUI  = QPushButton('Apply')
-		self.cancleUI = QPushButton('Cancle')
-		self.nameUI   = panelUI('name:',  QLineEdit())
-		self.colorUI  = panelUI('color:', QLineEdit())
-		self.lineUI   = panelUI('width:', QLineEdit())
+		self.visQCombo = QComboBox()
+		self.visQCombo.addItem("Hide", userData = 0)
+		self.visQCombo.addItem("Show", userData = 1)
+
+		self.applyUI   = QPushButton('Apply')
+		self.cancleUI  = QPushButton('Cancle')
+		self.nameUI    = panelUI('name:',       QLineEdit())
+		self.visibleUI = panelUI('visible:', self.visQCombo)
+		self.lineCUI   = panelUI('line color:', QLineEdit())
+		self.lineWUI   = panelUI('line width:', QLineEdit())
+		self.lineSUI   = panelUI('line style:', QComboBox())
 		
 
 		self.cVBox0  = QVBoxLayout()
 		self.cHBox0  = QHBoxLayout()
 		self.cVBox0.addWidget(self.nameUI)
-		self.cVBox0.addWidget(self.colorUI)
+		self.cVBox0.addWidget(self.visibleUI)
+		self.cVBox0.addWidget(self.lineCUI)
+		self.cVBox0.addWidget(self.lineWUI)
+		self.cVBox0.addWidget(self.lineSUI)
 		self.cVBox0.addStretch()
 		self.cHBox0.addWidget(self.applyUI)
 		self.cHBox0.addWidget(self.cancleUI)
@@ -63,13 +89,14 @@ class PlotPropertyTab(QWidget):
 		self.controlPanel.setLayout(self.cVBox0)
 
 	def setPanelVal(self, val):
-		name = val
+		name, visibility = val
 		self.nameUI.widget.setText(name)
+		self.visibleUI.widget.setCurrentIndex(visibility)
+
 
 	def addPlotItem(self, line = None):
 		plotListItem = QListWidgetItem()
 		ItemWidget   = plotListItemWidget(line)
-		
 		
 
 		plotListItem.setSizeHint(ItemWidget.sizeHint())
@@ -117,9 +144,9 @@ class plotListItemWidget(QWidget):
 
 
 	def getLineValues(self):
-		name = self.line.name()
-
-		return name
+		name       = self.line.name()
+		visibility = self.line.isVisible()
+		return name, visibility
 
 
 	def mouseDoubleClickEvent(self, event):
