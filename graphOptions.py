@@ -144,7 +144,7 @@ class plotListItemWidget(QWidget):
 
 
 	def getLineValues(self):
-		name       = self.line.name()
+		name       = self.line.line_name()
 		visibility = self.line.isVisible()
 		return name, visibility
 

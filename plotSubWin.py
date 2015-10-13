@@ -174,11 +174,20 @@ class MainWindow(QMainWindow):
 				self.line_symbol = symbol
 			return self.line_symbol			
 
-		line.line_name   = reWrapp_line_name
-		line.line_color  = reWrapp_line_color
-		line.line_width  = reWrapp_line_width
-		line.line_style  = reWrapp_line_style
-		line.line_symbol = reWrapp_line_symbol
+		def reWrapp_line_visible( visible = None ):
+			if visible:
+				self.line_visible = visible
+				self.line.setVisible(visible)
+			else:
+				self.line_visible = self.line.isVisible()
+			return self.line_visible	
+
+		line.line_name    = reWrapp_line_name
+		line.line_color   = reWrapp_line_color
+		line.line_width   = reWrapp_line_width
+		line.line_style   = reWrapp_line_style
+		line.line_symbol  = reWrapp_line_symbol
+		line.line_visible = reWrapp_line_visible
 
 	def insertPlot(self, xAry = None, yAry = None, plotArea = None, legend = None, plotName = None, 
 				lineColor = (0,0,0,255), lineWidth = 1, lineStyle = QtCore.Qt.SolidLine, 
@@ -272,8 +281,8 @@ class MainWindow(QMainWindow):
 				self.name = name
 			return self.name
 			
-		line.name = rewrapp_name
-		line.name('line{0}'.format(self.lineIDCounter))
+		line.line_name = rewrapp_name
+		line.line_name('line{0}'.format(self.lineIDCounter))
 		return line
 	
 
