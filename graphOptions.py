@@ -89,9 +89,12 @@ class PlotPropertyTab(QWidget):
 		self.controlPanel.setLayout(self.cVBox0)
 
 	def setPanelVal(self, val):
-		name, visibility = val
+		name, color, width, style, symbol, visible = val
+		print visible
 		self.nameUI.widget.setText(name)
-		self.visibleUI.widget.setCurrentIndex(visibility)
+		self.lineCUI.widget.setText(str(color))
+		self.lineWUI.widget.setText(str(width))
+		self.visibleUI.widget.setCurrentIndex(visible)
 
 
 	def addPlotItem(self, line = None):
@@ -144,11 +147,8 @@ class plotListItemWidget(QWidget):
 
 
 	def getLineValues(self):
-		name    = self.line.line_name()
-		visible = self.line.line_visible()
-		
-		return name, visible
-
+		name, color, width, style, symbol, visible = self.line.line_val()
+		return name, color, width, style, symbol, visible
 
 	def mouseDoubleClickEvent(self, event):
 		self.doubleClicked.emit()

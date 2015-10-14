@@ -175,16 +175,17 @@ class MainWindow(QMainWindow):
 							 width  = lineWidth,   style   = lineStyle, 
 							 symbol = Sym[dotSym], visible = True )		
 
-			line.symbol_val( color   = dotColor,    size    = dotSize,
-							 penC    = dotColor,    penW    = 1,
-							 visible = False )
+			line.symbol_val( color   = dotColor,      size    = dotSize,
+							 penC    = (0,255,0,255), penW    = 2,
+							 outLine = False,         visible = True )
 
 			plotArea.showGrid(x=True, y=True)
+			legend.addItem( line, plotName )
 
 #            self.w.setLabel('left', "Y Axis", units='A')
 #            self.w.setLabel('bottom', "Y Axis", units='s')
 #            self.w.setLogMode(x=True, y=False)
-			legend.addItem( line, plotName )     
+ 
 
 
 	def reWrapp_line(self, target):
@@ -248,31 +249,46 @@ class MainWindow(QMainWindow):
 			return target.spenColor	
 
 		def symbol_penWidth(target, penW = None):
-			if penW:
+			if penW != None:
+				pen = target.symbol_penColor()
 				target.spenWidth = penW
+				if penW <= 0:
+					target.symbol_penColor((pen[0], pen[1], pen[2], 0))
+				if penW >  0:
+					target.symbol_penColor((pen[0], pen[1], pen[2], 255))
+					target.spenWidth = penW
 				target.setSymbolPen(pg.mkPen(width = penW))
 			return target.spenWidth	
 
+		def symbol_outLine(target, outLine = None ):
+			pen   = target.symbol_penColor()
+			if outLine == True:
+				target.symbol_penColor( (pen[0],   pen[1],   pen[2],   255))
+				target.soutLine = outLine
+			if outLine == False:
+				target.symbol_penColor( (pen[0],   pen[1],   pen[2],   0))
+				target.soutLine = outLine
+			return target.soutLine
+
 		def symbol_visible(target, visible = None ):
 			color = target.symbol_color()
-			pen   = target.symbol_penColor()
 			if visible == True:
 				target.symbol_color((   color[0], color[1], color[2], 255))
-				target.symbol_penColor((pen[0],   pen[1],   pen[2],   255))
 				target.svisible = visible
 			if visible == False:
 				target.symbol_color((    color[0], color[1], color[2], 0))
-				target.symbol_penColor( (pen[0],   pen[1],   pen[2],   0))
+				target.symbol_outLine(False)
 				target.svisible = visible
-
 			return  target.svisible	
+
+
 
 		def symbol_val(target, color   = None, size  = None,
 							   penC    = None, penW  = None,
-							   visible = None):
-			return [target.symbol_color(color),   target.symbol_size(size),
-					target.symbol_penColor(penC), target.symbol_penWidth(penW),
-					target.symbol_visible(visible)]
+							   outLine = None, visible = None):
+			return [target.symbol_color(color),    target.symbol_size(size),
+					target.symbol_penColor(penC),  target.symbol_penWidth(penW),
+					target.symbol_outLine(outLine), target.symbol_visible(visible)]
 
 		target.line_name       = types.MethodType(line_name,       target)
 		target.line_color      = types.MethodType(line_color,      target)
@@ -287,6 +303,7 @@ class MainWindow(QMainWindow):
 		target.symbol_penColor = types.MethodType(symbol_penColor, target)
 		target.symbol_penWidth = types.MethodType(symbol_penWidth, target)		
 		target.symbol_visible  = types.MethodType(symbol_visible,  target)
+		target.symbol_outLine  = types.MethodType(symbol_outLine,  target)
 		target.symbol_val      = types.MethodType(symbol_val,      target)
 
 
@@ -346,13 +363,20 @@ class MainWindow(QMainWindow):
 		self.vb.addItem(line)
 		self.addLineHolder(line)
 		
-		def rewrapp_name( name = None ):
-			if name:
-				self.name = name
-			return self.name
-		# self.reWrapp( line )
-		line.line_name = rewrapp_name
-		line.line_name('line{0}'.format(self.lineIDCounter))
+		self.addLineHolder(line)
+
+		# self.reWrapp_line(line)
+
+		# line.line_val(   name   = plotName,    color   = lineColor,
+		# 				 width  = lineWidth,   style   = lineStyle, 
+		# 				 symbol = lineSymbol, visible = True )		
+
+		# line.symbol_val( color   = lineColor,      size    = 5,
+		# 				 penC    = (0,255,0,255), penW    = 2,
+		# 				 outLine = False,         visible = True )
+		print dir(line)
+
+		# line.line_name('line{0}'.format(self.lineIDCounter))
 		return line
 	
 
