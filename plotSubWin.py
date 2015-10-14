@@ -1,6 +1,7 @@
 import sys
 import pickle
 import PySide
+import types
 from   types import *
 import   graphOptions as gOption
 from   PySide.QtCore import *
@@ -147,47 +148,7 @@ class MainWindow(QMainWindow):
 		return self.w, self.l
 	
 
-	def reWrapp(self, line, name, color, width, style, symbol):
 
-		def reWrapp_line_name( name = None ):
-			if name:
-				self.line_name = name
-			return self.line_name
-
-		def reWrapp_line_color( color = None ):
-			if color:
-				self.line_color = color
-			return self.line_color
-
-		def reWrapp_line_width( width = None ):
-			if width:
-				self.line_width = width
-			return self.line_width	
-
-		def reWrapp_line_style( style = None ):
-			if width:
-				self.line_style = style
-			return self.line_style	
-
-		def reWrapp_line_symbol( symbol = None ):
-			if width:
-				self.line_symbol = symbol
-			return self.line_symbol			
-
-		def reWrapp_line_visible( visible = None ):
-			if visible:
-				self.line_visible = visible
-				self.line.setVisible(visible)
-			else:
-				self.line_visible = self.line.isVisible()
-			return self.line_visible	
-
-		line.line_name    = reWrapp_line_name
-		line.line_color   = reWrapp_line_color
-		line.line_width   = reWrapp_line_width
-		line.line_style   = reWrapp_line_style
-		line.line_symbol  = reWrapp_line_symbol
-		line.line_visible = reWrapp_line_visible
 
 	def insertPlot(self, xAry = None, yAry = None, plotArea = None, legend = None, plotName = None, 
 				lineColor = (0,0,0,255), lineWidth = 1, lineStyle = QtCore.Qt.SolidLine, 
@@ -199,17 +160,20 @@ class MainWindow(QMainWindow):
 			if ( xAry != None and yAry != None):
 				line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
 								  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
-				# self.plotLineHolder.append(line) oldone, replace with dictionary
 
-				self.addLineHolder(line)
 			else:
 				plotAry = xAry if xAry != None else yAry
 				xAry = np.linspace( 0, len( plotAry )-1, len( plotAry ))
 				yAry = np.array( plotAry )
 				line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
-								  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
-				# self.plotLineHolder.append(line) oldone, replace with dictionary
-				self.addLineHolder(line)
+								  pen=pg.mkPen(color = lineColor, width = lineWidth, style = lineStyle), symbol = Sym[dotSym] ) 
+
+			self.addLineHolder(line)
+
+			self.reWrapp_line(line)
+			line.line_val(name  = plotName,  color  = lineColor,   width   = lineWidth,
+				    	  style = lineStyle, symbol = Sym[dotSym], visible = True)		
+
 			line.setSymbolBrush( pg.mkBrush(  color = dotColor ))
 			line.setSymbolPen(   None )
 			line.setSymbolSize( dotSize )
@@ -218,7 +182,57 @@ class MainWindow(QMainWindow):
 #            self.w.setLabel('left', "Y Axis", units='A')
 #            self.w.setLabel('bottom', "Y Axis", units='s')
 #            self.w.setLogMode(x=True, y=False)
-			legend.addItem( line, plotName )        
+			legend.addItem( line, plotName )     
+
+
+	def reWrapp_line(self, target):
+		def line_name(target, name = None):
+			if name:
+				target.lname = name
+			return target.lname
+
+		def line_color(target, color = None ):
+			if color:
+				target.lcolor = color
+			return target.lcolor
+
+		def line_width(target, width = None ):
+			if width:
+				target.lwidth = width
+			return target.lwidth	
+
+		def line_style(target, style = None ):
+			if style:
+				target.lstyle = style
+			return target.lstyle	
+
+		def line_symbol(target, symbol = None ):
+			if  symbol:
+				target.lsymbol = symbol
+			return target.lsymbol
+
+		def line_visible(target, visible = None ):
+
+			if visible is not None:
+				target.setVisible(visible)
+			target.lvisible = target.isVisible()
+				
+			return  target.lvisible	
+
+		def line_val(target, name  = None, color  = None, width = None,
+				    		 style = None, symbol = None, visible = None):
+
+			return [target.line_name(name),     target.line_color(color),
+					target.line_width(width),   target.line_style(style),
+					target.line_symbol(symbol), target.line_visible(visible)]
+
+		target.line_name    = types.MethodType(line_name,    target)
+		target.line_color   = types.MethodType(line_color,   target)
+		target.line_width   = types.MethodType(line_width,   target)
+		target.line_style   = types.MethodType(line_style,   target)
+		target.line_symbol  = types.MethodType(line_symbol,  target)
+		target.line_visible = types.MethodType(line_visible, target)
+		target.line_val     = types.MethodType(line_val,     target)
 
 
 	def finitPlotArea(self, plotArea = None, legend = None, axisNameAry = None, unitAry = None, showAxis = [1, 1, 1, 1]):
@@ -280,7 +294,7 @@ class MainWindow(QMainWindow):
 			if name:
 				self.name = name
 			return self.name
-			
+		# self.reWrapp( line )
 		line.line_name = rewrapp_name
 		line.line_name('line{0}'.format(self.lineIDCounter))
 		return line

@@ -24,15 +24,15 @@ class graphProperty(QMainWindow):
 
 	def importPlotItems(self, lineDict = None):
 		ItemWidgets = []
-		try:
-			self.plotTab.plotListWidget.clear()
-			for index in lineDict:
-				ItemWidget = self.importPlotItem(lineDict[index])
-				ItemWidgets.append(ItemWidget)
-			return ItemWidgets
-		except:
-			print  'importPlorItemError'
-			return []
+		# try:
+		self.plotTab.plotListWidget.clear()
+		for index in lineDict:
+			ItemWidget = self.importPlotItem(lineDict[index])
+			ItemWidgets.append(ItemWidget)
+		return ItemWidgets
+		# except:
+		# 	print  'importPlorItemError'
+		# 	return []
 
 
 
@@ -144,9 +144,10 @@ class plotListItemWidget(QWidget):
 
 
 	def getLineValues(self):
-		name       = self.line.line_name()
-		visibility = self.line.isVisible()
-		return name, visibility
+		name    = self.line.line_name()
+		visible = self.line.line_visible()
+		
+		return name, visible
 
 
 	def mouseDoubleClickEvent(self, event):
