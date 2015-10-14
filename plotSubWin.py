@@ -171,14 +171,16 @@ class MainWindow(QMainWindow):
 			self.addLineHolder(line)
 
 			self.reWrapp_line(line)
-			line.line_val(name  = plotName,  color  = lineColor,   width   = lineWidth,
-				    	  style = lineStyle, symbol = Sym[dotSym], visible = True)		
+			line.line_val(   name   = plotName,    color   = lineColor,
+							 width  = lineWidth,   style   = lineStyle, 
+							 symbol = Sym[dotSym], visible = True )		
 
-			line.setSymbolBrush( pg.mkBrush(  color = dotColor ))
-			line.setSymbolPen(   None )
-			line.setSymbolSize( dotSize )
+			line.symbol_val( color   = dotColor,    size    = dotSize,
+							 penC    = dotColor,    penW    = 1,
+							 visible = False )
+
 			plotArea.showGrid(x=True, y=True)
-#            line.setPen(pg.mkPen(color = (255,0,0,255), width=5, style=QtCore.Qt.SolidLine))
+
 #            self.w.setLabel('left', "Y Axis", units='A')
 #            self.w.setLabel('bottom', "Y Axis", units='s')
 #            self.w.setLogMode(x=True, y=False)
@@ -194,16 +196,19 @@ class MainWindow(QMainWindow):
 		def line_color(target, color = None ):
 			if color:
 				target.lcolor = color
+				target.setPen(pg.mkPen( color = color ))
 			return target.lcolor
 
 		def line_width(target, width = None ):
 			if width:
 				target.lwidth = width
+				target.setPen(pg.mkPen( width = width ))
 			return target.lwidth	
 
 		def line_style(target, style = None ):
 			if style:
 				target.lstyle = style
+				target.setPen(pg.mkPen( style = style))
 			return target.lstyle	
 
 		def line_symbol(target, symbol = None ):
@@ -212,11 +217,9 @@ class MainWindow(QMainWindow):
 			return target.lsymbol
 
 		def line_visible(target, visible = None ):
-
 			if visible is not None:
 				target.setVisible(visible)
 			target.lvisible = target.isVisible()
-				
 			return  target.lvisible	
 
 		def line_val(target, name  = None, color  = None, width = None,
@@ -226,13 +229,66 @@ class MainWindow(QMainWindow):
 					target.line_width(width),   target.line_style(style),
 					target.line_symbol(symbol), target.line_visible(visible)]
 
-		target.line_name    = types.MethodType(line_name,    target)
-		target.line_color   = types.MethodType(line_color,   target)
-		target.line_width   = types.MethodType(line_width,   target)
-		target.line_style   = types.MethodType(line_style,   target)
-		target.line_symbol  = types.MethodType(line_symbol,  target)
-		target.line_visible = types.MethodType(line_visible, target)
-		target.line_val     = types.MethodType(line_val,     target)
+		def symbol_color(target, color = None):
+			if color:
+				target.scolor = color
+				target.setSymbolBrush(pg.mkBrush(color = color))
+			return target.scolor
+
+		def symbol_size(target, size = None):
+			if size:
+				target.ssize = size
+				target.setSymbolSize(size)
+			return target.ssize
+
+		def symbol_penColor(target, penC = None):
+			if penC:
+				target.spenColor = penC
+				target.setSymbolPen(pg.mkPen(color = penC))
+			return target.spenColor	
+
+		def symbol_penWidth(target, penW = None):
+			if penW:
+				target.spenWidth = penW
+				target.setSymbolPen(pg.mkPen(width = penW))
+			return target.spenWidth	
+
+		def symbol_visible(target, visible = None ):
+			color = target.symbol_color()
+			pen   = target.symbol_penColor()
+			if visible == True:
+				target.symbol_color((   color[0], color[1], color[2], 255))
+				target.symbol_penColor((pen[0],   pen[1],   pen[2],   255))
+				target.svisible = visible
+			if visible == False:
+				target.symbol_color((    color[0], color[1], color[2], 0))
+				target.symbol_penColor( (pen[0],   pen[1],   pen[2],   0))
+				target.svisible = visible
+
+			return  target.svisible	
+
+		def symbol_val(target, color   = None, size  = None,
+							   penC    = None, penW  = None,
+							   visible = None):
+			return [target.symbol_color(color),   target.symbol_size(size),
+					target.symbol_penColor(penC), target.symbol_penWidth(penW),
+					target.symbol_visible(visible)]
+
+		target.line_name       = types.MethodType(line_name,       target)
+		target.line_color      = types.MethodType(line_color,      target)
+		target.line_width      = types.MethodType(line_width,      target)
+		target.line_style      = types.MethodType(line_style,      target)
+		target.line_symbol     = types.MethodType(line_symbol,     target)
+		target.line_visible    = types.MethodType(line_visible,    target)
+		target.line_val        = types.MethodType(line_val,        target)
+
+		target.symbol_color    = types.MethodType(symbol_color,    target)
+		target.symbol_size     = types.MethodType(symbol_size,     target)
+		target.symbol_penColor = types.MethodType(symbol_penColor, target)
+		target.symbol_penWidth = types.MethodType(symbol_penWidth, target)		
+		target.symbol_visible  = types.MethodType(symbol_visible,  target)
+		target.symbol_val      = types.MethodType(symbol_val,      target)
+
 
 
 	def finitPlotArea(self, plotArea = None, legend = None, axisNameAry = None, unitAry = None, showAxis = [1, 1, 1, 1]):
