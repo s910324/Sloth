@@ -6,4 +6,4 @@
 
 
 
-[![Demo](http://img.youtube.com/vi/T-D1KVIuvjA/0.jpg)](https://www.youtube.com/watch?v=yXr62x98pXQ)
+[![Demo](https://github.com/s910324/Sloth/blob/master/screen%20shots/NightlyBuild%2028.jpg)](https://www.youtube.com/watch?v=yXr62x98pXQ)
