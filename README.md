@@ -1,7 +1,7 @@
-#Super Awesome Scientific Plotting Freeware
+#Sloth data visualization
 =====
 
-<h3>Which is powered by Python and Qt Framework.
+<h3>sloth powered by Python and Qt Framework, provide a interface to export interactive plot  to iPython-notebook.
 
 
 
