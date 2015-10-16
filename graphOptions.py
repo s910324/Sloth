@@ -90,7 +90,6 @@ class PlotPropertyTab(QWidget):
 
 	def setPanelVal(self, val):
 		name, color, width, style, symbol, visible = val
-		print visible
 		self.nameUI.widget.setText(name)
 		self.lineCUI.widget.setText(str(color))
 		self.lineWUI.widget.setText(str(width))

@@ -26,15 +26,18 @@ class MainWindow(QMainWindow):
 		self.lock = True
 		self.ID   = -1
 		self.resize(1000,800)
-		self.plotCounter = 0
+
 #        self.initSettingDocker()
 		self.initSettingToolbar()
 		self.initPlotArea()
-		self.plotLineHolder = []
+
 
 		self.option  = gOption.graphProperty()
 		self.lineIDCounter = -1
 		self.lineIDDict    = {}
+
+		self.plotIDCounter = -1
+		self.plotIDDict    = {}
 
 		self.colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
 					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
@@ -119,7 +122,13 @@ class MainWindow(QMainWindow):
 		lineID  = self.lineIDCounter
 		self.lineIDDict[lineID] = line		
 		return self.lineIDCounter	
-					
+
+
+	def addPlotHolder(self, plot, legend):	
+		self.plotIDCounter += 1
+		plotID  = self.plotIDCounter
+		self.plotIDDict[plotID] = plot, legend	
+		return self.plotIDCounter					
 		
 	def initPlotArea(self):
 		pg.setConfigOption('background', '#001133')
@@ -139,48 +148,61 @@ class MainWindow(QMainWindow):
 #        self.setWindowTitle(winTitle)
 
 
+	# def addPlotArea(self, graphTitle = ''):
+	# 	self.vb = CustomViewBox()
+	# 	self.w = self.view.addPlot( viewBox = self.vb, enableMenu = False, title = graphTitle)
+	# 	self.view.nextRow()
+	# 	self.l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
+	# 	self.l.setParentItem(self.w.graphicsItem())   # Note we do NOT call plt.addItem in this case
+	# 	self.addPlotHolder(self.w)
+	# 	return self.w, self.l
 	def addPlotArea(self, graphTitle = ''):
-		self.vb = CustomViewBox()
-		self.w = self.view.addPlot( viewBox = self.vb, enableMenu = False, title = graphTitle)
+		self.viewBox  = CustomViewBox()
+		plotArea      = self.view.addPlot( viewBox = self.viewBox, enableMenu = False, title = graphTitle)
+		legend        = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
+		
+		legend.setParentItem(plotArea.graphicsItem())   # Note we do NOT call plt.addItem in this case
 		self.view.nextRow()
-		self.l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
-		self.l.setParentItem(self.w.graphicsItem())   # Note we do NOT call plt.addItem in this case
-		return self.w, self.l
-	
+		self.addPlotHolder(plotArea, legend)
+		# self.w, self.l = plotArea, legend
+		return plotArea, legend#self.w, self.l
 
 
 
-	def insertPlot(self, xAry = None, yAry = None, plotArea = None, legend = None, plotName = None, 
-				lineColor = (0,0,0,255), lineWidth = 1, lineStyle = QtCore.Qt.SolidLine, 
-				dotColor  = (0,0,0,255), dotSize   = 4,  dotSym = 0    ):
-			Sym = [ 'o', 's', 't', 'd', '+' ]
-			if plotName == None:
-				plotName = 'Untitle {0}'.format(self.plotCounter)
-				self.plotCounter += 1
-			if ( xAry != None and yAry != None):
-				line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
-								  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
+	def insertPlot(self, xAry      = None,        yAry      = None,        plotArea  = None, legend    = None,
+						 plotName  = None,        lineColor = (0,0,0,255), lineWidth = 1,    lineStyle = QtCore.Qt.SolidLine, 
+						 dotColor  = (0,0,0,255), dotSize   = 5,           dotSym    = 0,    addLegend = True ):
+		Sym = [ 'o', 's', 't', 'd', '+' ]
+		if plotName == None:
+			self.plotIDCounter += 1
+			plotName = 'Untitle {0}'.format(self.plotIDCounter)
+			
+		if ( xAry != None and yAry != None):
+			line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
+							  pen=pg.mkPen(color = lineColor, width=lineWidth, style=lineStyle), symbol = Sym[dotSym] ) 
 
-			else:
-				plotAry = xAry if xAry != None else yAry
-				xAry = np.linspace( 0, len( plotAry )-1, len( plotAry ))
-				yAry = np.array( plotAry )
-				line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
-								  pen=pg.mkPen(color = lineColor, width = lineWidth, style = lineStyle), symbol = Sym[dotSym] ) 
+		else:
+			plotAry = xAry if xAry != None else yAry
+			xAry = np.linspace( 0, len( plotAry )-1, len( plotAry ))
+			yAry = np.array( plotAry )
+			line = plotArea.plot( np.array(xAry), np.array(yAry), name = plotName,
+							  pen=pg.mkPen(color = lineColor, width = lineWidth, style = lineStyle), symbol = Sym[dotSym] ) 
 
-			self.addLineHolder(line)
+		self.addLineHolder(line)
 
-			self.reWrapp_line(line)
-			line.line_val(   name   = plotName,    color   = lineColor,
-							 width  = lineWidth,   style   = lineStyle, 
-							 symbol = Sym[dotSym], visible = True )		
+		self.reWrapp_line(line)
+		line.line_val(   name   = plotName,    color   = lineColor,
+						 width  = lineWidth,   style   = lineStyle, 
+						 symbol = Sym[dotSym], visible = True )		
+		# line.line_color(lineColor)
+		line.symbol_val( color   = dotColor,      size    = dotSize,
+						 penC    = (0,255,0,255), penW    = 2,
+						 outLine = False,         visible = True )
 
-			line.symbol_val( color   = dotColor,      size    = dotSize,
-							 penC    = (0,255,0,255), penW    = 2,
-							 outLine = False,         visible = True )
-
-			plotArea.showGrid(x=True, y=True)
+		plotArea.showGrid(x=True, y=True)
+		if addLegend:
 			legend.addItem( line, plotName )
+		return line
 
 #            self.w.setLabel('left', "Y Axis", units='A')
 #            self.w.setLabel('bottom', "Y Axis", units='s')
@@ -189,6 +211,9 @@ class MainWindow(QMainWindow):
 
 
 	def reWrapp_line(self, target):
+		target.lcolor = None
+		target.lwidth = None
+		target.lstyle = None
 		def line_name(target, name = None):
 			if name:
 				target.lname = name
@@ -197,19 +222,28 @@ class MainWindow(QMainWindow):
 		def line_color(target, color = None ):
 			if color:
 				target.lcolor = color
-				target.setPen(pg.mkPen( color = color ))
+				width = target.lwidth
+				style = target.lstyle
+				if style != None or width != None:
+					target.line_setPen(color = color, width = width, style = style)
 			return target.lcolor
 
 		def line_width(target, width = None ):
 			if width:
 				target.lwidth = width
-				target.setPen(pg.mkPen( width = width ))
+				color = target.lcolor
+				style = target.lstyle
+				if color != None or style != None:
+					target.line_setPen(color = color, width = width, style = style)
 			return target.lwidth	
 
 		def line_style(target, style = None ):
 			if style:
 				target.lstyle = style
-				target.setPen(pg.mkPen( style = style))
+				width = target.lwidth
+				color = target.lcolor
+				if color != None or width != None:
+					target.line_setPen(color = color, width = width, style = style)
 			return target.lstyle	
 
 		def line_symbol(target, symbol = None ):
@@ -222,12 +256,27 @@ class MainWindow(QMainWindow):
 				target.setVisible(visible)
 			target.lvisible = target.isVisible()
 			return  target.lvisible	
+		
+		def line_setPen(target, color = None, width = None, style = None):
+			if color == None:
+				color = target.lcolor
+			if width == None:
+				width = target.lwidth
+			if style == None:
+				style = target.lstyle
+
+			target.setPen(pg.mkPen(color = color, width = width, style = style))
+			return color, width, style
+
 
 		def line_val(target, name  = None, color  = None, width = None,
 				    		 style = None, symbol = None, visible = None):
 
-			return [target.line_name(name),     target.line_color(color),
-					target.line_width(width),   target.line_style(style),
+			if sum([ elem != None for elem in [color, width, style]]) > 1:
+				target.line_setPen(color = color, width = width, style = style)
+			
+			return [target.line_name(name),     target.line_color(),
+					target.line_width(),        target.line_style(),
 					target.line_symbol(symbol), target.line_visible(visible)]
 
 		def symbol_color(target, color = None):
@@ -296,6 +345,7 @@ class MainWindow(QMainWindow):
 		target.line_style      = types.MethodType(line_style,      target)
 		target.line_symbol     = types.MethodType(line_symbol,     target)
 		target.line_visible    = types.MethodType(line_visible,    target)
+		target.line_setPen     = types.MethodType(line_setPen,     target)
 		target.line_val        = types.MethodType(line_val,        target)
 
 		target.symbol_color    = types.MethodType(symbol_color,    target)
@@ -323,13 +373,20 @@ class MainWindow(QMainWindow):
 			plotArea.setLabel(axis = 'top',    text = axisNameAry[2], units = unitAry[2], unitPrefix = None )
 		if len(axisNameAry) > 3:
 			plotArea.setLabel(axis = 'right',  text = axisNameAry[3], units = unitAry[3], unitPrefix = None )
-		self.w.showAxis('bottom', show= showAxis[0])
-		self.w.showAxis('left',   show= showAxis[1])                
-		self.w.showAxis('top',    show= showAxis[2])
-		self.w.showAxis('right',  show= showAxis[3])
+
+
+		# self.w.showAxis('bottom', show= showAxis[0])
+		# self.w.showAxis('left',   show= showAxis[1])                
+		# self.w.showAxis('top',    show= showAxis[2])
+		# self.w.showAxis('right',  show= showAxis[3])
+		plotArea.showAxis('bottom', show= showAxis[0])
+		plotArea.showAxis('left',   show= showAxis[1])                
+		plotArea.showAxis('top',    show= showAxis[2])
+		plotArea.showAxis('right',  show= showAxis[3])
 
 	def plotData(self, stack, dataSet):
 		try:
+			linePack = []
 			if stack:
 				p,l = self.addPlotArea('graphtitle')
 
@@ -337,46 +394,45 @@ class MainWindow(QMainWindow):
 				plotArrayX, plotArrayY = data
 				if stack:
 					print 'plot stacked plots'
-					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
+					line = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
 				
 				if not stack:
 					print 'plot unstacked plots'
 					p,l = self.addPlotArea('graphtitle')
-					self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
+					line = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
 					self.finitPlotArea(plotArea = p, legend = l) #'multiplot'				
+				linePack.append(line)
 
 			if stack:
 				self.finitPlotArea(plotArea = p, legend = l)
-
+			return linePack
 		except AttributeError:
 			raise AttributeError
 
-	def addLine(self):
-		point1, point2 = [-1.6, 151.6], [1.6, 151.6]
-		line     = pg.GraphItem()
-		position = np.array([ point1, point2 ])
-		adjust   = np.array([[ 0, 1 ]])
-		penStyle = pg.mkPen(color=(200, 200, 255), style=QtCore.Qt.DotLine)
-		symbols  = ['x','x']
+	def addLine(self, plotArea = None):
+		plotArrayX, plotArrayY = [-1.6, 1.6], [151.6, 151.6]
+		p, l  = self.plotIDDict[0]
+		lineColor  = (255,0,0,255)
+		line  = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = lineColor, dotColor = lineColor, addLegend = False)
 
-		line.setData(pos=position, adj=adjust, pen=penStyle, size=1, symbol=symbols, pxMode=True,)
-		self.vb.addItem(line)
-		self.addLineHolder(line)
+		# self.addLineHolder(line)
+
 		
-		self.addLineHolder(line)
+		plotName   = 'line{0}'.format(self.lineIDCounter)
+		lineWidth  = 100
+		lineStyle  = Qt.SolidLine
+		lineSymbol = 2
+		self.reWrapp_line(line)
 
-		# self.reWrapp_line(line)
+		line.line_val(   name   = plotName,       color   = lineColor,
+						 width  = lineWidth,      style   = lineStyle, 
+						 symbol = lineSymbol,     visible = True )		
 
-		# line.line_val(   name   = plotName,    color   = lineColor,
-		# 				 width  = lineWidth,   style   = lineStyle, 
-		# 				 symbol = lineSymbol, visible = True )		
+		line.symbol_val( color   = lineColor,     size    = 5,
+						 penC    = (0,255,0,255), penW    = 2,
+						 outLine = False,         visible = True )
 
-		# line.symbol_val( color   = lineColor,      size    = 5,
-		# 				 penC    = (0,255,0,255), penW    = 2,
-		# 				 outLine = False,         visible = True )
-		print dir(line)
 
-		# line.line_name('line{0}'.format(self.lineIDCounter))
 		return line
 	
 
@@ -447,6 +503,7 @@ class DebugWindow(QMainWindow):
 
 
 		data = self.loadCrew()
+
 		self.plot.plotData(1, data)
 
 		self.setCentralWidget(self.plot)
@@ -455,10 +512,11 @@ class DebugWindow(QMainWindow):
 
 	def setPen(self):
 		line = self.plot.lineIDDict[0]
-		print line.curve.setPen('#009900')
+		# line.curve.setPen(color = (0,99,0,255))
+		line.line_color((0,99,0,255))
 		# print dir(line.curve.setPen())
 
-		# line.setPen(pg.mkPen(color = (0,255,0,255) ))
+		line.setPen(pg.mkPen(color = (0,255,0,255), width = 10))
 
 	def saveData(self, data):
 		fileName   = './savedData.pkl'
@@ -482,4 +540,4 @@ def Debugger():
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-# Debugger()
+Debugger()
