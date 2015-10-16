@@ -33,16 +33,16 @@ class MainWindow(QMainWindow):
 
 
 		self.option  = gOption.graphProperty()
-		self.lineIDCounter = -1
-		self.lineIDDict    = {}
+		self.lineIDCounter    = -1
+		self.lineIDDict       = {}
 
-		self.plotIDCounter = -1
-		self.plotIDDict    = {}
+		self.plotIDCounter    = -1
+		self.plotIDDict       = {}
 
-		self.colorMap = [ (200,200,200,255), (255,0,0,255), (0,0,255,255), (20,200,0,255),
-					(255,0,115,255), (190,150,0,255), (10,0,175,255), (140,67,10,255),
-					(255,0,255,255), (15,110,0,255), (0,37,102,255), (255,185,0,255),
-					(130,0,217,255), (85,0,212,255)] 
+		self.colorMap = [ (200,200,200,255), (255,0,0,255),   (0,0,255,255),  (20,200,0,255),
+						  (255,0,115,255),   (190,150,0,255), (10,0,175,255), (140,67,10,255),
+						  (255,0,255,255),   (15,110,0,255),  (0,37,102,255), (255,185,0,255),
+						  (130,0,217,255),   (85,0,212,255)] 
 		'''        
 		p6 = win.addPlot(title="Updating plot")
 		curve = p6.plot(pen='y')
@@ -124,11 +124,15 @@ class MainWindow(QMainWindow):
 		return self.lineIDCounter	
 
 
-	def addPlotHolder(self, plot, legend):	
+	def addPlotHolder(self, plot, legend, viewBox):	
 		self.plotIDCounter += 1
 		plotID  = self.plotIDCounter
-		self.plotIDDict[plotID] = plot, legend	
-		return self.plotIDCounter					
+		self.plotIDDict[plotID] = plot, legend, viewBox
+		print 'a'
+		print self.plotIDCounter
+		return self.plotIDCounter	
+
+			
 		
 	def initPlotArea(self):
 		pg.setConfigOption('background', '#001133')
@@ -148,24 +152,16 @@ class MainWindow(QMainWindow):
 #        self.setWindowTitle(winTitle)
 
 
-	# def addPlotArea(self, graphTitle = ''):
-	# 	self.vb = CustomViewBox()
-	# 	self.w = self.view.addPlot( viewBox = self.vb, enableMenu = False, title = graphTitle)
-	# 	self.view.nextRow()
-	# 	self.l = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
-	# 	self.l.setParentItem(self.w.graphicsItem())   # Note we do NOT call plt.addItem in this case
-	# 	self.addPlotHolder(self.w)
-	# 	return self.w, self.l
 	def addPlotArea(self, graphTitle = ''):
-		self.viewBox  = CustomViewBox()
-		plotArea      = self.view.addPlot( viewBox = self.viewBox, enableMenu = False, title = graphTitle)
-		legend        = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
+		viewBox  = CustomViewBox()
+		plotArea = self.view.addPlot( viewBox = viewBox, enableMenu = False, title = graphTitle)
+		legend   = pg.LegendItem((100,60), offset=(70,70))  # args are (size, offset)
 		
 		legend.setParentItem(plotArea.graphicsItem())   # Note we do NOT call plt.addItem in this case
 		self.view.nextRow()
-		self.addPlotHolder(plotArea, legend)
+		self.addPlotHolder(plotArea, legend, viewBox)
 		# self.w, self.l = plotArea, legend
-		return plotArea, legend#self.w, self.l
+		return plotArea, legend, viewBox#self.w, self.l
 
 
 
@@ -174,7 +170,6 @@ class MainWindow(QMainWindow):
 						 dotColor  = (0,0,0,255), dotSize   = 5,           dotSym    = 0,    addLegend = True ):
 		Sym = [ 'o', 's', 't', 'd', '+' ]
 		if plotName == None:
-			self.plotIDCounter += 1
 			plotName = 'Untitle {0}'.format(self.plotIDCounter)
 			
 		if ( xAry != None and yAry != None):
@@ -388,7 +383,7 @@ class MainWindow(QMainWindow):
 		try:
 			linePack = []
 			if stack:
-				p,l = self.addPlotArea('graphtitle')
+				p,l,v = self.addPlotArea('graphtitle')
 
 			for i, data in enumerate(dataSet):
 				plotArrayX, plotArrayY = data
@@ -398,8 +393,8 @@ class MainWindow(QMainWindow):
 				
 				if not stack:
 					print 'plot unstacked plots'
-					p,l = self.addPlotArea('graphtitle')
-					line = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
+					p,l,v = self.addPlotArea('graphtitle')
+					line  = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = self.colorMap[i%14], dotColor = self.colorMap[i%14])
 					self.finitPlotArea(plotArea = p, legend = l) #'multiplot'				
 				linePack.append(line)
 
@@ -411,9 +406,9 @@ class MainWindow(QMainWindow):
 
 	def addLine(self, plotArea = None):
 		plotArrayX, plotArrayY = [-1.6, 1.6], [151.6, 151.6]
-		p, l  = self.plotIDDict[0]
+		p, l, v    = self.plotIDDict[0]
 		lineColor  = (255,0,0,255)
-		line  = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = lineColor, dotColor = lineColor, addLegend = False)
+		line       = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = lineColor, dotColor = lineColor, addLegend = False)
 
 		# self.addLineHolder(line)
 
@@ -504,20 +499,27 @@ class DebugWindow(QMainWindow):
 
 		data = self.loadCrew()
 
-		self.plot.plotData(1, data)
+		self.plot.plotData(0, data)
+		p, l, v = self.plot.plotIDDict[1]
+		# v.setBackgroundColor('#888888')
+		self.v = v
+		self.a = False
+		self.v.setAutoFillBackground(self.a)
+
 
 		self.setCentralWidget(self.plot)
 		self.resize(900,700)
-		self.a = 0
+
 
 	def setPen(self):
-		line = self.plot.lineIDDict[0]
-		# line.curve.setPen(color = (0,99,0,255))
-		line.line_color((0,99,0,255))
-		# print dir(line.curve.setPen())
+		# line = self.plot.lineIDDict[0]
+		# # line.curve.setPen(color = (0,99,0,255))
+		# line.line_color((0,99,0,255))
+		# # print dir(line.curve.setPen())
 
-		line.setPen(pg.mkPen(color = (0,255,0,255), width = 10))
-
+		# line.setPen(pg.mkPen(color = (0,255,0,255), width = 10))
+		self.a = not self.a
+		self.v.setAutoFillBackground(self.a)
 	def saveData(self, data):
 		fileName   = './savedData.pkl'
 		fileHolder = open(fileName, 'wb')
@@ -540,4 +542,4 @@ def Debugger():
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-# Debugger()
+Debugger()
