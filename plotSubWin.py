@@ -406,6 +406,8 @@ class MainWindow(QMainWindow):
 			raise AttributeError
 
 	def addLine(self, plotArea = None):
+
+
 		plotArrayX, plotArrayY = [-1.6, 1.6], [151.6, 151.6]
 		p, l, v    = self.plotIDDict[0]
 		lineColor  = (255,0,0,255)
@@ -470,7 +472,8 @@ class CustomViewBox(pg.ViewBox):
 
 	def setSelect(self, selected):
 		if selected:
-			brush = pg.mkBrush(color = "#880000")
+		
+			brush = pg.mkBrush(color = "#2FA000")
 			brush.setStyle(Qt.Dense6Pattern)
 			xRange, yRange = self.childrenBounds()
 			self.setBackgroundColor(brush)
