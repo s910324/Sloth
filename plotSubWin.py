@@ -4,6 +4,7 @@ import PySide
 import types
 from   types import *
 import   graphOptions as gOption
+import graphSelectorWindow as gSelector
 from   PySide.QtCore import *
 from   PySide.QtGui  import *
 from   pyqtgraph.Qt import QtGui, QtCore
@@ -460,6 +461,25 @@ class CustomViewBox(pg.ViewBox):
 	def __init__(self, *args, **kwds):
 		pg.ViewBox.__init__(self, *args, **kwds)
 		self.setMouseMode(self.RectMode)
+		self.text = pg.TextItem(html=u'<div style="text-align: center";><span style="color: rgba(255, 255, 255, 0); font-size: 35pt; ">x</span><span style="color: rgba(255, 255, 255, 180); font-size: 35pt; ">S e l e c t e d</span><span style="color: rgba(255, 255, 255, 0); font-size: 35pt; ">x</span></div>', anchor=(0.5,0.5), border='fff8', fill=None)
+		self.text.border.setWidth(2)
+		self.text.border.setStyle(Qt.DotLine)
+		self.text.setVisible(False)
+		self.addItem(self.text)
+
+
+	def setSelect(self, selected):
+		if selected:
+			brush = pg.mkBrush(color = "#880000")
+			brush.setStyle(Qt.Dense6Pattern)
+			xRange, yRange = self.childrenBounds()
+			self.setBackgroundColor(brush)
+			self.text.setPos((xRange[0]+xRange[1])/2, (yRange[0]+yRange[1])/2)
+			self.text.setVisible(True)
+		else:
+			self.setBackgroundColor(None)
+			self.text.setVisible(False)
+		
 
 	def mouseClickEvent(self, ev):
 		if ev.button() == QtCore.Qt.RightButton:
@@ -493,18 +513,15 @@ class DebugWindow(QMainWindow):
 
 		self.addToolBar( Qt.TopToolBarArea , self.toolbar)
 
-		# self.table.setRowCount(200)
-		# self.table.addCol(15)
-
-
 		data = self.loadCrew()
 
 		self.plot.plotData(0, data)
 		p, l, v = self.plot.plotIDDict[1]
-		# v.setBackgroundColor('#888888')
+
+		# v.setBackgroundColor('#880000')
 		self.v = v
 		self.a = False
-		self.v.setAutoFillBackground(self.a)
+		# self.v.setDisable()
 
 
 		self.setCentralWidget(self.plot)
@@ -512,14 +529,11 @@ class DebugWindow(QMainWindow):
 
 
 	def setPen(self):
-		# line = self.plot.lineIDDict[0]
-		# # line.curve.setPen(color = (0,99,0,255))
-		# line.line_color((0,99,0,255))
-		# # print dir(line.curve.setPen())
 
-		# line.setPen(pg.mkPen(color = (0,255,0,255), width = 10))
-		self.a = not self.a
-		self.v.setAutoFillBackground(self.a)
+		a = gSelector.graphSelector()
+		a.addPlotHolders(self.plot.plotIDDict)
+		a.show()
+
 	def saveData(self, data):
 		fileName   = './savedData.pkl'
 		fileHolder = open(fileName, 'wb')
@@ -542,4 +556,4 @@ def Debugger():
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-# Debugger()
+Debugger()
