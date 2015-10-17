@@ -1,7 +1,8 @@
 #Sloth data visualization
 =====
 
-<h4>sloth powered by Python and Qt Framework, provide a interface to export interactive plot  to iPython-notebook.
+<h4>Sloth is powered by Python and Qt Framework, 
+<h4>provide a interface to export interactive plot to iPython-notebook.
 
 
 
