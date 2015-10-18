@@ -1,9 +1,17 @@
 #Sloth data visualization
-=====
 
-<h4>Sloth is powered by Python and Qt Framework, 
-<h4>provide a interface to export interactive plot to iPython-notebook.
+<h4>Introduction
+<H6>
+  Sloth is powered by Python and Qt Framework, 
+  provide a interface to export interactive plot to iPython-notebook.
 
+
+|require module|version|
+|---|---|
+|Python2|>=2.7.3|
+|PySide|>=1.2.2|
+|Pandas|>=0.16.0|
+|PyQtGraph| >=0.9.10|
 
 
 #Youtube Demo
