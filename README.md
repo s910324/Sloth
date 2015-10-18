@@ -1,4 +1,4 @@
-#Sloth data visualization
+<h2>Sloth data visualization
 
 <h4>Introduction
 ------
