@@ -12,14 +12,6 @@ import pyqtgraph as pg
 import numpy as np
 
 
-# from QtVariant import QtGui, QtCore
-# from PyQt4.QtCore import *
-# from PyQt4.QtGui  import *
-
-#from scipy.stats import futil
-#from scipy.sparse.csgraph import _validation
-
-
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
 		super(MainWindow, self).__init__(parent)
@@ -28,7 +20,6 @@ class MainWindow(QMainWindow):
 		self.ID   = -1
 		self.resize(1000,800)
 
-#        self.initSettingDocker()
 		self.initSettingToolbar()
 		self.initPlotArea()
 
@@ -44,55 +35,6 @@ class MainWindow(QMainWindow):
 						  (255,0,115,255),   (190,150,0,255), (10,0,175,255), (140,67,10,255),
 						  (255,0,255,255),   (15,110,0,255),  (0,37,102,255), (255,185,0,255),
 						  (130,0,217,255),   (85,0,212,255)] 
-		'''        
-		p6 = win.addPlot(title="Updating plot")
-		curve = p6.plot(pen='y')
-		data = np.random.normal(size=(10,1000))
-		ptr = 0
-		def update():
-			global curve, data, ptr, p6
-			curve.setData(data[ptr%10])
-			if ptr == 0:
-				p6.enableAutoRange('xy', False)  ## stop auto-scaling after the first data set is plotted
-			ptr += 1
-		timer = QtCore.QTimer()
-		timer.timeout.connect(update)
-		timer.start(50)
-
-		
-		lr = pg.LinearRegionItem([400,700])
-		lr.setZValue(-10)
-		p8.addItem(lr)
-		
-		p9 = win.addPlot(title="Zoom on selected region")
-		p9.plot(data2)
-		def updatePlot():
-			p9.setXRange(*lr.getRegion(), padding=0)
-		def updateRegion():
-			lr.setRegion(p9.getViewBox().viewRange()[0])
-		lr.sigRegionChanged.connect(updatePlot)
-		p9.sigXRangeChanged.connect(updateRegion)
-		updatePlot()
-		'''
-			  
-#        xAry = [2,3,5,7,11,15,21]
-#        yAry = (xAry) 
-#        zAry = [4,6,3,6,234,3,23]
-#        w,l = self.addPlotArea()
-#        self.insertPlot(xAry, yAry, w, l)
-#        self.view.nextRow()        
-#        w,l = self.addPlotArea()
-#        self.insertPlot(xAry, zAry, w, l)
-#        self.finitPlotArea(w)
-#
-#    
-#    def initSettingDocker(self):
-#        self.settingDockWidget = QDockWidget("  ::  Settings ::", self)
-#        self.settingDockWidget.setFeatures(QDockWidget.DockWidgetMovable)
-#        self.settingDockWidget.setAllowedAreas(Qt.BottomDockWidgetArea and Qt.TopDockWidgetArea)
-#        self.addDockWidget(Qt.BottomDockWidgetArea, self.settingDockWidget)
-#        self.settings = PlotSettings()
-#        self.settingDockWidget.setWidget(self.settings)
 		
 	def initSettingToolbar(self):
 		self.graphBar   = QToolBar('plot options')
@@ -405,11 +347,10 @@ class MainWindow(QMainWindow):
 		except AttributeError:
 			raise AttributeError
 
-	def addLine(self, plotArea = None):
+	def addLine(self, plotArea = None, data = [-1.6, 1.6, 151.6, 151.6]):
 
-
-		plotArrayX, plotArrayY = [-1.6, 1.6], [151.6, 151.6]
-		p, l, v    = self.plotIDDict[0]
+		plotArrayX, plotArrayY = [data[0], data[2]], [data[1], data[3]]
+		p, l, v    = self.plotIDDict[plotArea]
 		lineColor  = (255,0,0,255)
 		line       = self.insertPlot(plotArrayX, plotArrayY, plotArea = p, legend = l, lineColor = lineColor, dotColor = lineColor, addLegend = False)
 
@@ -417,7 +358,7 @@ class MainWindow(QMainWindow):
 
 		
 		plotName   = 'line{0}'.format(self.lineIDCounter)
-		lineWidth  = 100
+		lineWidth  = 2
 		lineStyle  = Qt.SolidLine
 		lineSymbol = 2
 		self.reWrapp_line(line)
@@ -534,6 +475,8 @@ class DebugWindow(QMainWindow):
 	def setPen(self):
 
 		a = gSelector.graphSelector()
+		a.requestPreview.connect(self.plot.addLine, Qt.QueuedConnection)
+
 		a.addPlotHolders(self.plot.plotIDDict)
 		a.show()
 

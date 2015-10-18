@@ -2,13 +2,14 @@ import sys
 from PySide import QtGui
 from   PySide.QtGui  import *
 from   PySide.QtCore import *
-
+import  graphSelectorListEditor as gListEditor
 
 class graphSelector(QWidget):
-	checkedChange = Signal(int, int)
+	checkedChange  = Signal(int, int)
+	requestPreview = Signal(int, list)
 	def __init__(self, parent=None):
 		super(graphSelector, self).__init__(parent)
-		self.resize(450, 650)
+		self.resize(350, 650)
 		self.vbox0        = QVBoxLayout()
 		box1              = self.setUpGroupBox()
 		box2              = self.setUpLineOptionUI()
@@ -30,45 +31,65 @@ class graphSelector(QWidget):
 
 	def setUpApplyUI(self):
 		hbox              = QHBoxLayout()
-		self.applyPB      = QPushButton('Apply')
+		self.applyPB      = QPushButton('Apply Changes')
 		self.canclePB     = QPushButton('Cancle')
+		# self.applyPB.setStyleSheet( 'border: 2px solid #008800; height: 20px;')
+		# self.canclePB.setStyleSheet('border: 2px solid #880000; height: 20px;')		
+		self.applyPB.clicked.connect(self.preview)
+		self.canclePB.clicked.connect(self.cancleOperation)
 		hbox.addWidget(self.applyPB)
 		hbox.addWidget(self.canclePB)
+		
 		return hbox
 
 	def setUpLineOptionUI(self):
-		vbox0    = QVBoxLayout()
-		hbox1    = QHBoxLayout()
-		hbox2    = QHBoxLayout()
-		self.p1x = QLineEdit()
-		self.p1y = QLineEdit()
-		self.p2x = QLineEdit()
-		self.p2y = QLineEdit()
-		valid    = QtGui.QDoubleValidator()
-		self.p1x.setValidator(valid)
-		self.p1y.setValidator(valid)
-		self.p2x.setValidator(valid)
-		self.p2y.setValidator(valid)
-		hbox1.addWidget(QLabel('point 1 [x, y] =  [   '))
+		layout    = QVBoxLayout()
+		vbox0     = QVBoxLayout()
+		hbox1     = QHBoxLayout()
+		hbox2     = QHBoxLayout()
+		groupBox  = QGroupBox("Point Coordinate:")
+		groupBox1 = QGroupBox("Point1:")
+		groupBox2 = QGroupBox("Point2:")
+
+		self.p1x = QLineNumEdit()
+		self.p1y = QLineNumEdit()
+		self.p2x = QLineNumEdit()
+		self.p2y = QLineNumEdit()
+		self.previewPB = QPushButton('Preview Changes')
+
+
+		hbox1.addWidget(QLabel('['))
 		hbox1.addWidget(self.p1x)
 		hbox1.addWidget(QLabel(', '))
 		hbox1.addWidget(self.p1y)
 		hbox1.addWidget(QLabel(']'))
+		groupBox1.setLayout(hbox1)
 
-		hbox2.addWidget(QLabel('point 2 [x, y] =  [   '))
+		hbox2.addWidget(QLabel('['))
 		hbox2.addWidget(self.p2x)
 		hbox2.addWidget(QLabel(', '))
 		hbox2.addWidget(self.p2y)
 		hbox2.addWidget(QLabel(']'))
-		
-		vbox0.addLayout(hbox1)
-		vbox0.addLayout(hbox2)
+		groupBox2.setLayout(hbox2)
+
+		vbox0.addWidget(groupBox1)
+		vbox0.addSpacing(10)
+		vbox0.addWidget(groupBox2)
+		vbox0.addWidget(self.previewPB)
+		self.previewPB.clicked.connect(self.preview)
 		vbox0.addStretch()
-		return vbox0
+		groupBox.setLayout(vbox0)
+		layout.addWidget(groupBox)
+		return layout
+
+	def cancleOperation(self):
+		for widget in self.checkBoxList:
+			widget.setChecked(False)
+		self.close()
+
 	def addPlotHolder(self, viewBox, ticket):
 		checkBox = QCheckBox('viewBox {0}'.format(ticket), self)
 		checkBox.box_number = ticket
-
 		checkBox.stateChanged.connect(lambda  stat = checkBox.checkState(), view = viewBox : self.setCheck(view, stat))
 		self.checkLayout.addWidget(checkBox)
 		self.checkLayout.addSpacing(5)
@@ -85,12 +106,49 @@ class graphSelector(QWidget):
 		viewBox.setSelect(stat)
 		return stat
 
+	def valueCheck(self):
+		data = [self.p1x.checkValue(), self.p1y.checkValue(), self.p2x.checkValue(), self.p2y.checkValue()]
+		if None not in data:
+			print 'data = ' + str(data)
+			return data
+		return False
+
+	def preview(self):
+		data = self.valueCheck()
+		activeBox = []
+		print data
+		if data:
+			for checkBox in self.checkBoxList:
+				if checkBox.isChecked():
+					viewBox_number = checkBox.box_number
+					print data
+					self.requestPreview.emit(viewBox_number, data)
+					activeBox.append(viewBox_number)
+			return activeBox, data
+		else:
+			return False
 
 
+class QLineNumEdit(QLineEdit):
+	def __init__(self, parent=None):
+		super(QLineNumEdit, self).__init__(parent)
+		valid    = QtGui.QDoubleValidator()
+		self.setValidator(valid)
+		self.textChanged.connect(self.checkValue)
 
+	def checkValue(self):
+		try:
+			value = float(self.text())
+			self.setStyleSheet("border: 1px solid None;")
+			return value
+		except ValueError:
+			self.setStyleSheet("border: 1px solid red;")
+			return None
+
+	
 def run():
 	app = QApplication(sys.argv)
 	MainWindow = graphSelector()
 	MainWindow.show()
 	app.exec_()
-# run()
+run()
