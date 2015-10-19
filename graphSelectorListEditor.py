@@ -14,15 +14,15 @@ class graphListEditor(QMainWindow):
 		
 		self.setWindowTitle('SubWindow Handler')
 		self.setCentralWidget(self.listWidget)
-		# self.setupToolbar()
+		self.setupToolbar()
 		self.resize(400, 600)
 		self.setMaximumWidth(400)
 
 	def setupToolbar(self):
-		self.MainToolbar  = QToolBar('Edit List') 
-		addCrewAction	  = QAction('add  elem', self)
-		saveListAction	  = QAction('save edit', self)
-		loadListAction	  = QAction('load save', self)
+		self.MainToolbar  = QToolBar('Edit') 
+		addCrewAction	  = QAction('add', self)
+		saveListAction	  = QAction('save', self)
+		loadListAction	  = QAction('load', self)
 
 		addCrewAction.triggered.connect(self.addCrew)
 		saveListAction.triggered.connect(self.saveCrew)

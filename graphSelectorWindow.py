@@ -13,10 +13,13 @@ class graphSelector(QWidget):
 		self.vbox0        = QVBoxLayout()
 		box1              = self.setUpGroupBox()
 		box2              = self.setUpLineOptionUI()
-		box3              = self.setUpApplyUI()
+		box3              = self.setUpLineEditor()
+		box4              = self.setUpApplyUI()
+
 		self.vbox0.addLayout(box1)
 		self.vbox0.addLayout(box2)
 		self.vbox0.addLayout(box3)
+		self.vbox0.addLayout(box4)
 		self.checkBoxList = []
 		self.setLayout(self.vbox0)
 
@@ -55,7 +58,7 @@ class graphSelector(QWidget):
 		self.p1y = QLineNumEdit()
 		self.p2x = QLineNumEdit()
 		self.p2y = QLineNumEdit()
-		self.previewPB = QPushButton('Preview Changes')
+		self.previewPB = QPushButton('Add to Praph')
 
 
 		hbox1.addWidget(QLabel('['))
@@ -77,10 +80,21 @@ class graphSelector(QWidget):
 		vbox0.addWidget(groupBox2)
 		vbox0.addWidget(self.previewPB)
 		self.previewPB.clicked.connect(self.preview)
-		vbox0.addStretch()
+		# vbox0.addStretch()
 		groupBox.setLayout(vbox0)
 		layout.addWidget(groupBox)
 		return layout
+
+	def setUpLineEditor(self):
+		vbox0 = QVBoxLayout()
+		vbox1 = QVBoxLayout()
+		groupBox        = QGroupBox("Lines:")
+		self.lineEditor = gListEditor.graphListEditor()
+		vbox0.addWidget(groupBox)
+		vbox1.addWidget(self.lineEditor)
+		groupBox.setLayout(vbox1)
+		return vbox0
+
 
 	def cancleOperation(self):
 		for widget in self.checkBoxList:
