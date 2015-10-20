@@ -1,7 +1,8 @@
 import sys
-from   PySide.QtGui  import *
-from   PySide.QtCore import *
-from   QLineNumber   import *
+from   PySide.QtGui       import *
+from   PySide.QtCore      import *
+from   QLineNumber        import *
+from   viewLineList       import *
 
 class viewBoxControlWidget (QWidget):
 	def __init__(self, parent=None):
@@ -11,7 +12,7 @@ class viewBoxControlWidget (QWidget):
 		boxZ = QVBoxLayout()
 		boxZ.addLayout(box0)
 		boxZ.addLayout(box1)
-		self.setLayout(boxZ)
+		# self.setLayout(boxZ)
 
 
 	def setupLineUI(self):

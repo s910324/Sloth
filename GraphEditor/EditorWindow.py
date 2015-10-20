@@ -1,9 +1,10 @@
 import sys
-from   PySide import QtGui
+from   PySide               import QtGui
 from   PySide.QtGui         import *
 from   PySide.QtCore        import *
-from   viewBoxListWidget    import *
-from   lineControlWidget import *
+from   viewBoxList          import *
+from   lineControlWidget    import *
+from   viewBoxControlWidget import *
 
 class EditorWindow(QGroupBox):
 	def __init__(self, parent=None):
@@ -12,9 +13,9 @@ class EditorWindow(QGroupBox):
 		self.setupLayout()
 
 	def setupLayout(self):
-		box1 = self.setupList()
-		box2 = self.setupControl()
-		box3 = self.setupSubmitUI()
+		box1  = self.setupList()
+		box2  = self.setupControl()
+		box3  = self.setupSubmitUI()
 		hbox1 = QHBoxLayout()
 		vbox1 = QVBoxLayout()
 		hbox1.addLayout(box1)
@@ -24,16 +25,21 @@ class EditorWindow(QGroupBox):
 		self.setLayout(hbox1)
 
 	def setupList(self):
-		self.viewBoxList = viewBoxListWidget()
-		self.viewBoxList.setFixedWidth(200)
+		self.viewBoxList = viewBoxList()
+		self.viewBoxList.addView()
+		self.viewBoxList.addView()
+		self.viewBoxList.setFixedWidth(250)
 		vbox             = QVBoxLayout()
 		vbox.addWidget(self.viewBoxList)
 		return vbox
 
 	def setupControl(self):
-		self.control = lineControlWidget()
-		vbox         = QVBoxLayout()
-		vbox.addWidget(self.control)
+		self.lcontrol = lineControlWidget()
+		self.vcontrol = viewBoxControlWidget()
+		vbox          = QVBoxLayout()
+		vbox.addWidget(self.vcontrol)
+		vbox.addWidget(self.lcontrol)
+		self.vcontrol.hide()
 		
 		return vbox		
 
