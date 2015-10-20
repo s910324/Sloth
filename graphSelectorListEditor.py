@@ -14,7 +14,7 @@ class graphListEditor(QMainWindow):
 		
 		self.setWindowTitle('SubWindow Handler')
 		self.setCentralWidget(self.listWidget)
-		self.setupToolbar()
+		# self.setupToolbar()
 		self.resize(400, 600)
 		self.setMaximumWidth(400)
 
