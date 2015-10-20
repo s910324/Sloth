@@ -50,8 +50,10 @@ class viewLineListWidget(QWidget):
 		hbox0.addWidget(self.deleteButton)
 
 		vbox0              = QVBoxLayout()
+		vbox0.setContentsMargins(10,10,10,2)
 		vbox0.addLayout(hbox0)
-		vbox0.addLayout(self.HLine())
+		vbox0.addLayout(self.HLine(3))
+
 		self.setLayout(vbox0)
 
 
@@ -65,14 +67,15 @@ class viewLineListWidget(QWidget):
 		event.accept()
 
 
-	def HLine(self):
+	def HLine(self, width = 1):
 		vbox  = QVBoxLayout()
 		hline = QFrame()
 		hline.setFrameStyle( QFrame.HLine  |  QFrame.Plain )
 		hline.setFrameShadow( QFrame.Sunken )
-		hline.setLineWidth(1)
+		hline.setLineWidth(width)
 		vbox.addSpacing(5)
 		vbox.addWidget(hline)
+		vbox.setContentsMargins(0,0,0,0)
 		vbox.addSpacing(5)
 		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
 		return vbox
