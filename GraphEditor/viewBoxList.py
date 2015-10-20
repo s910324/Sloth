@@ -8,7 +8,6 @@ class viewBoxList(QListWidget):
 	def __init__(self, parent=None):
 		super(viewBoxList, self).__init__(parent)
 
-		# self.resize(500,500)
 
 
 
@@ -32,6 +31,7 @@ class viewBoxListWidget(QWidget):
 		self.setFixedWidth(240)
 
 
+
 	def setDesign(self):
 		style              = 'QPushButton{background-color: #808080; border-radius: 8px; color: #212121; }'
 		hbox0              = QHBoxLayout()
@@ -50,6 +50,7 @@ class viewBoxListWidget(QWidget):
 		hbox0.addWidget(self.viewNameLable)
 		hbox0.addStretch()
 		hbox0.addWidget(self.addLineButton)
+		hbox0.addSpacing(5)
 		hbox0.addWidget(self.foldingButton)
 		vbox0 = QVBoxLayout()
 		vbox0.addLayout(hbox0)
@@ -57,6 +58,7 @@ class viewBoxListWidget(QWidget):
 
 
 		self.viewLineList = viewLineList()
+		self.viewLineList.setMinimumHeight(5)
 		vbox0.addWidget(self.viewLineList)
 		self.setLayout(vbox0)
 
@@ -77,9 +79,9 @@ class viewBoxListWidget(QWidget):
 		hline.setFrameStyle( QFrame.HLine  |  QFrame.Plain )
 		hline.setFrameShadow( QFrame.Sunken )
 		hline.setLineWidth(1)
-		vbox.addSpacing(15)
+		# vbox.addSpacing(15)
 		vbox.addWidget(hline)
-		vbox.addSpacing(15)
+		vbox.addSpacing(5)
 		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
 		return vbox
 

@@ -6,13 +6,17 @@ from   PySide.QtCore import *
 class viewLineList(QListWidget):
 	def __init__(self, parent=None):
 		super(viewLineList, self).__init__(parent)
+		self.lineCount = 0
 
-
-
-
+		self.setMaximumHeight(80)
+		self.addLine()
+		self.addLine()
 
 
 	def addLine(self):
+		self.lineCount += 1
+		self.setMaximumHeight(80 * self.lineCount)
+		
 		vlineListWidgetItem = QListWidgetItem()
 		vlineListWidget     = viewLineListWidget()
 		vlineListWidgetItem.setSizeHint(vlineListWidget.sizeHint())
@@ -37,19 +41,16 @@ class viewLineListWidget(QWidget):
 		self.viewNameLable = QLabel('View box : n')
 		self.viewNameLable.setFixedWidth(50)
 
-		self.addLineButton = QPushButton('+')
-		self.addLineButton.setStyleSheet(style)
-		self.addLineButton.setFixedSize(16,16)
+
 		
-		self.foldingButton = QPushButton('-')
-		self.foldingButton.setStyleSheet(style)
-		self.foldingButton.setFixedSize(16,16)
+		self.deleteButton = QPushButton('x')
+		self.deleteButton.setStyleSheet(style)
+		self.deleteButton.setFixedSize(16,16)
 
 
 		hbox0.addWidget(self.viewNameLable)
 		hbox0.addStretch()
-		hbox0.addWidget(self.addLineButton)
-		hbox0.addWidget(self.foldingButton)
+		hbox0.addWidget(self.deleteButton)
 		vbox0 = QVBoxLayout()
 		vbox0.addLayout(hbox0)
 		vbox0.addLayout(self.HLine())
