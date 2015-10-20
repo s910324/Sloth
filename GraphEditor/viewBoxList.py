@@ -52,6 +52,7 @@ class viewBoxListWidget(QWidget):
 		hbox0.addWidget(self.addLineButton)
 		hbox0.addSpacing(5)
 		hbox0.addWidget(self.foldingButton)
+		hbox0.addSpacing(10)
 		vbox0 = QVBoxLayout()
 		vbox0.addLayout(hbox0)
 		vbox0.addLayout(self.HLine())

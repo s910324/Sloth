@@ -31,9 +31,6 @@ class viewLineListWidget(QWidget):
 	def __init__(self, parent = None):
 		super(viewLineListWidget, self).__init__(parent)
 		self.setDesign()
-		
-
-
 
 	def setDesign(self):
 		style              = 'QPushButton{background-color: #808080; border-radius: 8px; color: #212121; }'
@@ -46,12 +43,13 @@ class viewLineListWidget(QWidget):
 		self.deleteButton = QPushButton('x')
 		self.deleteButton.setStyleSheet(style)
 		self.deleteButton.setFixedSize(16,16)
-
+		
 
 		hbox0.addWidget(self.viewNameLable)
 		hbox0.addStretch()
 		hbox0.addWidget(self.deleteButton)
-		vbox0 = QVBoxLayout()
+
+		vbox0              = QVBoxLayout()
 		vbox0.addLayout(hbox0)
 		vbox0.addLayout(self.HLine())
 		self.setLayout(vbox0)
@@ -73,9 +71,9 @@ class viewLineListWidget(QWidget):
 		hline.setFrameStyle( QFrame.HLine  |  QFrame.Plain )
 		hline.setFrameShadow( QFrame.Sunken )
 		hline.setLineWidth(1)
-		vbox.addSpacing(15)
+		vbox.addSpacing(5)
 		vbox.addWidget(hline)
-		vbox.addSpacing(15)
+		vbox.addSpacing(5)
 		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
 		return vbox
 
