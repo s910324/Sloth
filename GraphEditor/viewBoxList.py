@@ -61,6 +61,7 @@ class viewBoxListWidget(QWidget):
 		self.viewLineList = viewLineList()
 		self.viewLineList.setMinimumHeight(5)
 		vbox0.addWidget(self.viewLineList)
+
 		self.setLayout(vbox0)
 
 

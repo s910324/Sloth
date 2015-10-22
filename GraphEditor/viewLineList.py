@@ -2,6 +2,7 @@ import sys
 from   PySide        import QtGui
 from   PySide.QtGui  import *
 from   PySide.QtCore import *
+from   QHeader       import *
 
 class viewLineList(QListWidget):
 	def __init__(self, parent=None):
@@ -33,27 +34,30 @@ class viewLineListWidget(QWidget):
 		self.setDesign()
 
 	def setDesign(self):
-		style              = 'QPushButton{background-color: #808080; border-radius: 8px; color: #212121; }'
-		hbox0              = QHBoxLayout()
-		self.viewNameLable = QLabel('View box : n')
-		self.viewNameLable.setFixedWidth(50)
+		# style              = 'QPushButton{background-color: #808080; border-radius: 8px; color: #212121; }'
+		# hbox0              = QHBoxLayout()
+		# self.viewNameLable = QLabel('View box : n')
+		# self.viewNameLable.setFixedWidth(50)
 
 
 		
-		self.deleteButton = QPushButton('x')
-		self.deleteButton.setStyleSheet(style)
-		self.deleteButton.setFixedSize(16,16)
+		# self.deleteButton = QPushButton('x')
+		# self.deleteButton.setStyleSheet(style)
+		# self.deleteButton.setFixedSize(16,16)
 		
 
-		hbox0.addWidget(self.viewNameLable)
-		hbox0.addStretch()
-		hbox0.addWidget(self.deleteButton)
+		# hbox0.addWidget(self.viewNameLable)
+		# hbox0.addStretch()
+		# hbox0.addWidget(self.deleteButton)
 
-		vbox0              = QVBoxLayout()
-		vbox0.setContentsMargins(10,10,10,2)
-		vbox0.addLayout(hbox0)
-		vbox0.addLayout(self.HLine(3))
-
+		# vbox0              = QVBoxLayout()
+		# vbox0.setContentsMargins(10,10,10,2)
+		# vbox0.addLayout(hbox0)
+		# vbox0.addLayout(self.HLine(3))
+		a = QHeader()
+		a.setFixedHeight(30)
+		vbox0 = QVBoxLayout()
+		vbox0.addWidget(a)
 		self.setLayout(vbox0)
 
 
