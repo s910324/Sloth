@@ -6,6 +6,7 @@ from PySide.QtCore import *
 class viewBoxListWidget(QWidget):
 	def __init__(self, lineMode = True, parent = None):
 		super(viewBoxListWidget, self).__init__(parent)
+		self.focus_color = QColor(53, 64, 82)
 
 		self.setFocusPolicy(Qt.StrongFocus)
 		self.show()
@@ -26,12 +27,12 @@ class viewBoxListWidget(QWidget):
 
 		#header:
 		painter.setPen(QColor(0,0,0,0))
-		painter.setBrush(QColor('#354052'))
+		painter.setBrush(QColor(53, 64, 82))
 		painter.drawRect(0, 0, w, h)
 
 		painter.setPen(QColor(0,0,0,0))
 
-		painter.setBrush(QColor('#DDDDDD'))
+		painter.setBrush(self.focus_color)
 		painter.drawRect(3, 2, 3, h-4)
 
 
@@ -55,10 +56,10 @@ class viewBoxListWidget(QWidget):
 
 	def setDcFocus(self, focused = True):
 		if focused:
-			self.header_Color = self.focused_Color
+			self.focus_color = QColor(53, 64, 82)
 
 		else:
-			self.header_Color = self.unFocused_Color
+			self.focus_color = QColor(66, 72, 82)
 
 		self.update()
 
