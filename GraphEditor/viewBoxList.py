@@ -9,9 +9,18 @@ from   QRighter           import *
 from   QSpacer            import *
 
 class viewBoxList(QListWidget):
+
 	def __init__(self, parent=None):
 		super(viewBoxList, self).__init__(parent)
-
+		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+		self.setStyleSheet( """
+                                QListWidget:item:selected:active {
+                                     background-color: rgba(0,0,0,0);
+                                }
+                                QListWidget:item:selected:!active {
+                                     background-color: rgba(0,0,0,0);
+                                }
+                                """)
 
 
 
@@ -24,20 +33,27 @@ class viewBoxList(QListWidget):
 		self.addItem(vListWidgetItem)
 		self.setItemWidget(vListWidgetItem, vListWidget)
 		vListWidget.doubleClicked.connect(lambda widget = vListWidget : self.handleFocus(widget))
+
 		return  vListWidget
 
-	def handleFocus(self, widget):
+	def handleFocus(self, widget = None):
 		for index in range(self.count()):
 			self.itemWidget(self.item(index)).setDcFocus(False)
-		widget.setDcFocus(True)	
+		if widget:
+			widget.setDcFocus(True)	
+
+	def setLostFocus(self):
+		self.handleFocus(None)
+
+
 
 class viewBoxListWidget(QWidget):
 	doubleClicked = Signal(object)
 	def __init__(self, parent = None):
 		super(viewBoxListWidget, self).__init__(parent)
 		self.setDesign()
-		self.decoretors = []
-		self.setFixedWidth(280)
+
+		# self.setFixedWidth(280)
 
 
 

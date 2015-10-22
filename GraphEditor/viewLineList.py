@@ -9,6 +9,9 @@ class viewLineList(QListWidget):
 		super(viewLineList, self).__init__(parent)
 		self.lineCount = 0
 		self.setMaximumHeight(80)
+		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+		self.addLine()
+		self.addLine()
 		self.addLine()
 		self.addLine()
 
