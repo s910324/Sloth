@@ -14,6 +14,7 @@ class viewLineList(QListWidget):
 		self.addLine()
 
 
+
 	def addLine(self):
 		self.lineCount += 1
 		self.setMaximumHeight(80 * self.lineCount)
@@ -24,11 +25,16 @@ class viewLineList(QListWidget):
 
 		self.addItem(vlineListWidgetItem)
 		self.setItemWidget(vlineListWidgetItem, vlineListWidget)
+		vlineListWidget.doubleClicked.connect(lambda widget = vlineListWidget : self.handleFocus(widget))
 		return  vlineListWidget
 
-
+	def handleFocus(self, widget):
+		for index in range(self.count()):
+			self.itemWidget(self.item(index)).header.setDcFocus(False)
+		widget.setDcFocus(True)	
 
 class viewLineListWidget(QWidget):
+	doubleClicked = Signal(object)
 	def __init__(self, parent = None):
 		super(viewLineListWidget, self).__init__(parent)
 		self.setDesign()
@@ -54,10 +60,11 @@ class viewLineListWidget(QWidget):
 		# vbox0.setContentsMargins(10,10,10,2)
 		# vbox0.addLayout(hbox0)
 		# vbox0.addLayout(self.HLine(3))
-		a = QHeader()
-		a.setFixedHeight(30)
+		self.header = QHeader()
+		self.header.setFixedHeight(30)
 		vbox0 = QVBoxLayout()
-		vbox0.addWidget(a)
+		vbox0.setContentsMargins(5,5,5,0)
+		vbox0.addWidget(self.header )
 		self.setLayout(vbox0)
 
 
@@ -67,40 +74,7 @@ class viewLineListWidget(QWidget):
 
 
 	def mouseDoubleClickEvent(self, event):
-		self.doubleClicked.emit()
+		self.header.setFocus()
+		self.doubleClicked.emit(self.header)
 		event.accept()
 
-
-	def HLine(self, width = 1):
-		vbox  = QVBoxLayout()
-		hline = QFrame()
-		hline.setFrameStyle( QFrame.HLine  |  QFrame.Plain )
-		hline.setFrameShadow( QFrame.Sunken )
-		hline.setLineWidth(width)
-		vbox.addSpacing(5)
-		vbox.addWidget(hline)
-		vbox.setContentsMargins(0,0,0,0)
-		vbox.addSpacing(5)
-		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
-		return vbox
-
-	def VLine(self):
-		toto = QFrame()
-		toto.setFrameStyle(QFrame.VLine  |  QFrame.Plain)
-		toto.setLineWidth(1)
-		toto.setFrameShadow(QFrame.Sunken)
-		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
-		return toto		
-
-# def run():
-# 	app = QApplication(sys.argv)
-# 	# MainWindow = listItem()
-# 	MainWindow = viewBoxList()
-# 	MainWindow.addView()
-# 	MainWindow.addView()
-# 	MainWindow.show()
-
-
-# 	app.exec_()
-
-# run()
