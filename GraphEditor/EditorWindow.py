@@ -28,8 +28,9 @@ class EditorWindow(QGroupBox):
 		self.viewBoxList = viewBoxList()
 		self.viewBoxList.addView()
 		self.viewBoxList.addView()
-		self.viewBoxList.setFixedWidth(250)
+		self.viewBoxList.setFixedWidth(300)
 		vbox             = QVBoxLayout()
+		vbox.setContentsMargins(0,0,0,0)
 		vbox.addWidget(self.viewBoxList)
 		return vbox
 

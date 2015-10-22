@@ -6,7 +6,6 @@ from PySide.QtCore import *
 class QHeader(QWidget):
 	def __init__(self, lineMode = True, parent = None):
 		super(QHeader, self).__init__(parent)
-		self.show()
 		self.lineMode        = lineMode  #otherwise will be ViewBox Header
 		self.unFocused_Color = '#6C6D6D'
 		self.focused_Color   = '#E7E8EB'
@@ -15,6 +14,7 @@ class QHeader(QWidget):
 		self.lineRbColor = '#FF4848'
 		self.viewRbColor = '#545454'
 		self.setFocusPolicy(Qt.StrongFocus)
+		self.show()
 
 	def paintEvent(self, event):
 		painter = QPainter()
@@ -35,7 +35,7 @@ class QHeader(QWidget):
 		painter.setPen(  QColor( self.header_Color ))
 		painter.setBrush(QColor( self.header_Color ))
 		painter.drawRoundedRect(0, 5, w, h, 8, 8, mode = Qt.AbsoluteSize)
-		print self.lineMode
+
 		if self.lineMode:
 			RbColor = self.lineRbColor
 		else: 
@@ -68,18 +68,5 @@ class QHeader(QWidget):
 
 		else:
 			self.header_Color = self.unFocused_Color
-		print 'a'
+
 		self.update()
-
-		
-
-
-def main():
-	
-	app = QtGui.QApplication(sys.argv)
-	ex = QHeader()
-	sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-	main()

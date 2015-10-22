@@ -3,6 +3,10 @@ from   PySide             import QtGui
 from   PySide.QtGui       import *
 from   PySide.QtCore      import *
 from   viewLineList       import *
+from   QHeader            import *
+from   QLefter            import *
+from   QRighter           import *
+from   QSpacer            import *
 
 class viewBoxList(QListWidget):
 	def __init__(self, parent=None):
@@ -24,7 +28,7 @@ class viewBoxList(QListWidget):
 
 	def handleFocus(self, widget):
 		for index in range(self.count()):
-			self.itemWidget(self.item(index)).header.setDcFocus(False)
+			self.itemWidget(self.item(index)).setDcFocus(False)
 		widget.setDcFocus(True)	
 
 class viewBoxListWidget(QWidget):
@@ -32,8 +36,8 @@ class viewBoxListWidget(QWidget):
 	def __init__(self, parent = None):
 		super(viewBoxListWidget, self).__init__(parent)
 		self.setDesign()
-		
-		self.setFixedWidth(250)
+		self.decoretors = []
+		self.setFixedWidth(280)
 
 
 
@@ -71,9 +75,39 @@ class viewBoxListWidget(QWidget):
 		self.header.setFixedHeight(30)
 
 		vbox0 = QVBoxLayout()
-		vbox0.setContentsMargins(5,5,5,0)
-		vbox0.addWidget(self.header )
-		vbox0.addWidget(self.viewLineList)
+		vbox0.setContentsMargins(0,0,0,0)
+		vbox0.setSpacing(0)
+
+
+		vbox1 = QVBoxLayout()
+		vbox1.setContentsMargins(0,0,0,0)
+		vbox1.setContentsMargins(0,0,0,0)
+		vbox1.setSpacing(0)		
+		self.space1 = QSpacer()
+		self.space2 = QSpacer()
+		self.space1.setFixedHeight(8)
+		self.space2.setFixedHeight(8)
+
+		vbox1.addWidget(self.space1)
+		vbox1.addWidget(self.viewLineList)
+		vbox1.addWidget(self.space2)
+
+
+		hbox0 = QHBoxLayout()
+		hbox0.setContentsMargins(0,0,0,0)	
+		hbox0.setSpacing(0)
+		self.lefter  = QLefter()
+		self.righter = QRighter()
+		self.lefter.setFixedWidth(15)
+		self.righter.setFixedWidth(15)
+
+		hbox0.addWidget(self.lefter)
+		hbox0.addLayout(vbox1)
+		hbox0.addWidget(self.righter)
+
+		vbox0.addWidget(self.header)
+		vbox0.addLayout(hbox0)
+		
 		self.setLayout(vbox0)
 
 
@@ -83,5 +117,12 @@ class viewBoxListWidget(QWidget):
 
 
 	def mouseDoubleClickEvent(self, event):
-		self.doubleClicked.emit()
+		self.doubleClicked.emit(self)
 		event.accept()
+
+	def setDcFocus(self, focus = True):
+		self.header.setDcFocus(focus)
+		self.lefter.setDcFocus(focus)
+		self.righter.setDcFocus(focus)
+		self.space1.setDcFocus(focus)
+		self.space2.setDcFocus(focus)

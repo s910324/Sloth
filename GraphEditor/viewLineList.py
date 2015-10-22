@@ -8,7 +8,6 @@ class viewLineList(QListWidget):
 	def __init__(self, parent=None):
 		super(viewLineList, self).__init__(parent)
 		self.lineCount = 0
-
 		self.setMaximumHeight(80)
 		self.addLine()
 		self.addLine()
@@ -63,7 +62,7 @@ class viewLineListWidget(QWidget):
 		self.header = QHeader()
 		self.header.setFixedHeight(30)
 		vbox0 = QVBoxLayout()
-		vbox0.setContentsMargins(5,5,5,0)
+		vbox0.setContentsMargins(0,0,0,0)
 		vbox0.addWidget(self.header )
 		self.setLayout(vbox0)
 
