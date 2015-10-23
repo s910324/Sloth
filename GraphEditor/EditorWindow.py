@@ -18,11 +18,14 @@ class EditorWindow(QGroupBox):
 		box3  = self.setupSubmitUI()
 		hbox1 = QHBoxLayout()
 		vbox1 = QVBoxLayout()
+
+		hbox1.setContentsMargins(0,0,0,0)
 		hbox1.addLayout(box1)
 		hbox1.addLayout(vbox1)
 		vbox1.addLayout(box2)
 		vbox1.addLayout(box3)
 		self.setLayout(hbox1)
+		self.setContentsMargins(0,0,0,0)
 
 	def setupList(self):
 		self.viewBoxList = viewBoxList()

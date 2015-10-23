@@ -8,7 +8,7 @@ from   QLefter            import *
 from   QRighter           import *
 from   QSpacer            import *
 
-import sys
+
 sys.path.append('./MaterialDesignList')
 
 from MViewBoxListWidget import *
@@ -101,8 +101,7 @@ class viewBoxListWidget(QWidget):
 		vbox0.setSpacing(0)
 
 		vbox0.addWidget(self.header)
-		# vbox0.addLayout(hbox0)
-		
+		vbox0.addWidget(self.viewLineList)		
 		self.setLayout(vbox0)
 
 

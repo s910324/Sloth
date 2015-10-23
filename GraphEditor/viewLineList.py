@@ -4,6 +4,10 @@ from   PySide.QtGui  import *
 from   PySide.QtCore import *
 from   QHeader       import *
 
+sys.path.append('./MaterialDesignList')
+
+from MLineListWidget import *
+
 class viewLineList(QListWidget):
 	def __init__(self, parent=None):
 		super(viewLineList, self).__init__(parent)
@@ -62,7 +66,8 @@ class viewLineListWidget(QWidget):
 		# vbox0.setContentsMargins(10,10,10,2)
 		# vbox0.addLayout(hbox0)
 		# vbox0.addLayout(self.HLine(3))
-		self.header = QHeader()
+		# self.header = QHeader()
+		self.header = MLineListWidget()
 		self.header.setFixedHeight(30)
 		vbox0 = QVBoxLayout()
 		vbox0.setContentsMargins(0,0,0,0)
