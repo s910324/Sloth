@@ -15,7 +15,7 @@ class viewLineList(QListWidget):
 		# self.setMaximumHeight(35)
 		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
 		self.addLine()
-		# self.addLine()
+		self.addLine()
 		# self.addLine()
 		# self.addLine()
 

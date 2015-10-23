@@ -28,7 +28,7 @@ class MViewBoxListWidget(QWidget):
 
 		#header:
 		painter.setPen(QColor(0,0,0,0))
-		painter.setBrush(QColor(53, 64, 82))
+		painter.setBrush(QColor('#354052'))
 		painter.drawRect(0, 0, w, h)
 
 		painter.setPen(QColor(0,0,0,0))
@@ -48,8 +48,9 @@ class MViewBoxListWidget(QWidget):
 
 		font = QFont("Helvetica", 11, QFont.Bold)
 		painter.setFont(font)
-		painter.setPen(QColor('#5B6170'))
+		painter.setPen(QColor('#2F2F2F'))
 		painter.drawText(QRectF((w-22), (h / 2 - 10), 50, 50), Qt.AlignLeft, '+')
+
 
 	def setDcFocus(self, focused = True):
 		if focused:

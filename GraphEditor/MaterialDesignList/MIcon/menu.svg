@@ -1,13 +1,110 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="77.801px" height="71.16px" viewBox="0 0 77.801 71.16" enable-background="new 0 0 77.801 71.16" xml:space="preserve">
-<g>
-	<path d="M6.5,13h64.801c3.59,0,6.5-2.91,6.5-6.5s-2.91-6.5-6.5-6.5H6.5C2.91,0,0,2.91,0,6.5S2.91,13,6.5,13z"/>
-	<path d="M71.301,29.078H6.5c-3.59,0-6.5,2.91-6.5,6.5c0,3.589,2.91,6.5,6.5,6.5h64.801c3.59,0,6.5-2.91,6.5-6.5
-		C77.801,31.988,74.891,29.078,71.301,29.078z"/>
-	<path d="M71.301,58.16H6.5c-3.59,0-6.5,2.909-6.5,6.5c0,3.59,2.91,6.5,6.5,6.5h64.801c3.59,0,6.5-2.91,6.5-6.5
-		C77.801,61.069,74.891,58.16,71.301,58.16z"/>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="26"
+   height="26"
+   viewBox="0 0 26 26"
+   id="svg5557"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="menu.svg">
+  <defs
+     id="defs5559" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="-34.684424"
+     inkscape:cy="35.083425"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="741"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     units="px" />
+  <metadata
+     id="metadata5562">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1026.3622)">
+    <g
+       transform="translate(-239.96428,467.50507)"
+       id="g5166">
+      <line
+         style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="240"
+         y1="580"
+         x2="242"
+         y2="580"
+         id="line5168" />
+      <line
+         style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="240"
+         y1="572"
+         x2="242"
+         y2="572"
+         id="line5170" />
+      <line
+         style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="240"
+         y1="564"
+         x2="242"
+         y2="564"
+         id="line5172" />
+      <line
+         style="fill:none;stroke:#cb4f39;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="246"
+         y1="564"
+         x2="266"
+         y2="564"
+         id="line5174" />
+      <line
+         style="fill:none;stroke:#cb4f39;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="246"
+         y1="572"
+         x2="266"
+         y2="572"
+         id="line5176" />
+      <line
+         style="fill:none;stroke:#cb4f39;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="246"
+         y1="580"
+         x2="266"
+         y2="580"
+         id="line5178" />
+    </g>
+  </g>
 </svg>

@@ -6,7 +6,7 @@ from PySide.QtCore import *
 class MLineListWidget(QWidget):
 	def __init__(self, parent = None):
 		super(MLineListWidget, self).__init__(parent)
-		self.focus_color = QColor(200, 200, 200)
+		self.focus_color = QColor('#314B76')
 
 		self.setFocusPolicy(Qt.StrongFocus)
 		self.setDcFocus(False)
@@ -42,8 +42,8 @@ class MLineListWidget(QWidget):
 		#title:
 		font = QFont("Helvetica", 11, QFont.Bold)
 		painter.setFont(font)
-		painter.setPen(QColor('#8D95AA'))
-		painter.drawText(QRectF((25), (h / 2 - 8), 50, 50), Qt.AlignLeft, 'Text')
+		painter.setPen(QColor('#515662'))
+		painter.drawText(QRectF((45), (h / 2 - 8), 50, 50), Qt.AlignLeft, 'Text')
 
 		#state
 		# painter.setPen(QColor(0,0,0,0))
@@ -55,17 +55,19 @@ class MLineListWidget(QWidget):
 		# painter.setFont(font)
 		# painter.setPen(QColor('#7C013E'))
 		# painter.drawText(QRectF((w-22), (h / 2 - 8), 50, 50), Qt.AlignLeft, 'x')
-		# painter.drawLine(15, h-2, w - 30, h-2)
 
-		painter.drawImage(QRectF(w-24,8,15,15), QImage("./MaterialDesignList/MIcon/menu.svg"))
+		painter.drawImage(QRectF(15,8,16,16), QImage("./MaterialDesignList/MIcon/line.svg"))
+		painter.drawLine(15, h, w - 30, h)
+
+		painter.drawImage(QRectF(w-26,8,15,15), QImage("./MaterialDesignList/MIcon/menu.svg"))
 		
 
 	def setDcFocus(self, focused = True):
 		if focused:
-			self.focus_color = QColor(200, 200, 200)
+			self.focus_color = QColor('#314B76')
 
 		else:
-			self.focus_color = QColor(50, 50, 50)
+			self.focus_color = QColor('#323232')
 
 		self.update()
 

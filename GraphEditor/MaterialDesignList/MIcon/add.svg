@@ -15,7 +15,7 @@
    id="svg5557"
    version="1.1"
    inkscape:version="0.91 r"
-   sodipodi:docname="preview.svg">
+   sodipodi:docname="add.svg">
   <defs
      id="defs5559" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="46.70736"
-     inkscape:cy="-30.11424"
+     inkscape:zoom="5.6"
+     inkscape:cx="-34.684424"
+     inkscape:cy="35.083425"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -55,23 +55,31 @@
      id="layer1"
      transform="translate(0,-1026.3622)">
     <g
-       transform="translate(-144.12055,752.48277)"
-       id="g5356">
-      <g
-         id="g5358">
-        <path
-           style="fill:#cb4f39"
-           inkscape:connector-curvature="0"
-           d="m 157,280.1 c 4.6,0 8.8,4.7 10.5,6.9 -1.7,2.2 -5.9,6.9 -10.5,6.9 -4.6,0 -8.8,-4.7 -10.5,-6.9 1.7,-2.1 5.9,-6.9 10.5,-6.9 m 0,-2 c -7.2,0 -13,8.9 -13,8.9 0,0 5.8,8.9 13,8.9 7.2,0 13,-8.9 13,-8.9 0,0 -5.8,-8.9 -13,-8.9 l 0,0 z"
-           id="path5360" />
-      </g>
+       transform="translate(-48.964285,87.326487)"
+       id="g4984">
       <circle
+         style="fill:none;stroke:#cb4f39;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         cx="62"
+         cy="952"
+         r="12"
+         id="circle4986" />
+      <line
          style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
          stroke-miterlimit="10"
-         cx="157"
-         cy="287"
-         r="3"
-         id="circle5362" />
+         x1="62"
+         y1="948"
+         x2="62"
+         y2="956"
+         id="line4988" />
+      <line
+         style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
+         stroke-miterlimit="10"
+         x1="66"
+         y1="952"
+         x2="58"
+         y2="952"
+         id="line4990" />
     </g>
   </g>
 </svg>
