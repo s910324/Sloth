@@ -3,9 +3,9 @@ from PySide        import QtGui
 from PySide.QtGui  import *
 from PySide.QtCore import *
 
-class viewBoxListWidget(QWidget):
+class MViewBoxListWidget(QWidget):
 	def __init__(self, lineMode = True, parent = None):
-		super(viewBoxListWidget, self).__init__(parent)
+		super(MViewBoxListWidget, self).__init__(parent)
 		self.focus_color = QColor(200, 200, 200)
 
 		self.setFocusPolicy(Qt.StrongFocus)
@@ -67,10 +67,10 @@ class viewBoxListWidget(QWidget):
 
 def run():
 	app = QApplication(sys.argv)
-	MainWindow = viewBoxListWidget()
+	MainWindow = MViewBoxListWidget()
 	MainWindow.show()
 	app.exec_()
 
 
-run()
+# run()
 
