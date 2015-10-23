@@ -34,7 +34,7 @@ class MViewBoxListWidget(QWidget):
 		painter.setPen(QColor(0,0,0,0))
 
 		painter.setBrush(self.focus_color)
-		painter.drawRect(3, 2, 3, h-4)
+		# painter.drawRect(3, 2, 3, h-4)
 
 
 
@@ -42,18 +42,14 @@ class MViewBoxListWidget(QWidget):
 		font = QFont("Helvetica", 11, QFont.Bold)
 		painter.setFont(font)
 		painter.setPen(QColor('#8D95AA'))
-		painter.drawText(QRectF((25), (h / 2 - 6), 50, 50), Qt.AlignLeft, 'Text')
+		painter.drawText(QRectF((35), (h / 2 - 8), 50, 50), Qt.AlignLeft, 'Text')
 
-		#state
-		painter.setPen(QColor(0,0,0,0))
-		painter.setBrush(QColor('#161F2E'))
-		painter.setBrush(Qt.Dense3Pattern)
-		painter.drawRect(w-35, 2, 35, h)
+		painter.drawImage(QRectF(5,8,16,16), QImage("./MaterialDesignList/MIcon/window.svg"))
 
 		font = QFont("Helvetica", 11, QFont.Bold)
 		painter.setFont(font)
 		painter.setPen(QColor('#5B6170'))
-		painter.drawText(QRectF((w-22), (h / 2 - 8), 50, 50), Qt.AlignLeft, '+')
+		painter.drawText(QRectF((w-22), (h / 2 - 10), 50, 50), Qt.AlignLeft, '+')
 
 	def setDcFocus(self, focused = True):
 		if focused:

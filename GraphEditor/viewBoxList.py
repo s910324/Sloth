@@ -58,10 +58,6 @@ class viewBoxListWidget(QWidget):
 		super(viewBoxListWidget, self).__init__(parent)
 		self.setDesign()
 
-		# self.setFixedWidth(280)
-
-
-
 	def setDesign(self):
 		# style              = 'QPushButton{background-color: #808080; border-radius: 8px; color: #212121; }'
 		# hbox0              = QHBoxLayout()

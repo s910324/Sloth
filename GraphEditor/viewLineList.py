@@ -12,18 +12,18 @@ class viewLineList(QListWidget):
 	def __init__(self, parent=None):
 		super(viewLineList, self).__init__(parent)
 		self.lineCount = 0
-		self.setMaximumHeight(80)
+		# self.setMaximumHeight(35)
 		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
 		self.addLine()
-		self.addLine()
-		self.addLine()
-		self.addLine()
+		# self.addLine()
+		# self.addLine()
+		# self.addLine()
 
 
 
 	def addLine(self):
 		self.lineCount += 1
-		self.setMaximumHeight(80 * self.lineCount)
+		self.setMaximumHeight(35* self.lineCount)
 		
 		vlineListWidgetItem = QListWidgetItem()
 		vlineListWidget     = viewLineListWidget()
