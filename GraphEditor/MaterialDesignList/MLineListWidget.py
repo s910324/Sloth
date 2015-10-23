@@ -7,7 +7,8 @@ class MLineListWidget(QWidget):
 	def __init__(self, parent = None):
 		super(MLineListWidget, self).__init__(parent)
 		self.focus_color = QColor('#314B76')
-
+		self.lineVisible = True
+		self.visible_icon = QImage("./MaterialDesignList/MIcon/preview.svg")
 		self.setFocusPolicy(Qt.StrongFocus)
 		self.setDcFocus(False)
 		self.show()
@@ -55,7 +56,7 @@ class MLineListWidget(QWidget):
 		self.previewRect = QRectF(w-56, 6, 20, 20)
 		self.menuRect    = QRectF(w-26, 8, 15, 15)
 		painter.drawImage(self.lineRect,    QImage("./MaterialDesignList/MIcon/line.svg"))
-		painter.drawImage(self.previewRect, QImage("./MaterialDesignList/MIcon/preview.svg"))
+		painter.drawImage(self.previewRect, self.visible_icon)
 		painter.drawImage(self.menuRect,    QImage("./MaterialDesignList/MIcon/menu.svg"))
 
 		
@@ -70,20 +71,21 @@ class MLineListWidget(QWidget):
 		self.update()
 
 	def setLineVisible(self, visible = True):
-		if focused:
+		if visible:
 			self.visible_icon = QImage("./MaterialDesignList/MIcon/preview.svg")
-
 		else:
 			self.visible_icon = QImage("./MaterialDesignList/MIcon/No-preview.svg")
-
+		self.lineVisible = visible
 		self.update()
 
 	def mousePressEvent(self, event):
 
-		# rect = self.contentSceneRect()
-		# if not rect.contains(int(event.scenePos().x()), int(event.scenePos().y())):
-		# 	#ungrab mouse
-		# 	event.ignore()
+		if self.previewRect.contains(int(event.x()), int(event.y())):
+			self.setLineVisible(not self.lineVisible)
+		elif self.menuRect.contains(int(event.x()), int(event.y())):
+			event.ignore()
+		else:
+			event.ignore()
 		# 	self.ignore = True
 		# 	return
 				
