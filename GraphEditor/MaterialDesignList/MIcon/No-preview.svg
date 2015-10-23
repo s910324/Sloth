@@ -60,13 +60,13 @@
       <g
          id="g5358">
         <path
-           style="fill:#b3b3b3"
+           style="fill:#454545"
            inkscape:connector-curvature="0"
            d="m 157,280.1 c 4.6,0 8.8,4.7 10.5,6.9 -1.7,2.2 -5.9,6.9 -10.5,6.9 -4.6,0 -8.8,-4.7 -10.5,-6.9 1.7,-2.1 5.9,-6.9 10.5,-6.9 m 0,-2 c -7.2,0 -13,8.9 -13,8.9 0,0 5.8,8.9 13,8.9 7.2,0 13,-8.9 13,-8.9 0,0 -5.8,-8.9 -13,-8.9 l 0,0 z"
            id="path5360" />
       </g>
       <circle
-         style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
+         style="fill:none;stroke:#454545;stroke-width:2;stroke-miterlimit:10"
          stroke-miterlimit="10"
          cx="157"
          cy="287"

@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
-     inkscape:cx="39.131216"
+     inkscape:cx="-36.503955"
      inkscape:cy="-30.11424"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,7 +58,7 @@
        transform="translate(-144.96212,277.27028)"
        id="g5078">
       <polyline
-         style="fill:none;stroke:#b3b3b3;stroke-width:2;stroke-miterlimit:10"
+         style="fill:none;stroke:#454545;stroke-width:2;stroke-miterlimit:10"
          stroke-miterlimit="10"
          points="167,753 149,762 167,771  "
          id="polyline5080" />
