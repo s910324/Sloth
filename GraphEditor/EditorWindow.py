@@ -33,7 +33,7 @@ class EditorWindow(QGroupBox):
 		self.viewBoxList.addView()
 		self.viewBoxList.addView()
 		self.viewBoxList.addView()
-		self.viewBoxList.setFixedWidth(300)
+		self.viewBoxList.setFixedWidth(280)
 		vbox             = QVBoxLayout()
 		vbox.setContentsMargins(0,0,0,0)
 		vbox.addWidget(self.viewBoxList)
@@ -65,6 +65,17 @@ class EditorWindow(QGroupBox):
 def run():
 	app        = QApplication(sys.argv)
 	MainWindow = EditorWindow()
+	def load_stylesheet(pyside=True):
+		f = QFile("../setting/style.qss")
+		if not f.exists():
+			return ""
+		else:
+			print 'a'
+			f.open(QFile.ReadOnly | QFile.Text)
+			ts = QTextStream(f)
+			stylesheet = ts.readAll()
+			return stylesheet	
+	# app.setStyleSheet(load_stylesheet())	
 	MainWindow.show()
 	app.exec_()
 run()

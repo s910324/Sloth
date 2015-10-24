@@ -165,4 +165,4 @@ def run():
 	MainWindow = graphSelector()
 	MainWindow.show()
 	app.exec_()
-run()
+# run()

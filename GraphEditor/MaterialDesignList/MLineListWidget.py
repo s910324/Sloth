@@ -4,10 +4,14 @@ from PySide.QtGui  import *
 from PySide.QtCore import *
 
 class MLineListWidget(QWidget):
-	def __init__(self, parent = None):
+	LineVisibilityChanged = Signal(bool)
+	DcFocusStateChanged   = Signal(bool)
+	def __init__(self, title = 'line', parent = None):
 		super(MLineListWidget, self).__init__(parent)
-		self.focus_color = QColor('#314B76')
-		self.lineVisible = True
+		self.focus_color  = QColor('#314B76')
+		self.title        = title
+		self.lineVisible  = True
+		self.shadow       = 0
 		self.visible_icon = QImage("./MaterialDesignList/MIcon/preview.svg")
 		self.setFocusPolicy(Qt.StrongFocus)
 		self.setDcFocus(False)
@@ -25,31 +29,25 @@ class MLineListWidget(QWidget):
 		size = self.size()
 		w    = size.width()
 		h    = size.height()
-		
 
 		#header:
 		painter.setPen(QColor(0,0,0,0))
 		painter.setBrush(QColor(167, 167, 167))
-
 		painter.drawRect(0, 0, w, h)
 
+		#status:
 		painter.setPen(QColor(0,0,0,0))
-
 		painter.setBrush(self.focus_color)
-		painter.drawRect(3, 2, 3, h-4)
-
-
+		painter.drawRect(0, 0, 3, h-1)
 
 		#title:
 		font = QFont("Helvetica", 11, QFont.Bold)
 		painter.setFont(font)
 		painter.setPen(QColor('#515662'))
-		painter.drawText(QRectF((45), (h / 2 - 8), 50, 50), Qt.AlignLeft, 'Text')
+		painter.drawText(QRectF((45), (h / 2 - 8), 50, 50), Qt.AlignLeft, self.title)
 
-		painter.drawLine(15,     h, w - 60, h)
-		painter.setPen(Qt.DotLine)
-		painter.drawLine(w - 60, h, w,      h)
 
+		#icon:
 		painter.setRenderHint(QPainter.Antialiasing and QPainter.SmoothPixmapTransform)
 
 		self.lineRect    = QRectF(15,   8, 16, 16)
@@ -58,7 +56,23 @@ class MLineListWidget(QWidget):
 		painter.drawImage(self.lineRect,    QImage("./MaterialDesignList/MIcon/line.svg"))
 		painter.drawImage(self.previewRect, self.visible_icon)
 		painter.drawImage(self.menuRect,    QImage("./MaterialDesignList/MIcon/menu.svg"))
+		painter.setBrush(QColor('#2D2D2D'))
 
+		#shadow:
+		linearGradient = QLinearGradient(w/2, 0, w/2, 5)
+		linearGradient.setColorAt(0.0,QColor(0,0,0,self.shadow))
+		linearGradient.setColorAt(1.0,QColor(20,20,20,0))
+		painter.setPen(QColor(0,0,0,0))
+		painter.setBrush(linearGradient)
+		painter.drawRect(0, 0, w, 5)
+
+		#split line:
+		painter.setPen(QColor('#757575'))
+		painter.drawLine(15,     h, w - 60, h)
+
+	def addShadow(self):
+		self.shadow = 180
+		self.update()
 		
 
 	def setDcFocus(self, focused = True):
@@ -67,7 +81,7 @@ class MLineListWidget(QWidget):
 
 		else:
 			self.focus_color = QColor('#323232')
-
+		self.DcFocusStateChanged.emit(focused)
 		self.update()
 
 	def setLineVisible(self, visible = True):
@@ -76,14 +90,18 @@ class MLineListWidget(QWidget):
 		else:
 			self.visible_icon = QImage("./MaterialDesignList/MIcon/No-preview.svg")
 		self.lineVisible = visible
+		self.LineVisibilityChanged.emit(visible)
 		self.update()
 
 	def mousePressEvent(self, event):
-
-		if self.previewRect.contains(int(event.x()), int(event.y())):
-			self.setLineVisible(not self.lineVisible)
-		elif self.menuRect.contains(int(event.x()), int(event.y())):
-			event.ignore()
+		if event.button() == Qt.LeftButton:
+			if self.previewRect.contains(int(event.x()), int(event.y())):
+				self.setLineVisible(not self.lineVisible)
+				
+			elif self.menuRect.contains(int(event.x()), int(event.y())):
+				event.ignore()
+			else:
+				event.ignore()
 		else:
 			event.ignore()
 		# 	self.ignore = True

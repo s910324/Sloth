@@ -17,6 +17,8 @@ class viewBoxList(QListWidget):
 
 	def __init__(self, parent=None):
 		super(viewBoxList, self).__init__(parent)
+		self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.setVerticalScrollBarPolicy(  Qt.ScrollBarAlwaysOff)
 		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
 		self.setStyleSheet( """
                                 QListWidget:item:selected:active {
@@ -97,6 +99,7 @@ class viewBoxListWidget(QWidget):
 		vbox0.setSpacing(0)
 
 		vbox0.addWidget(self.header)
+		self.viewLineList.setFixedWidth(280)
 		vbox0.addWidget(self.viewLineList)		
 		self.setLayout(vbox0)
 
