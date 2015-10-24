@@ -10,6 +10,9 @@ class EditorWindow(QGroupBox):
 	def __init__(self, parent=None):
 		super(EditorWindow, self).__init__(parent)
 		self.resize(650, 700)
+		self.viewBoxCount = -1
+		self.viewBoxDict  = {}
+	
 		self.setupLayout()
 
 	def setupLayout(self):
@@ -29,10 +32,6 @@ class EditorWindow(QGroupBox):
 
 	def setupList(self):
 		self.viewBoxList = viewBoxList()
-		self.viewBoxList.addView()
-		self.viewBoxList.addView()
-		self.viewBoxList.addView()
-		self.viewBoxList.addView()
 		self.viewBoxList.setFixedWidth(280)
 		vbox             = QVBoxLayout()
 		vbox.setContentsMargins(0,0,0,0)
@@ -46,7 +45,6 @@ class EditorWindow(QGroupBox):
 		vbox.addWidget(self.vcontrol)
 		vbox.addWidget(self.lcontrol)
 		self.vcontrol.hide()
-		
 		return vbox		
 
 	def setupSubmitUI(self):
@@ -60,11 +58,40 @@ class EditorWindow(QGroupBox):
 		hbox.addWidget(self.canclePB)
 		return hbox
 
+	def addView(self, viewBox = None):
+		self.viewBoxCount += 1
+		viewBoxListWidget = self.viewBoxList.addView(viewBox)
+		self.viewBoxDict[self.viewBoxCount] = viewBoxListWidget
+		return viewBoxListWidget
 
+	def importPlotItem(self, line = None):
+		ItemWidget = self.plotTab.addPlotItem(line)
+		values     = ItemWidget.getLineValues()
+		ItemWidget.doubleClicked.connect(lambda val = values :self.plotTab.setPanelVal(val))
+		return ItemWidget
+
+
+
+	def importPlotItems(self, lineDict = None):
+		ItemWidgets = []
+		# try:
+		self.plotTab.plotListWidget.clear()
+		for index in lineDict:
+			ItemWidget = self.importPlotItem(lineDict[index])
+			ItemWidgets.append(ItemWidget)
+		return ItemWidgets
 
 def run():
 	app        = QApplication(sys.argv)
 	MainWindow = EditorWindow()
+	MainWindow.addView()
+
+	b = MainWindow.addView()
+	b.addLine()
+	b.addLine()
+	a = MainWindow.addView()
+	a.addLine()
+	a.addLine()
 	def load_stylesheet(pyside=True):
 		f = QFile("../setting/style.qss")
 		if not f.exists():

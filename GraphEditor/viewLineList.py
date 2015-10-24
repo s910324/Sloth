@@ -9,27 +9,24 @@ sys.path.append('./MaterialDesignList')
 from MLineListWidget import *
 
 class viewLineList(QListWidget):
+	itemDcFocused = Signal()
 	def __init__(self, parent=None):
 		super(viewLineList, self).__init__(parent)
-		self.lineCount = 0
+		self.lineCount = -1
+		self.setFixedHeight(0)
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(  Qt.ScrollBarAlwaysOff)
 		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-		a = self.addLine()
-		a.header.addShadow()
-
-		self.addLine()
-		# self.addLine()
-		# self.addLine()
 
 
-
-	def addLine(self):
+	def addLine(self, line = None):
 		self.lineCount += 1
-		self.setMaximumHeight(31 * self.lineCount)
-		
+		self.setFixedHeight( 31 * (self.lineCount + 1))
+
 		vlineListWidgetItem = QListWidgetItem()
 		vlineListWidget     = viewLineListWidget()
+		vlineListWidget.setShadow(self.lineCount == 0)
+
 		vlineListWidgetItem.setSizeHint(vlineListWidget.sizeHint())
 
 		self.addItem(vlineListWidgetItem)
@@ -39,44 +36,49 @@ class viewLineList(QListWidget):
 
 	def handleFocus(self, widget):
 		for index in range(self.count()):
-			self.itemWidget(self.item(index)).header.setDcFocus(False)
+			lineListWidget = self.itemWidget(self.item(index))
+			lineListWidget.header.setDcFocus(False)
+		self.itemDcFocused.emit()
 		widget.setDcFocus(True)	
 
 class viewLineListWidget(QWidget):
 	doubleClicked = Signal(object)
-	def __init__(self, parent = None):
+	def __init__(self, line = None, parent = None):
 		super(viewLineListWidget, self).__init__(parent)
+		self.line   = line
+
 		self.setDesign()
 
 	def setDesign(self):
-		# style              = 'QPushButton{background-color: #808080; border-radius: 8px; color: #212121; }'
-		# hbox0              = QHBoxLayout()
-		# self.viewNameLable = QLabel('View box : n')
-		# self.viewNameLable.setFixedWidth(50)
-
-
-		
-		# self.deleteButton = QPushButton('x')
-		# self.deleteButton.setStyleSheet(style)
-		# self.deleteButton.setFixedSize(16,16)
-		
-
-		# hbox0.addWidget(self.viewNameLable)
-		# hbox0.addStretch()
-		# hbox0.addWidget(self.deleteButton)
-
-		# vbox0              = QVBoxLayout()
-		# vbox0.setContentsMargins(10,10,10,2)
-		# vbox0.addLayout(hbox0)
-		# vbox0.addLayout(self.HLine(3))
-		# self.header = QHeader()
+		vbox0       = QVBoxLayout()
 		self.header = MLineListWidget()
 		self.header.setFixedHeight(30)
-		vbox0 = QVBoxLayout()
+
 		vbox0.setContentsMargins(0,0,0,0)
 		vbox0.addWidget(self.header )
 		self.setLayout(vbox0)
 
+	def setValue(self, val):
+		name, color, width, style, symbol, visible = self.getLineVal()
+		self.name    = name
+		self.color   = color
+		self.width   = width
+		self.style   = style
+		self.symbol  = symbol
+		self.visible =  visible
+		self.header.setTitle(name)
+		self.header.setLineVisible(visible)
+		return name, color, width, style, symbol, visible
+
+
+	def setShadow(self, shadow):
+		self.shadow = 180 * shadow
+		self.header.setShadow(self.shadow)
+
+
+	def getLineValues(self):
+		name, color, width, style, symbol, visible = self.line.line_val()
+		return name, color, width, style, symbol, visible
 
 
 	def returnVal(self):
@@ -84,7 +86,16 @@ class viewLineListWidget(QWidget):
 
 
 	def mouseDoubleClickEvent(self, event):
+		event.accept()
 		self.header.setFocus()
 		self.doubleClicked.emit(self.header)
-		event.accept()
 
+def run():
+	app = QApplication(sys.argv)
+	MainWindow = viewLineList()
+	MainWindow.addLine()
+	MainWindow.show()
+	app.exec_()
+
+
+# run()

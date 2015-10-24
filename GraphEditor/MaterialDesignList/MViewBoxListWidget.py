@@ -4,12 +4,15 @@ from PySide.QtGui  import *
 from PySide.QtCore import *
 
 class MViewBoxListWidget(QWidget):
+	DcFocusStateChanged = Signal(bool)
 	def __init__(self, title = 'viewBox', parent = None):
 		super(MViewBoxListWidget, self).__init__(parent)
-		self.title =  title
+
+		self.title   =  title
+
 		self.setFocusPolicy(Qt.StrongFocus)
 		self.setDcFocus(False)
-		self.show()
+
 
 	def paintEvent(self, event):
 		painter = QPainter()
@@ -35,7 +38,7 @@ class MViewBoxListWidget(QWidget):
 		font = QFont("Helvetica", 11, QFont.Bold)
 		painter.setFont(font)
 		painter.setPen(QColor('#8D95AA'))
-		painter.drawText(QRectF((35), (h / 2 - 8), 50, 50), Qt.AlignLeft, self.title)
+		painter.drawText(QRectF((35), (h / 2 - 8), 150, 50), Qt.AlignLeft, self.title)
 
 
 		#add line:
@@ -51,8 +54,11 @@ class MViewBoxListWidget(QWidget):
 	def setTitle(self, title):
 		self.title = title
 		self.update
+
 	def setDcFocus(self, focused = True):
-		pass
+		self.DcFocusStateChanged.emit(focused)
+
+
 def run():
 	app = QApplication(sys.argv)
 	MainWindow = MViewBoxListWidget()

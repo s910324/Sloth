@@ -7,15 +7,14 @@ class MLineListWidget(QWidget):
 	LineVisibilityChanged = Signal(bool)
 	DcFocusStateChanged   = Signal(bool)
 	def __init__(self, title = 'line', parent = None):
-		super(MLineListWidget, self).__init__(parent)
-		self.focus_color  = QColor('#314B76')
-		self.title        = title
-		self.lineVisible  = True
-		self.shadow       = 0
-		self.visible_icon = QImage("./MaterialDesignList/MIcon/preview.svg")
+		super(MLineListWidget, self).__init__(parent)	
+		self.title = title
+
 		self.setFocusPolicy(Qt.StrongFocus)
+		self.setShadow(False)
 		self.setDcFocus(False)
-		self.show()
+		self.setLineVisible(True )
+
 
 	def paintEvent(self, event):
 		painter = QPainter()
@@ -70,14 +69,17 @@ class MLineListWidget(QWidget):
 		painter.setPen(QColor('#757575'))
 		painter.drawLine(15,     h, w - 60, h)
 
-	def addShadow(self):
-		self.shadow = 180
+	def setShadow(self, shadow):
+		self.shadow  = shadow
 		self.update()
 		
+	def setTitle(self, title = None):
+		self.title = title
+		self.update()
 
 	def setDcFocus(self, focused = True):
 		if focused:
-			self.focus_color = QColor('#314B76')
+			self.focus_color = QColor('#55A837')
 
 		else:
 			self.focus_color = QColor('#323232')
@@ -104,40 +106,11 @@ class MLineListWidget(QWidget):
 				event.ignore()
 		else:
 			event.ignore()
-		# 	self.ignore = True
-		# 	return
-				
-		# self.ignore = False
-		# if event.button() == Qt.RightButton:
-		# 	self.menu = QMenu()
-		# 	self.menu.addAction('[x] delete this Node', self.selfDestory)
-		# 	self.menu.addAction('[+] add input', self.addPlug)
-		# 	self.menu.popup(event.screenPos())
-			
-		# 	# connect(menu, SIGNAL(triggered(QAction *)),object, SLOT(triggered(QAction *)))
-		# 	self.resizeMode = False
-			
 
-		# if event.button() == Qt.LeftButton:
-		# 	self.moveMode = True  
-		# 	self.offset = event.scenePos() - self.contentPos
-		# 	for plug in self.jack:
-		# 		plug.moveMode = True  
-		# 		plug.offset = event.scenePos() - plug.contentPos
-		# 	for source in self.drain:
-		# 		source.moveMode = True  
-		# 		source.offset = event.scenePos() - source.contentPos	
-			
-		# 	for part in self.parts:
-		# 		if type(part) is not QGraphicsProxyWidget:
-		# 			part.moveMode = True  
-		# 			part.offset = event.scenePos() - part.contentPos
-		# 		else:
-		# 			part.offset = event.scenePos() - part.contentPos
 				
 def run():
 	app = QApplication(sys.argv)
-	MainWindow = MViewBoxListWidget()
+	MainWindow = MLineListWidget()
 	MainWindow.show()
 	app.exec_()
 
