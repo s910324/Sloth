@@ -10,7 +10,9 @@ from   PySide.QtGui  import *
 from   pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
-
+sys.path.append('./GraphEditor')
+sys.path.append('./GraphEditor/MaterialDesignList')
+from EditorWindow import *
 
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
@@ -24,7 +26,8 @@ class MainWindow(QMainWindow):
 		self.initPlotArea()
 
 
-		self.option  = gOption.graphProperty()
+		self.option           = gOption.graphProperty()
+		self.optionWindow     = EditorWindow()
 		self.lineIDCounter    = -1
 		self.lineIDDict       = {}
 
@@ -56,9 +59,11 @@ class MainWindow(QMainWindow):
 		addHLineAction.triggered.connect(self.addLine)    
 
 	def showOptionPanel(self):
-		self.option.importPlotItems(self.lineIDDict)
-
-		self.option.show()
+		# self.option.importPlotItems(self.lineIDDict)
+		# self.option.show()
+		self.optionWindow.addView()
+		self.optionWindow.importPlotItems(self.lineIDDict)
+		self.optionWindow.show()
 
 	def addLineHolder(self, line):	
 		self.lineIDCounter += 1
@@ -71,8 +76,6 @@ class MainWindow(QMainWindow):
 		self.plotIDCounter += 1
 		plotID  = self.plotIDCounter
 		self.plotIDDict[plotID] = plot, legend, viewBox
-		print 'a'
-		print self.plotIDCounter
 		return self.plotIDCounter	
 
 			
@@ -502,4 +505,4 @@ def Debugger():
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-# Debugger()
+Debugger()

@@ -13,10 +13,13 @@ sys.path.append('./MaterialDesignList')
 
 from MViewBoxListWidget import *
 
+
 class viewBoxList(QListWidget):
 
 	def __init__(self, parent=None):
 		super(viewBoxList, self).__init__(parent)
+		self.viewBoxCount = -1
+		self.viewBoxDict  = {}		
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(  Qt.ScrollBarAlwaysOff)
 		self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
@@ -33,6 +36,8 @@ class viewBoxList(QListWidget):
 
 
 	def addView(self, viewBox = None):
+		self.viewBoxCount += 1
+
 		vListWidgetItem = QListWidgetItem()
 		vListWidget     = viewBoxListWidget(viewBox, vListWidgetItem)
 		vListWidgetItem.setSizeHint(vListWidget.sizeHint())
@@ -41,10 +46,15 @@ class viewBoxList(QListWidget):
 		self.setItemWidget(vListWidgetItem, vListWidget)
 		vListWidget.doubleClicked.connect(lambda widget = vListWidget : self.handleFocus(widget))
 		vListWidget.viewLineList.itemDcFocused.connect(lambda widget = vListWidget.viewLineList : self.handleItemFocus(widget))
+		self.viewBoxDict[self.viewBoxCount] = viewBox, vListWidget
 		return  vListWidget
 
-	def handleFocus(self, widget = None):
+	def addLine(self, viewBoxNum = None, line = None):
+		viewBox, vListWidget = self.viewBoxDict[viewBoxNum]
+		vlineListWidget      = vListWidget.addLine(line)
+		return vlineListWidget
 
+	def handleFocus(self, widget = None):
 		for index in range(self.count()):
 			viewBoxWidget = self.itemWidget(self.item(index))
 			viewBoxWidget.setDcFocus(False)
@@ -90,7 +100,6 @@ class viewBoxListWidget(QWidget):
 	def addLine(self, line = None):
 		vlineListWidget = self.viewLineList.addLine(line)
 		self.item.setSizeHint(self.sizeHint())
-
 		return  vlineListWidget
 
 	def returnVal(self):

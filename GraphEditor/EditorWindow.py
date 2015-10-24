@@ -10,8 +10,6 @@ class EditorWindow(QGroupBox):
 	def __init__(self, parent=None):
 		super(EditorWindow, self).__init__(parent)
 		self.resize(650, 700)
-		self.viewBoxCount = -1
-		self.viewBoxDict  = {}
 	
 		self.setupLayout()
 
@@ -59,45 +57,53 @@ class EditorWindow(QGroupBox):
 		return hbox
 
 	def addView(self, viewBox = None):
-		self.viewBoxCount += 1
 		viewBoxListWidget = self.viewBoxList.addView(viewBox)
-		self.viewBoxDict[self.viewBoxCount] = viewBoxListWidget
 		return viewBoxListWidget
 
-	def importPlotItem(self, line = None):
-		ItemWidget = self.plotTab.addPlotItem(line)
-		values     = ItemWidget.getLineValues()
-		ItemWidget.doubleClicked.connect(lambda val = values :self.plotTab.setPanelVal(val))
-		return ItemWidget
+	def addPlot(self, viewBoxNum = 0, line = None):
+		viewBox, vListWidget = self.viewBoxList.viewBoxDict[viewBoxNum]
+		vlineListWidget = self.viewBoxList.addLine(viewBoxNum, line)
+		values = vlineListWidget.getLineValues()
+		print values
+		
+		vlineListWidget.doubleClicked.connect(lambda val = values : self.lcontrol.setPanelVal(val))
+		return vlineListWidget
 
-
+	# def importPlotItem(self, line = None):
+	# 	vlineListWidget = self.plotTab.addPlotItem(line)
+	# 	values     = ItemWidget.getLineValues()
+	# 	ItemWidget.doubleClicked.connect(lambda val = values :self.plotTab.setPanelVal(val))
+	# 	return ItemWidget
 
 	def importPlotItems(self, lineDict = None):
 		ItemWidgets = []
 		# try:
-		self.plotTab.plotListWidget.clear()
+		# self.plotTab.plotListWidget.clear()
 		for index in lineDict:
-			ItemWidget = self.importPlotItem(lineDict[index])
+			ItemWidget = self.addPlot(0, lineDict[index])
 			ItemWidgets.append(ItemWidget)
 		return ItemWidgets
+
+
+	# def importPlotItems(self, lineDict = None):
+	# 	ItemWidgets = []
+	# 	# try:
+	# 	self.plotTab.plotListWidget.clear()
+	# 	for index in lineDict:
+	# 		ItemWidget = self.importPlotItem(lineDict[index])
+	# 		ItemWidgets.append(ItemWidget)
+	# 	return ItemWidgets
 
 def run():
 	app        = QApplication(sys.argv)
 	MainWindow = EditorWindow()
 	MainWindow.addView()
 
-	b = MainWindow.addView()
-	b.addLine()
-	b.addLine()
-	a = MainWindow.addView()
-	a.addLine()
-	a.addLine()
 	def load_stylesheet(pyside=True):
 		f = QFile("../setting/style.qss")
 		if not f.exists():
 			return ""
 		else:
-			print 'a'
 			f.open(QFile.ReadOnly | QFile.Text)
 			ts = QTextStream(f)
 			stylesheet = ts.readAll()
@@ -105,4 +111,4 @@ def run():
 	# app.setStyleSheet(load_stylesheet())	
 	MainWindow.show()
 	app.exec_()
-run()
+# run()

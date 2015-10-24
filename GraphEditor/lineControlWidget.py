@@ -185,6 +185,14 @@ class lineControlWidget (QWidget):
 		box.addWidget(groupBox)
 		return box
 
+	def setPanelVal(self, val):
+		print val
+		name, color, width, style, symbol, visible = val
+		self.nameLine.setText(name)
+
+
+
+
 	def HLine(self):
 		vbox  = QVBoxLayout()
 		hline = QFrame()
@@ -204,3 +212,13 @@ class lineControlWidget (QWidget):
 		toto.setFrameShadow(QFrame.Sunken)
 		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
 		return toto		
+
+
+
+def run():
+	app        = QApplication(sys.argv)
+	MainWindow = lineControlWidget()
+
+
+	app.exec_()
+# run()		

@@ -24,14 +24,14 @@ class viewLineList(QListWidget):
 		self.setFixedHeight( 31 * (self.lineCount + 1))
 
 		vlineListWidgetItem = QListWidgetItem()
-		vlineListWidget     = viewLineListWidget()
+		vlineListWidget     = viewLineListWidget(line)
 		vlineListWidget.setShadow(self.lineCount == 0)
 
 		vlineListWidgetItem.setSizeHint(vlineListWidget.sizeHint())
 
 		self.addItem(vlineListWidgetItem)
 		self.setItemWidget(vlineListWidgetItem, vlineListWidget)
-		vlineListWidget.doubleClicked.connect(lambda widget = vlineListWidget : self.handleFocus(widget))
+		vlineListWidget.focusChanged.connect(lambda widget = vlineListWidget : self.handleFocus(widget))
 		return  vlineListWidget
 
 	def handleFocus(self, widget):
@@ -42,7 +42,8 @@ class viewLineList(QListWidget):
 		widget.setDcFocus(True)	
 
 class viewLineListWidget(QWidget):
-	doubleClicked = Signal(object)
+	focusChanged  = Signal(object)
+	doubleClicked = Signal()
 	def __init__(self, line = None, parent = None):
 		super(viewLineListWidget, self).__init__(parent)
 		self.line   = line
@@ -88,7 +89,8 @@ class viewLineListWidget(QWidget):
 	def mouseDoubleClickEvent(self, event):
 		event.accept()
 		self.header.setFocus()
-		self.doubleClicked.emit(self.header)
+		self.doubleClicked.emit()
+		self.focusChanged.emit(self.header)
 
 def run():
 	app = QApplication(sys.argv)
