@@ -62,8 +62,8 @@ class EditorWindow(QGroupBox):
 
 	def addPlot(self, viewBoxNum = 0, line = None):
 		viewBox, vListWidget = self.viewBoxList.viewBoxDict[viewBoxNum]
-		vlineListWidget = self.viewBoxList.addLine(viewBoxNum, line)
-		values = vlineListWidget.getLineValues()
+		vlineListWidget      = self.viewBoxList.addLine(viewBoxNum, line)
+		values               = vlineListWidget.getLineValues()
 		print values
 		
 		vlineListWidget.doubleClicked.connect(lambda val = values : self.lcontrol.setPanelVal(val))
@@ -75,12 +75,18 @@ class EditorWindow(QGroupBox):
 	# 	ItemWidget.doubleClicked.connect(lambda val = values :self.plotTab.setPanelVal(val))
 	# 	return ItemWidget
 
-	def importPlotItems(self, lineDict = None):
+	def importPlotItems(self,viewBoxDict = None, lineDict = None):
 		ItemWidgets = []
 		# try:
 		# self.plotTab.plotListWidget.clear()
+		for index in viewBoxDict:
+			# plot, legend, viewBox = viewBoxDict[index]
+			# ItemWidget = self.addView(lineDict[index])
+			ItemWidget = self.addView()
 		for index in lineDict:
-			ItemWidget = self.addPlot(0, lineDict[index])
+			line       = lineDict[index]
+			viewboxNum = line.line_viewNum()
+			ItemWidget = self.addPlot(viewboxNum, line)
 			ItemWidgets.append(ItemWidget)
 		return ItemWidgets
 
@@ -97,8 +103,7 @@ class EditorWindow(QGroupBox):
 def run():
 	app        = QApplication(sys.argv)
 	MainWindow = EditorWindow()
-	a= MainWindow.addView()
-	a.addLine()
+
 
 
 	def load_stylesheet(pyside=True):

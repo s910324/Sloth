@@ -187,7 +187,7 @@ class lineControlWidget (QWidget):
 
 	def setPanelVal(self, val):
 		print val
-		name, color, width, style, symbol, visible = val
+		name, color, width, style, symbol, visible, viewNum = val
 		self.nameLine.setText(name)
 
 

@@ -60,7 +60,7 @@ class viewLineListWidget(QWidget):
 		self.setLayout(vbox0)
 
 	def setValue(self, val):
-		name, color, width, style, symbol, visible = self.getLineVal()
+		name, color, width, style, symbol, visible, viewNum = self.getLineVal()
 		self.name    = name
 		self.color   = color
 		self.width   = width
@@ -69,7 +69,7 @@ class viewLineListWidget(QWidget):
 		self.visible =  visible
 		self.header.setTitle(name)
 		self.header.setLineVisible(visible)
-		return name, color, width, style, symbol, visible
+		return name, color, width, style, symbol, visible, viewNum
 
 
 	def setShadow(self, shadow):
@@ -78,8 +78,8 @@ class viewLineListWidget(QWidget):
 
 
 	def getLineValues(self):
-		name, color, width, style, symbol, visible = self.line.line_val()
-		return name, color, width, style, symbol, visible
+		name, color, width, style, symbol, visible, viewNum = self.line.line_val()
+		return name, color, width, style, symbol, visible, viewNum
 
 
 	def returnVal(self):

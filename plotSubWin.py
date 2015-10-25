@@ -64,8 +64,8 @@ class MainWindow(QMainWindow):
 	def showOptionPanel(self):
 		# self.option.importPlotItems(self.lineIDDict)
 		# self.option.show()
-		self.optionWindow.addView()
-		self.optionWindow.importPlotItems(self.lineIDDict)
+		
+		self.optionWindow.importPlotItems(self.plotIDDict, self.lineIDDict)
 		self.optionWindow.show()
 
 	def addLineHolder(self, line):	
@@ -108,8 +108,8 @@ class MainWindow(QMainWindow):
 		
 		legend.setParentItem(plotArea.graphicsItem())   # Note we do NOT call plt.addItem in this case
 		self.view.nextRow()
-		self.addPlotHolder(plotArea, legend, viewBox)
-		# self.w, self.l = plotArea, legend
+		viewBoxNum = self.addPlotHolder(plotArea, legend, viewBox)
+		plotArea.viewBoxNum = viewBoxNum
 		return plotArea, legend, viewBox#self.w, self.l
 
 
@@ -135,10 +135,11 @@ class MainWindow(QMainWindow):
 		self.addLineHolder(line)
 
 		self.reWrapp_line(line)
-		line.line_val(   name   = plotName,    color   = lineColor,
-						 width  = lineWidth,   style   = lineStyle, 
-						 symbol = Sym[dotSym], visible = True )		
-		# line.line_color(lineColor)
+		print plotArea.viewBoxNum
+		line.line_val(   name   = plotName,       color   = lineColor,
+						 width  = lineWidth,      style   = lineStyle, 
+						 symbol = Sym[dotSym],    visible = True,      viewNum = plotArea.viewBoxNum)		
+		print line.line_viewNum()
 		line.symbol_val( color   = dotColor,      size    = dotSize,
 						 penC    = (0,255,0,255), penW    = 2,
 						 outLine = False,         visible = True )
@@ -212,16 +213,21 @@ class MainWindow(QMainWindow):
 			target.setPen(pg.mkPen(color = color, width = width, style = style))
 			return color, width, style
 
+		def line_viewNum(target, viewNum = None):
+			if viewNum is not None:
+				target.lviewNum = viewNum
 
-		def line_val(target, name  = None, color  = None, width = None,
-				    		 style = None, symbol = None, visible = None):
+			return target.lviewNum
+
+		def line_val(target, name  = None, color  = None, width   = None,
+				    		 style = None, symbol = None, visible = None, viewNum = None):
 
 			if sum([ elem != None for elem in [color, width, style]]) > 1:
 				target.line_setPen(color = color, width = width, style = style)
 			
 			return [target.line_name(name),     target.line_color(),
 					target.line_width(),        target.line_style(),
-					target.line_symbol(symbol), target.line_visible(visible)]
+					target.line_symbol(symbol), target.line_visible(visible), target.line_viewNum(viewNum)]
 
 		def symbol_color(target, color = None):
 			if color:
@@ -279,8 +285,8 @@ class MainWindow(QMainWindow):
 		def symbol_val(target, color   = None, size  = None,
 							   penC    = None, penW  = None,
 							   outLine = None, visible = None):
-			return [target.symbol_color(color),    target.symbol_size(size),
-					target.symbol_penColor(penC),  target.symbol_penWidth(penW),
+			return [target.symbol_color(color),     target.symbol_size(size),
+					target.symbol_penColor(penC),   target.symbol_penWidth(penW),
 					target.symbol_outLine(outLine), target.symbol_visible(visible)]
 
 		target.line_name       = types.MethodType(line_name,       target)
@@ -290,6 +296,7 @@ class MainWindow(QMainWindow):
 		target.line_symbol     = types.MethodType(line_symbol,     target)
 		target.line_visible    = types.MethodType(line_visible,    target)
 		target.line_setPen     = types.MethodType(line_setPen,     target)
+		target.line_viewNum    = types.MethodType(line_viewNum,    target)
 		target.line_val        = types.MethodType(line_val,        target)
 
 		target.symbol_color    = types.MethodType(symbol_color,    target)
@@ -350,11 +357,12 @@ class MainWindow(QMainWindow):
 			if stack:
 				self.finitPlotArea(plotArea = p, legend = l)
 			return linePack
+
 		except AttributeError:
 			raise AttributeError
 
 	def addLine(self, plotArea = None, data = [-1.6, 1.6, 151.6, 151.6]):
-		plotArea = 0
+		# plotArea = 0
 		plotArrayX, plotArrayY = [data[0], data[2]], [data[1], data[3]]
 		p, l, v    = self.plotIDDict[plotArea]
 		lineColor  = (255,0,0,255)
