@@ -189,6 +189,13 @@ class lineControlWidget (QWidget):
 		print val
 		name, color, width, style, symbol, visible, viewNum = val
 		self.nameLine.setText(name)
+		if visible:
+			self.lineVisi.setChecked(True)
+		else:
+			self.lineVisi.setChecked(False)
+		self.lColorLine.setText(str(color))
+		self.lWidthLine.setText(width)
+
 
 
 
