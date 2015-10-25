@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
 		self.graphBar.addAction(addVLineAction)
 
 		optionAction.triggered.connect(self.showOptionPanel)
-		addHLineAction.triggered.connect(self.addLine)    
+		addHLineAction.triggered.connect(lambda viewNum = 0 : self.addLine(viewNum))    
 
 	def showOptionPanel(self):
 		# self.option.importPlotItems(self.lineIDDict)
