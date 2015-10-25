@@ -10,9 +10,12 @@ from   PySide.QtGui  import *
 from   pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
-sys.path.append('./GraphEditor')
-sys.path.append('./GraphEditor/MaterialDesignList')
-from EditorWindow import *
+
+from GraphEditor import EditorWindow 
+from GraphEditor.MaterialDesignList import *
+# sys.path.append('./GraphEditor')
+# sys.path.append('./GraphEditor/MaterialDesignList')
+# import  GraphEditor.EditorWindow as EditorWindow
 
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
@@ -27,7 +30,7 @@ class MainWindow(QMainWindow):
 
 
 		self.option           = gOption.graphProperty()
-		self.optionWindow     = EditorWindow()
+		self.optionWindow     = EditorWindow.EditorWindow()
 		self.lineIDCounter    = -1
 		self.lineIDDict       = {}
 
@@ -351,7 +354,7 @@ class MainWindow(QMainWindow):
 			raise AttributeError
 
 	def addLine(self, plotArea = None, data = [-1.6, 1.6, 151.6, 151.6]):
-
+		plotArea = 0
 		plotArrayX, plotArrayY = [data[0], data[2]], [data[1], data[3]]
 		p, l, v    = self.plotIDDict[plotArea]
 		lineColor  = (255,0,0,255)

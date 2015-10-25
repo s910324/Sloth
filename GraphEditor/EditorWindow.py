@@ -97,7 +97,9 @@ class EditorWindow(QGroupBox):
 def run():
 	app        = QApplication(sys.argv)
 	MainWindow = EditorWindow()
-	MainWindow.addView()
+	a= MainWindow.addView()
+	a.addLine()
+
 
 	def load_stylesheet(pyside=True):
 		f = QFile("../setting/style.qss")

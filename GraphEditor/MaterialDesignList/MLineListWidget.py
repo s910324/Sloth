@@ -52,9 +52,9 @@ class MLineListWidget(QWidget):
 		self.lineRect    = QRectF(15,   8, 16, 16)
 		self.previewRect = QRectF(w-56, 6, 20, 20)
 		self.menuRect    = QRectF(w-26, 8, 15, 15)
-		painter.drawImage(self.lineRect,    QImage("./MaterialDesignList/MIcon/line.svg"))
+		painter.drawImage(self.lineRect,    QImage("./GraphEditor/MaterialDesignList/MIcon/line.svg"))
 		painter.drawImage(self.previewRect, self.visible_icon)
-		painter.drawImage(self.menuRect,    QImage("./MaterialDesignList/MIcon/menu.svg"))
+		painter.drawImage(self.menuRect,    QImage("./GraphEditor/MaterialDesignList/MIcon/menu.svg"))
 		painter.setBrush(QColor('#2D2D2D'))
 
 		#shadow:
@@ -88,9 +88,9 @@ class MLineListWidget(QWidget):
 
 	def setLineVisible(self, visible = True):
 		if visible:
-			self.visible_icon = QImage("./MaterialDesignList/MIcon/preview.svg")
+			self.visible_icon = QImage("./GraphEditor/MaterialDesignList/MIcon/preview.svg")
 		else:
-			self.visible_icon = QImage("./MaterialDesignList/MIcon/No-preview.svg")
+			self.visible_icon = QImage("./GraphEditor/MaterialDesignList/MIcon/No-preview.svg")
 		self.lineVisible = visible
 		self.LineVisibilityChanged.emit(visible)
 		self.update()

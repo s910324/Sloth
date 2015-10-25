@@ -7,11 +7,11 @@ from   QHeader            import *
 from   QLefter            import *
 from   QRighter           import *
 from   QSpacer            import *
+from   MaterialDesignList import MViewBoxListWidget 
 
+# sys.path.append('./MaterialDesignList')
 
-sys.path.append('./MaterialDesignList')
-
-from MViewBoxListWidget import *
+# from MViewBoxListWidget import *
 
 
 class viewBoxList(QListWidget):
@@ -86,7 +86,7 @@ class viewBoxListWidget(QWidget):
 
 	def setDesign(self):
 		self.viewLineList = viewLineList()
-		self.header = MViewBoxListWidget()
+		self.header = MViewBoxListWidget.MViewBoxListWidget()
 		self.header.setFixedHeight(30)
 
 		vbox0 = QVBoxLayout()

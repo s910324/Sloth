@@ -48,7 +48,7 @@ class MViewBoxListWidget(QWidget):
 		painter.drawText(QRectF((w-22), (h / 2 - 10), 50, 50), Qt.AlignLeft, '+')
 
 		#Icon:
-		painter.drawImage(QRectF(5,8,16,16), QImage("./MaterialDesignList/MIcon/window.svg"))
+		painter.drawImage(QRectF(5,8,16,16), QImage("./GraphEditor/MaterialDesignList/MIcon/window.svg"))
 
 
 	def setTitle(self, title):

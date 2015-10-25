@@ -1,12 +1,12 @@
 import sys
-from   PySide        import QtGui
-from   PySide.QtGui  import *
-from   PySide.QtCore import *
-from   QHeader       import *
+from   PySide             import QtGui
+from   PySide.QtGui       import *
+from   PySide.QtCore      import *
+from   QHeader            import *
+from   MaterialDesignList import MLineListWidget
+# sys.path.append('./MaterialDesignList')
 
-sys.path.append('./MaterialDesignList')
-
-from MLineListWidget import *
+# from MLineListWidget import *
 
 class viewLineList(QListWidget):
 	itemDcFocused = Signal()
@@ -52,7 +52,7 @@ class viewLineListWidget(QWidget):
 
 	def setDesign(self):
 		vbox0       = QVBoxLayout()
-		self.header = MLineListWidget()
+		self.header = MLineListWidget.MLineListWidget()
 		self.header.setFixedHeight(30)
 
 		vbox0.setContentsMargins(0,0,0,0)
