@@ -194,7 +194,7 @@ class lineControlWidget (QWidget):
 		else:
 			self.lineVisi.setChecked(False)
 		self.lColorLine.setText(str(color))
-		self.lWidthLine.setText(width)
+		self.lWidthLine.setText(str(width))
 
 
 

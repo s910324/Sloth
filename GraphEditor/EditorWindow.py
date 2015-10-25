@@ -65,7 +65,6 @@ class EditorWindow(QGroupBox):
 		vlineListWidget      = self.viewBoxList.addLine(viewBoxNum, line)
 		values               = vlineListWidget.getLineValues()
 		print values
-		
 		vlineListWidget.doubleClicked.connect(lambda val = values : self.lcontrol.setPanelVal(val))
 		return vlineListWidget
 

@@ -135,15 +135,15 @@ class MainWindow(QMainWindow):
 		self.addLineHolder(line)
 
 		self.reWrapp_line(line)
-		print plotArea.viewBoxNum
+
 		line.line_val(   name   = plotName,       color   = lineColor,
 						 width  = lineWidth,      style   = lineStyle, 
 						 symbol = Sym[dotSym],    visible = True,      viewNum = plotArea.viewBoxNum)		
-		print line.line_viewNum()
+
 		line.symbol_val( color   = dotColor,      size    = dotSize,
 						 penC    = (0,255,0,255), penW    = 2,
 						 outLine = False,         visible = True )
-
+		print line.line_color()
 		plotArea.showGrid(x=True, y=True)
 		if addLegend:
 			legend.addItem( line, plotName )
@@ -205,10 +205,16 @@ class MainWindow(QMainWindow):
 		def line_setPen(target, color = None, width = None, style = None):
 			if color == None:
 				color = target.lcolor
+			else:
+				target.lcolor = color
 			if width == None:
 				width = target.lwidth
+			else:
+				target.lwidth = width
 			if style == None:
 				style = target.lstyle
+			else:				
+				target.lstyle = style
 
 			target.setPen(pg.mkPen(color = color, width = width, style = style))
 			return color, width, style
@@ -224,6 +230,7 @@ class MainWindow(QMainWindow):
 
 			if sum([ elem != None for elem in [color, width, style]]) > 1:
 				target.line_setPen(color = color, width = width, style = style)
+
 			
 			return [target.line_name(name),     target.line_color(),
 					target.line_width(),        target.line_style(),
