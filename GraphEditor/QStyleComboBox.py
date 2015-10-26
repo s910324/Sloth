@@ -6,7 +6,11 @@ from   PySide.QtCore import *
 class QStyleComboBox(QComboBox):
 	def __init__(self, option = None, parent=None):
 		super(QStyleComboBox, self).__init__(parent)
-		# if option = 'QPen':
+		self.addItem()
+		a = QListWidget()
+		self.setModel(a.model())
+
+
 
 
 
