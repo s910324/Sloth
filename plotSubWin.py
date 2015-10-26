@@ -523,4 +523,4 @@ def Debugger():
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-Debugger()
+# Debugger()
