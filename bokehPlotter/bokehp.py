@@ -1,5 +1,5 @@
 import sys
-
+import pickle
 import numpy as np
 
 from PySide.QtGui    import *
@@ -8,7 +8,7 @@ from PySide.QtWebKit import *
 
 from bokeh.resources import CDN
 from bokeh.embed     import file_html
-from bokeh.models    import LinearAxis, Range1d
+from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
 from bokeh.plotting  import figure
 
 
@@ -17,8 +17,9 @@ class PlotWindowWidget(QMainWindow):
 		super(PlotWindowWidget, self).__init__(parent)
 		self.Web = QWebView()
 		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)
-		self.div = self.plot()
-		self.a = [self.div.x_range.start, self.div.x_range.end, self.div.y_range.start, self.div.y_range.end]
+		data = self.loadCrew()
+		self.div, self.rng = self.plot(data)
+		
 		html = file_html(self.div, CDN, "my plot")
 		self.Web.setHtml(html)
 		self.setCentralWidget(self.Web)
@@ -31,32 +32,75 @@ class PlotWindowWidget(QMainWindow):
 		self.toolbar.addAction(resetAction)
 		resetAction.triggered.connect(self.resetGraph)
 
-	def plot(self):
-		N = 4000
+	def plot(self, data):
 
-		x = np.random.random(size=N) * 100
-		y = np.random.random(size=N) * 100
-		radii = np.random.random(size=N) * 1.5
-		colors = ["#%02x%02x%02x" % (r, g, 150) for r, g in zip(np.floor(50+2*x), np.floor(30+2*y))]
+		p1,p2 = data
+		
+		x = np.array(p1[0])
+		y = np.array(p2[1])
 
-		p1 = figure(title='Pan and Zoom Here', x_range=(0, 100), y_range=(0, 100),
-		            tools='box_zoom,box_select,crosshair,reset', plot_width=400, plot_height=400, toolbar_location=None)
-		p1.extra_y_ranges = {"foo": Range1d(start=-100, end=200)}
-		p1.add_layout(LinearAxis(), 'right')
-		p1.add_layout(LinearAxis(), 'above')
-		p1.scatter(x, y, radius=radii, fill_color=colors, fill_alpha=0.6, line_color=None)
+		radii = 0.005
+		
+		colors = ["#%02x%02x%02x" % (200,200,200) for i in range(len(x))]
+
+		p1 = figure(title='Pan and Zoom Here', x_range=(min(x), max(x)), y_range=(min(y), max(y)),
+		            tools='box_zoom,box_select,crosshair,reset', plot_width=800, plot_height=300, toolbar_location=None,
+		            background_fill="#001133", border_fill="#001133")
+
+
+		p1.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'right')
+		p1.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'above')
+
+		p1.xaxis.axis_line_color       = "#C8C8C8"
+		p1.xaxis.major_tick_line_color = "#C8C8C8"
+		p1.xaxis.major_tick_line_width = 1
+		p1.xaxis.minor_tick_line_color = "#C8C8C8"
+		p1.xaxis.minor_tick_line_width = 1
+
+		p1.yaxis.axis_line_color       = "#C8C8C8"
+		p1.yaxis.major_tick_line_color = "#C8C8C8"
+		p1.yaxis.major_tick_line_width = 1
+		p1.yaxis.minor_tick_line_color = "#C8C8C8"
+		p1.yaxis.minor_tick_line_width = 1
+
+		p1.xaxis.major_tick_in  =  5 
+		p1.xaxis.major_tick_out =  0
+		p1.xaxis.minor_tick_in  =  3
+		p1.xaxis.minor_tick_out =  0
+
+		p1.yaxis.major_tick_in  =  5 
+		p1.yaxis.major_tick_out =  0
+		p1.yaxis.minor_tick_in  =  3
+		p1.yaxis.minor_tick_out =  0
 
 	
-		return p1
+
+		p1.xgrid.grid_line_color = "#00ffC8"
+		p1.xgrid.grid_line_alpha = 0.5
+		p1.xgrid.grid_line_dash  = [5,5]
+		p1.ygrid.grid_line_alpha = 0.5
+		p1.ygrid.grid_line_dash  = [5,5]
+		p1.scatter(x, y, radius=radii, fill_color=colors, fill_alpha=1, line_color=None)
+
+	
+		return p1, [min(x), max(x), min(y), max(y)]
 
 	def resetGraph(self):
-		self.div.x_range = Range1d(start=self.a[0], end=self.a[1])
-		self.div.y_range = Range1d(start=self.a[2], end=self.a[3])
+		self.div.x_range = Range1d(start=self.rng[0], end=self.rng[1])
+		self.div.y_range = Range1d(start=self.rng[2], end=self.rng[3])
 
 		html = file_html(self.div, CDN, "my plot")
+		
 		self.Web.setHtml(html)
 		print 'a'
 
+	def loadCrew(self):
+		fileName = './savedData.pkl'
+		package  = open( fileName, 'rb' )
+		data = pickle.load( package )
+
+		package.close()
+		return data
 
 
 if __name__ == '__main__':
