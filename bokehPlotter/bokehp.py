@@ -9,7 +9,7 @@ from PySide.QtWebKit import *
 from bokeh.resources import CDN
 from bokeh.embed     import file_html
 from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
-from bokeh.plotting  import figure, show, output_file
+from bokeh.plotting  import figure, show, output_file,  vplot
 
 
 class PlotWindowWidget(QMainWindow):
@@ -18,7 +18,8 @@ class PlotWindowWidget(QMainWindow):
 		self.Web = QWebView()
 		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)
 		data = self.loadCrew()
-		self.div, self.rng = self.plot(data)
+	
+		self.div= self.plot(0, data)
 		
 		html = file_html(self.div, CDN, "my plot")
 		self.Web.setHtml(html)
@@ -32,16 +33,25 @@ class PlotWindowWidget(QMainWindow):
 		self.toolbar.addAction(resetAction)
 		resetAction.triggered.connect(self.resetGraph)
 
-	def plot(self, data):
 
-		p1,p2 = data
-		x     = np.array(p1[0])
-		y     = np.array(p2[1])
+	def plot(self, stack, dataSet):
+		plotPack = []
+		if not stack:
+			for i, data in enumerate(dataSet):
+				plot, rng = self.addPlotArea(data)
+				plotPack.append(plot)
+			html = self.insertPlot(plotPack)
+		return html
+
+
+	def addPlotArea(self, data):
+		x     = np.array(data[0])
+		y     = np.array(data[1])
 
 		radii = 0.008
 		
 		colors       = ["#%02x%02x%02x" % (200,200,200) for i in range(len(x))]
-		spamX, spamY = [(max(x)-min(x))*0.05, (max(y)-min(y))*0.05]
+		spamX, spamY = [float(max(x)-min(x))*0.05, float(max(y)-min(y))*0.05]
 
 		p1 = figure(title='Pan and Zoom Here', x_range=(min(x)-spamX, max(x)+spamX), y_range=(min(y)-spamY, max(y)+spamY),
 		            tools='box_zoom,box_select,crosshair, save, reset', plot_width=800, plot_height=300,
@@ -98,10 +108,20 @@ class PlotWindowWidget(QMainWindow):
 		p1.legend.glyph_width           = 20
 		p1.legend.legend_spacing        = 5
 		p1.legend.legend_padding        = 20
-		output_file("les_mis.html")
-		show(p1)
-		p1.toolbar_location = None
+		# output_file("les_mis.html")
+		# show(p1)
+		# p1.toolbar_location = None
 		return p1, [min(x)-spamX, max(x)+spamX, min(y)-spamY, max(y)+spamY]
+
+
+	def insertPlot(self, plotSets):
+		
+		layout = vplot(*plotSets)
+		output_file("les_mis.html")
+		show(layout)
+		for plot in plotSets:
+			plot.toolbar_location = None
+		return layout
 
 	def resetGraph(self):
 		self.div.x_range = Range1d(start=self.rng[0], end=self.rng[1])
