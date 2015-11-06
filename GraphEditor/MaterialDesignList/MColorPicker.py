@@ -41,7 +41,7 @@ class MColorPicker(QWidget):
 		vboxR = QVBoxLayout()
 		vboxG = QVBoxLayout()
 		vboxB = QVBoxLayout()
-		vboxV.insertSpacerItem(0, QSpacerItem(0,0,vData = QSizePolicy.Preferred, hData = QSizePolicy.MinimumExpanding))
+		vboxV.insertSpacerItem(0, QSpacerItem(0,0,vData = QSizePolicy.MinimumExpanding, hData = QSizePolicy.MinimumExpanding))
 		vboxR.addStretch()
 		vboxG.addStretch()
 		vboxB.addStretch()

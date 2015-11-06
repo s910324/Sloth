@@ -8,6 +8,7 @@ import graphSelectorWindow as gSelector
 from   PySide.QtCore import *
 from   PySide.QtGui  import *
 from   pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph.exporters
 import pyqtgraph as pg
 import numpy as np
 
@@ -495,11 +496,21 @@ class DebugWindow(QMainWindow):
 
 	def setPen(self):
 
-		a = gSelector.graphSelector()
-		a.requestPreview.connect(self.plot.addLine, Qt.QueuedConnection)
+		# a = gSelector.graphSelector()
+		# a.requestPreview.connect(self.plot.addLine, Qt.QueuedConnection)
 
-		a.addPlotHolders(self.plot.plotIDDict)
-		a.show()
+		# a.addPlotHolders(self.plot.plotIDDict)
+		# a.show()
+		p, l, v = self.plot.plotIDDict[0]
+		# exporter = pg.exporters.ImageExporter(p)
+		# exporter = pg.exporters.MatplotlibExporter(p)
+		exporter = pg.exporters.SVGExporter(p)
+
+		# set export parameters if needed
+		# exporter.parameters()['width'] = 100   # (note this also affects height parameter)
+
+		# save to file
+		exporter.export('fileName.svg')
 
 	def saveData(self, data):
 		fileName   = './savedData.pkl'
@@ -523,4 +534,4 @@ def Debugger():
 	form = DebugWindow()
 	form.show()
 	app.exec_()
-# Debugger()
+Debugger()
