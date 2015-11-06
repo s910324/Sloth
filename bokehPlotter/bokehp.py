@@ -38,7 +38,7 @@ class PlotWindowWidget(QMainWindow):
 		x     = np.array(p1[0])
 		y     = np.array(p2[1])
 
-		radii = 0.005
+		radii = 0.008
 		
 		colors       = ["#%02x%02x%02x" % (200,200,200) for i in range(len(x))]
 		spamX, spamY = [(max(x)-min(x))*0.05, (max(y)-min(y))*0.05]
@@ -47,7 +47,9 @@ class PlotWindowWidget(QMainWindow):
 		            tools='box_zoom,box_select,crosshair, save, reset', plot_width=800, plot_height=300,
 		            background_fill="#001133", border_fill="#001133")
 
-		p1.title_text_color = "#C8C8C8"
+		p1.title_text_color      = "#C8C8C8"
+		p1.title_text_font_style = "bold"
+		p1.title_text_font_size  = "10pt"
 
 		p1.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'right')
 		p1.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'above')
@@ -88,11 +90,14 @@ class PlotWindowWidget(QMainWindow):
 		p1.line(x, y, legend=legendText, line_color=colors)
 		p1.scatter(x, y, radius=radii, radius_dimension='y',  fill_color=colors, fill_alpha=1, line_color=None, legend=legendText)
 
-		p1.legend.orientation = "top_left"
-		p1.legend.label_standoff = 5
-		p1.legend.glyph_width    = 20
-		p1.legend.legend_spacing = 5
-		p1.legend.legend_padding = 20
+		p1.legend.orientation           = "top_left"
+		p1.legend.background_fill_alpha = 0.5
+		p1.legend.border_line_width     = 1
+		p1.legend.border_line_color     = "#C8C8C8"
+		p1.legend.label_standoff        = 5
+		p1.legend.glyph_width           = 20
+		p1.legend.legend_spacing        = 5
+		p1.legend.legend_padding        = 20
 		output_file("les_mis.html")
 		show(p1)
 		p1.toolbar_location = None
