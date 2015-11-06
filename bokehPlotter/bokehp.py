@@ -9,7 +9,7 @@ from PySide.QtWebKit import *
 from bokeh.resources import CDN
 from bokeh.embed     import file_html
 from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
-from bokeh.plotting  import figure
+from bokeh.plotting  import figure, show, output_file
 
 
 class PlotWindowWidget(QMainWindow):
@@ -35,33 +35,36 @@ class PlotWindowWidget(QMainWindow):
 	def plot(self, data):
 
 		p1,p2 = data
-		
-		x = np.array(p1[0])
-		y = np.array(p2[1])
+		x     = np.array(p1[0])
+		y     = np.array(p2[1])
 
 		radii = 0.005
 		
-		colors = ["#%02x%02x%02x" % (200,200,200) for i in range(len(x))]
+		colors       = ["#%02x%02x%02x" % (200,200,200) for i in range(len(x))]
+		spamX, spamY = [(max(x)-min(x))*0.05, (max(y)-min(y))*0.05]
 
-		p1 = figure(title='Pan and Zoom Here', x_range=(min(x), max(x)), y_range=(min(y), max(y)),
-		            tools='box_zoom,box_select,crosshair,reset', plot_width=800, plot_height=300, toolbar_location=None,
+		p1 = figure(title='Pan and Zoom Here', x_range=(min(x)-spamX, max(x)+spamX), y_range=(min(y)-spamY, max(y)+spamY),
+		            tools='box_zoom,box_select,crosshair, save, reset', plot_width=800, plot_height=300,
 		            background_fill="#001133", border_fill="#001133")
 
+		p1.title_text_color = "#C8C8C8"
 
 		p1.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'right')
 		p1.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'above')
 
-		p1.xaxis.axis_line_color       = "#C8C8C8"
-		p1.xaxis.major_tick_line_color = "#C8C8C8"
-		p1.xaxis.major_tick_line_width = 1
-		p1.xaxis.minor_tick_line_color = "#C8C8C8"
-		p1.xaxis.minor_tick_line_width = 1
+		p1.xaxis.axis_line_color        = "#C8C8C8"
+		p1.xaxis.major_label_text_color = "#C8C8C8"
+		p1.xaxis.major_tick_line_color  = "#C8C8C8"
+		p1.xaxis.major_tick_line_width  = 1
+		p1.xaxis.minor_tick_line_color  = "#C8C8C8"
+		p1.xaxis.minor_tick_line_width  = 1
 
-		p1.yaxis.axis_line_color       = "#C8C8C8"
-		p1.yaxis.major_tick_line_color = "#C8C8C8"
-		p1.yaxis.major_tick_line_width = 1
-		p1.yaxis.minor_tick_line_color = "#C8C8C8"
-		p1.yaxis.minor_tick_line_width = 1
+		p1.yaxis.axis_line_color        = "#C8C8C8"
+		p1.yaxis.major_label_text_color = "#C8C8C8"
+		p1.yaxis.major_tick_line_color  = "#C8C8C8"
+		p1.yaxis.major_tick_line_width  = 1
+		p1.yaxis.minor_tick_line_color  = "#C8C8C8"
+		p1.yaxis.minor_tick_line_width  = 1
 
 		p1.xaxis.major_tick_in  =  5 
 		p1.xaxis.major_tick_out =  0
@@ -73,17 +76,27 @@ class PlotWindowWidget(QMainWindow):
 		p1.yaxis.minor_tick_in  =  3
 		p1.yaxis.minor_tick_out =  0
 
-	
 
-		p1.xgrid.grid_line_color = "#00ffC8"
-		p1.xgrid.grid_line_alpha = 0.5
-		p1.xgrid.grid_line_dash  = [5,5]
-		p1.ygrid.grid_line_alpha = 0.5
-		p1.ygrid.grid_line_dash  = [5,5]
-		p1.scatter(x, y, radius=radii, fill_color=colors, fill_alpha=1, line_color=None)
+		p1.xgrid.grid_line_color = "#C8C8C8"
+		p1.xgrid.grid_line_alpha =  0.5
+		p1.xgrid.grid_line_dash  = [3,3]
+		p1.ygrid.grid_line_color = "#C8C8C8"
+		p1.ygrid.grid_line_alpha =  0.5
+		p1.ygrid.grid_line_dash  = [3,3]
 
-	
-		return p1, [min(x), max(x), min(y), max(y)]
+		legendText = 'plot'
+		p1.line(x, y, legend=legendText, line_color=colors)
+		p1.scatter(x, y, radius=radii, radius_dimension='y',  fill_color=colors, fill_alpha=1, line_color=None, legend=legendText)
+
+		p1.legend.orientation = "top_left"
+		p1.legend.label_standoff = 5
+		p1.legend.glyph_width    = 20
+		p1.legend.legend_spacing = 5
+		p1.legend.legend_padding = 20
+		output_file("les_mis.html")
+		show(p1)
+		p1.toolbar_location = None
+		return p1, [min(x)-spamX, max(x)+spamX, min(y)-spamY, max(y)+spamY]
 
 	def resetGraph(self):
 		self.div.x_range = Range1d(start=self.rng[0], end=self.rng[1])
