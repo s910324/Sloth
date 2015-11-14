@@ -1,0 +1,1178 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"number",
+				"number1"
+			],
+			[
+				"s",
+				"setValue"
+			],
+			[
+				"return",
+				"returnClass"
+			],
+			[
+				"val",
+				"val2"
+			],
+			[
+				"st",
+				"string"
+			],
+			[
+				"c",
+				"cout"
+			],
+			[
+				"plot",
+				"plotPack	(statement)"
+			],
+			[
+				"tool",
+				"toolbar_location	(statement)"
+			],
+			[
+				"v",
+				"vform	(function)"
+			],
+			[
+				"drawText",
+				"drawTextItem	(function)"
+			],
+			[
+				"AlignLe",
+				"AlignLeft	(class)"
+			],
+			[
+				"w",
+				"width	(statement)"
+			],
+			[
+				"Qpa",
+				"QPainter	(class)"
+			],
+			[
+				"ren",
+				"RenderHint	(class)"
+			],
+			[
+				"de",
+				"drawRect	(function)"
+			],
+			[
+				"N",
+				"None	(class)"
+			],
+			[
+				"h",
+				"html"
+			],
+			[
+				"he",
+				"height	Style CSS"
+			],
+			[
+				"op",
+				"opacity"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"bo",
+				"border-color"
+			],
+			[
+				"da",
+				"dashed"
+			],
+			[
+				"borde",
+				"border-style"
+			],
+			[
+				"le",
+				"left"
+			],
+			[
+				"al",
+				"text-align"
+			],
+			[
+				"m",
+				"MatplotlibExporter	(class)"
+			],
+			[
+				"cons",
+				"console.log('$0');"
+			],
+			[
+				"setCn",
+				"setCentralWidget	(function)"
+			],
+			[
+				"setu",
+				"setUpToolBar	(function)"
+			],
+			[
+				"if",
+				"ifmain	if __name__ == '__main__'"
+			],
+			[
+				"Mi",
+				"MinimumExpanding	(class)"
+			],
+			[
+				"add",
+				"addStrut	(function)"
+			],
+			[
+				"bl",
+				"blockSignals"
+			],
+			[
+				"ch",
+				"changeColor	(function)"
+			],
+			[
+				"col",
+				"colorChanged"
+			],
+			[
+				"l",
+				"ListType	(statement)"
+			],
+			[
+				"Ty",
+				"type	(class)"
+			],
+			[
+				"color",
+				"ColorView	(statement)"
+			],
+			[
+				"Q",
+				"QLineNumber	(module)"
+			],
+			[
+				"Mcol",
+				"MColorView	(class)"
+			],
+			[
+				"show",
+				"showColorDialog"
+			],
+			[
+				"Qp",
+				"QPen	(class)"
+			],
+			[
+				"QPO",
+				"QPointF	(class)"
+			],
+			[
+				"draw",
+				"drawEllipse	(function)"
+			],
+			[
+				"set",
+				"setWidth	(function)"
+			],
+			[
+				"dra",
+				"drawLine	(function)"
+			],
+			[
+				"QCom",
+				"QComboBox	(class)"
+			],
+			[
+				"QStylec",
+				"QStyleOptionComboBox	(class)"
+			],
+			[
+				"line_v",
+				"line_val"
+			],
+			[
+				"setch",
+				"setChecked	(function)"
+			],
+			[
+				"view",
+				"viewBoxNum"
+			],
+			[
+				"num",
+				"viewNum"
+			],
+			[
+				"line_vi",
+				"line_viewNum"
+			],
+			[
+				"viewBox",
+				"viewBoxDict	(statement)"
+			],
+			[
+				"sets",
+				"setSizeHint"
+			],
+			[
+				"setfix",
+				"setFixedHeight	(function)"
+			],
+			[
+				"siz",
+				"sizeHint	(function)"
+			],
+			[
+				"setF",
+				"setFixedHeight	(function)"
+			],
+			[
+				"up",
+				"updateGeometry	(function)"
+			],
+			[
+				"vl",
+				"vListWidget	(statement)"
+			],
+			[
+				"setSi",
+				"setSizePolicy	(function)"
+			],
+			[
+				"update",
+				"updateGeometry	(function)"
+			],
+			[
+				"vli",
+				"vListWidgetItem	(statement)"
+			],
+			[
+				"viewbox",
+				"viewBoxList	(statement)"
+			],
+			[
+				"itemD",
+				"itemDcFocused	(statement)"
+			],
+			[
+				"QLi",
+				"QLinearGradient	(class)"
+			],
+			[
+				"line",
+				"lineVisible	(statement)"
+			],
+			[
+				"M",
+				"MLineListWidget	(class)"
+			],
+			[
+				"QRe",
+				"QRect	(class)"
+			],
+			[
+				"list",
+				"viewBoxListWidget"
+			],
+			[
+				"vi",
+				"viewBoxListWidget"
+			],
+			[
+				"vL",
+				"vListWidgetItem	(statement)"
+			],
+			[
+				"setsty",
+				"setStyleSheet	(function)"
+			],
+			[
+				"fo",
+				"focus	(param)"
+			],
+			[
+				"spa",
+				"space2	(statement)"
+			],
+			[
+				"setFix",
+				"setFixedHeight	(function)"
+			],
+			[
+				"setc",
+				"setContentsMargins	(function)"
+			],
+			[
+				"setm",
+				"setContentsMargins	(function)"
+			],
+			[
+				"hea",
+				"header_Color"
+			],
+			[
+				"setR",
+				"setRenderHint	(function)"
+			],
+			[
+				"De",
+				"Dense4Pattern	(class)"
+			],
+			[
+				"setB",
+				"setBrush	(function)"
+			],
+			[
+				"adds",
+				"addSpacing	(function)"
+			],
+			[
+				"res",
+				"resize	(function)"
+			],
+			[
+				"cal",
+				"canclePB	(statement)"
+			],
+			[
+				"addS",
+				"addStretch	(function)"
+			],
+			[
+				"QChe",
+				"QCheckBox	(class)"
+			],
+			[
+				"Al",
+				"AlignHCenter	(class)"
+			],
+			[
+				"setup",
+				"setupLineUI	(function)"
+			],
+			[
+				"pos",
+				"pos1Label0	(statement)"
+			],
+			[
+				"QLine",
+				"QLineNumber	(class)"
+			],
+			[
+				"QCh",
+				"QCheckBox	(class)"
+			],
+			[
+				"se",
+				"setupList	(function)"
+			],
+			[
+				"la",
+				"layout	(statement)"
+			],
+			[
+				"name",
+				"nameLineE"
+			],
+			[
+				"setStyle",
+				"setStyleSheet	(function)"
+			],
+			[
+				"addL",
+				"addLine"
+			],
+			[
+				"ca",
+				"cancleOperation	(function)"
+			],
+			[
+				"cl",
+				"close	(function)"
+			],
+			[
+				"p",
+				"p1y	(statement)"
+			],
+			[
+				"va",
+				"checkValueValid"
+			],
+			[
+				"te",
+				"textChanged	(class)"
+			],
+			[
+				"po",
+				"point2	(statement)"
+			],
+			[
+				"che",
+				"checkValueValid	(function)"
+			],
+			[
+				"ali",
+				"AlignCenter	(class)"
+			],
+			[
+				"Qline",
+				"QLineEdit	(class)"
+			],
+			[
+				"seup",
+				"setUpApplyUI	(function)"
+			],
+			[
+				"vbox",
+				"vbox1	(statement)"
+			],
+			[
+				"ma",
+				"MainWindow	(statement)"
+			],
+			[
+				"chec",
+				"checkBoxList	(statement)"
+			],
+			[
+				"rad",
+				"radio4	(statement)"
+			],
+			[
+				"gr",
+				"groupBox	(statement)"
+			],
+			[
+				"Dsn",
+				"Dense1Pattern	(class)"
+			],
+			[
+				"get",
+				"get_values	(function)"
+			],
+			[
+				"pad",
+				"pandas	(module)"
+			],
+			[
+				"daa",
+				"Data	(function)"
+			],
+			[
+				"viewb",
+				"viewBoxIDCounter	(statement)"
+			],
+			[
+				"linec",
+				"line_color"
+			],
+			[
+				"li",
+				"lineWidth	(statement)"
+			],
+			[
+				"plotI",
+				"plotIDDict"
+			],
+			[
+				"das",
+				"DashDotLine	(class)"
+			],
+			[
+				"Das",
+				"DashDotLine	(class)"
+			],
+			[
+				"sym",
+				"symbol_penColor"
+			],
+			[
+				"is",
+				"isVisible"
+			],
+			[
+				"pl",
+				"plotName	(param)"
+			],
+			[
+				"line_",
+				"line_name"
+			],
+			[
+				"nam",
+				"line_name"
+			],
+			[
+				"pen",
+				"penStyle"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/rawr/Downloads/CPP/pp.cpp",
+			"settings":
+			{
+				"buffer_size": 1188,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/rawr/Downloads/CPP/grade.h",
+			"settings":
+			{
+				"buffer_size": 1495,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/Cpp-11.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++/C++ Single File.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++11/C++11.sublime-build",
+					""
+				],
+				[
+					"Packages/C++11/C++11.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++11/C++11.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/User/Cpp-11.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Cpp-11.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/User/Cpp-11.sublime-build",
+				"Run"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 368.0,
+		"last_filter": "pci",
+		"selected_items":
+		[
+			[
+				"pci",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: re",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: r",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control:r",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			],
+			[
+				"menu",
+				"View: Toggle Menu"
+			],
+			[
+				"Package Control: i",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 344.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/rawr/.config/sublime-text-3/Packages/User/Cpp-11.sublime-build",
+		"/home/rawr/Downloads/CPP/grade.cpp",
+		"/home/rawr/.config/sublime-text-3/Installed Packages/C++11.sublime-package",
+		"/home/rawr/Downloads/CPP/GradeBook.h",
+		"/home/rawr/Downloads/CPP/GradeBook.cpp",
+		"/home/rawr/Downloads/CPP/MObject.cpp",
+		"/home/rawr/Downloads/CPP/MObject.h",
+		"/home/rawr/Downloads/CPP/Object.h",
+		"/home/rawr/Downloads/CPP/Object.cpp",
+		"/home/rawr/Downloads/pp.cpp",
+		"/home/rawr/Downloads/CPP/pp",
+		"/home/rawr/Desktop/Untitled Document",
+		"/home/rawr/Desktop/zz.py",
+		"/home/rawr/.config/sublime-text-3/Packages/C++11/C++11.sublime-settings",
+		"/home/rawr/.config/sublime-text-3/Packages/User/C++11.sublime-build",
+		"/home/rawr/.config/sublime-text-3/Packages/C++11/messages/install.txt",
+		"/home/rawr/.config/sublime-text-3/Packages/User/CTags.sublime-settings",
+		"/home/rawr/Downloads/Untitled Document",
+		"/home/rawr/github/Sloth/bokehPlotter/bokehp.py",
+		"/home/rawr/github/revealEditor/index (copy).html",
+		"/home/rawr/github/Sloth/plotSubWin.py",
+		"/home/rawr/github/revealEditor/Reveal Editor.py",
+		"/home/rawr/github/revealEditor/js.py",
+		"/home/rawr/.config/sublime-text-3/Packages/CTags/CTags.sublime-settings",
+		"/home/rawr/Desktop/jsplot.txt",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MLineListWidget.py",
+		"/home/rawr/Desktop/bokehp.py",
+		"/home/rawr/Downloads/bokeh-master/examples/interactions/us_marriages_divorces/us_marriages_divorces_interactive.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/widget.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/slideshow/app_reveal.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/simple/simple.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/embed_multiple.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/animated.py",
+		"/home/rawr/Desktop/DrawSVG-master/SDFSDF.PY",
+		"/home/rawr/Desktop/DrawSVG-master/examples.py",
+		"/home/rawr/Desktop/DrawSVG-master/exampleGraphs.py",
+		"/home/rawr/Desktop/DrawSVG-master/drawSVGGraph.py",
+		"/home/rawr/Desktop/SDFSDF.PY",
+		"/home/rawr/Desktop/123.SVG",
+		"/home/rawr/Desktop/abc.svg",
+		"/home/rawr/ProgramFiles/android-pyside-build-scripts/env.sh",
+		"/home/rawr/Downloads/bokeh-master/examples/charts/file/hover_span.py",
+		"/home/rawr/Downloads/bokeh-master/examples/plotting/file/logplot.py",
+		"/home/rawr/Desktop/MColorPicker.py",
+		"/home/rawr/Downloads/bokeh-master/examples/glyphs/airports_map.py",
+		"/home/rawr/Downloads/bokeh-master/examples/glyphs/trail.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/spectrogram/spectrogram.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/embed_multiple_responsive.py",
+		"/home/rawr/Downloads/bokeh-master/examples/embed/publishing.py",
+		"/home/rawr/Desktop/zxc.html",
+		"/home/rawr/Downloads/bokeh-master/examples/charts/file/area.py",
+		"/home/rawr/Downloads/bokeh-master/examples/plotting/file/grid.py",
+		"/home/rawr/Desktop/asc.py",
+		"/home/rawr/Desktop/js.py",
+		"/home/rawr/github/Sloth/wbSubWin.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MColorPicker.py",
+		"/home/rawr/github/Sloth/NightlyBuild.py",
+		"/home/rawr/Desktop/zxczxc",
+		"/home/rawr/Downloads/reveal.js-3.1.0/index (copy).html",
+		"/home/rawr/Desktop/ascasc.py",
+		"/home/rawr/Downloads/reveal.js-3.1.0/js/jquery/jquery-ui.js",
+		"/home/rawr/Downloads/reveal.js-3.1.0/index.html",
+		"/home/rawr/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/usr/share/alsa/alsa.conf",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/QLineNumber255.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/QLineNumber.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MViewBoxListWidget.py",
+		"/home/rawr/github/Sloth/graphOptions.py",
+		"/home/rawr/github/Sloth/GraphEditor/viewBoxList.py",
+		"/home/rawr/github/Sloth/GraphEditor/viewLineList.py",
+		"/home/rawr/github/Sloth/GraphEditor/QStyleComboBox.py",
+		"/home/rawr/github/Sloth/GraphEditor/lineControlWidget.py",
+		"/home/rawr/github/Sloth/GraphEditor/EditorWindow.py",
+		"/home/rawr/github/Changer/Changer.py",
+		"/home/rawr/github/Sloth/GraphEditor/QLineNumber.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/__init__.py",
+		"/home/rawr/Desktop/aa.py",
+		"/home/rawr/github/Sloth/GraphEditor/viewBoxControlWidget.py",
+		"/home/rawr/github/Sloth/graphSelectorWindow.py",
+		"/home/rawr/github/Sloth/SubWinList.py",
+		"/home/rawr/github/NodeGUI/JNode.py",
+		"/home/rawr/github/NodeGUI/JackNode.py",
+		"/home/rawr/github/NodeGUI/NodeGUI2.py",
+		"/home/rawr/github/NodeGUI/PlugNode.py",
+		"/home/rawr/github/NodeGUI/ImageNode.py",
+		"/home/rawr/github/Sloth/GraphEditor/untitled.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/viewBoxListWidget.py",
+		"/home/rawr/github/Sloth/GraphEditor/ MaterialDesignList.py",
+		"/home/rawr/github/Sloth/GraphEditor/SubWinList.py",
+		"/home/rawr/github/Sloth/GraphEditor/QSpacer.py",
+		"/home/rawr/github/Sloth/GraphEditor/QHeader.py",
+		"/home/rawr/github/Sloth/GraphEditor/QLefter.py",
+		"/home/rawr/github/Sloth/GraphEditor/QRighter.py",
+		"/home/rawr/github/Sloth/GraphEditor/QHeader/QHeader.py",
+		"/home/rawr/github/NodeGUI/NodeGUI.py",
+		"/home/rawr/Downloads/untitled.py",
+		"/home/rawr/github/Sloth/GraphEditor/Header.py",
+		"/home/rawr/Downloads/1318211-41be6b5f8f3bd6dc148d56efa60f3178671c5ef2/ui_widget.py",
+		"/home/rawr/Downloads/1318211-41be6b5f8f3bd6dc148d56efa60f3178671c5ef2/widget.py",
+		"/home/rawr/github/Sloth/GraphEditor/viewLineListWidget.py",
+		"/home/rawr/github/Sloth/GraphEditor/viewBoxListWidget.py",
+		"/home/rawr/github/Sloth/GraphEditor/ viewLineListWidget.py",
+		"/home/rawr/github/temp_shit/temp1.py",
+		"/home/rawr/github/Changer/ListEditor.py",
+		"/home/rawr/github/Sloth/GraphEditor/viewBoxControlWidget .py",
+		"/home/rawr/github/Sloth/graphSelectorListEditor.py",
+		"/home/rawr/github/Sloth/graphEditorWindow.py",
+		"/home/rawr/github/Sloth/README.md",
+		"/home/rawr/github/nodeSHit/rq.js",
+		"/home/rawr/github/temp_shit/json.json",
+		"/home/rawr/github/temp_shit/untitled.py",
+		"/home/rawr/github/temp_shit/del.py",
+		"/home/rawr/Downloads/toyplot.csv",
+		"/home/rawr/Downloads/iris.csv",
+		"/home/rawr/.config/sublime-text-3/Packages/SublimePythonIDE/SublimePython.sublime-settings",
+		"/home/rawr/Downloads/eagle-lin64-7.4.0.run",
+		"/home/rawr/Downloads/SolidWorks 2013 SP3.0 [32 Bits & 64 Bits][MULTi][WwW.LoKoTorrents.CoM]/SolidWorks 2013 SP3.0 [32 Bits & 64 Bits][MULTi][WwW.LoKoTorrents.CoM]/Instrucciones.txt",
+		"/media/rawr/UUI/Uni-USB-Installer-Readme.txt",
+		"/media/rawr/IRM_CCSA_X64FRE_EN-US_DV5/autorun.inf",
+		"/home/rawr/.cxoffice/setup/dosdevices/c:/users/crossover/Temp/Other Application.log",
+		"/home/rawr/github/temp_shit/flaskShit.py",
+		"/home/rawr/github/Heroku-master/FlaskWeb/test.py",
+		"/home/rawr/ProgramFiles/node_js_lib/app/data/node_modules/appjs-linux-x64/index.js",
+		"/home/rawr/github/nodeSHit/gg.js",
+		"/home/rawr/ProgramFiles/node_js_lib/app/data/app.js",
+		"/home/rawr/ProgramFiles/node_js_lib/node-five-master/test/canvas.js",
+		"/home/rawr/ProgramFiles/node_js_lib/node-qt-master/examples/helloworld.js",
+		"/home/rawr/ProgramFiles/node_js_lib/node-qt-master/examples/sound.js"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"title",
+			"', '",
+			"np",
+			"plotData",
+			"loadCrew",
+			"aveData",
+			"', '",
+			"height",
+			"hei",
+			"', '",
+			"tick",
+			"', '",
+			"self.plot.plotIDDict",
+			"THE HTML PRESENTATION FRAMEWORK",
+			"font",
+			"setPanelVal",
+			"print",
+			"addLine",
+			"addPlotArea",
+			"insertPlot",
+			"addPlotHolder",
+			"connect",
+			"print ",
+			"dic",
+			"dict",
+			"self.option",
+			"goption",
+			"show",
+			"61",
+			"setFixed",
+			"Fix",
+			"sizeHint",
+			"addLine",
+			"plotIDDict",
+			"connect",
+			"itemDcFocused",
+			"spreadWay",
+			"boxLay",
+			"print",
+			"preview",
+			"graphSelector",
+			"addLine",
+			" addLine",
+			"width",
+			"bord",
+			"AxisItem",
+			"utoRange",
+			"AutoRange",
+			"Range",
+			"XRange",
+			"Scale",
+			"axis",
+			"Range",
+			"center",
+			"xRange",
+			"setXRange",
+			"x",
+			"Range",
+			"XRange",
+			"key",
+			"Background",
+			"Enable",
+			"Disa",
+			"get",
+			"Auto",
+			"self.plotIDCounter",
+			"addPlotHolder",
+			"plotIDDict",
+			"viewBox",
+			"viewBoxIDCounter",
+			"viewBox",
+			"addPlotArea",
+			"', '",
+			"set",
+			"Config",
+			"setConfigOption",
+			"backg",
+			"style",
+			"stle",
+			"col",
+			"set",
+			"', '",
+			"set",
+			"color",
+			"vis",
+			"alph",
+			"set",
+			"enable",
+			"', '",
+			"fini",
+			"200, 200, 200, 255",
+			"(200, 200, 200, 255)",
+			"'a",
+			"ine_val",
+			"print ",
+			"addItem",
+			"insertPlot",
+			"addPlotHolder",
+			"self.vb",
+			"addPlotArea",
+			"self.w",
+			"plotLineHolder",
+			"self.plotIDCounter",
+			"plotCounter",
+			"addLineHolder",
+			"sym",
+			"set",
+			"alpha",
+			"Alpha",
+			"', '",
+			"255",
+			"parent.",
+			"brush",
+			"paint",
+			"', '",
+			"pen",
+			"visi",
+			"', '",
+			"line",
+			"sym",
+			"pen",
+			"colo",
+			"pen",
+			"color",
+			"visi",
+			"', ",
+			"doublec",
+			"getLine"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"\n",
+			"width",
+			"\n",
+			"plotArea",
+			"', '\n",
+			"self.",
+			"\n",
+			"', \n",
+			"plotListItem",
+			"",
+			"self.subWinDict",
+			"AddWinListItem",
+			"subWinList",
+			"killConnect",
+			"plug",
+			"275",
+			"121212",
+			"090909",
+			"222222",
+			"888888",
+			"	",
+			"self.listWidget",
+			"1F7514",
+			"#1F450C",
+			"#53A83E",
+			"#8DFF70",
+			"#33FF00",
+			"	",
+			"self.typeThread",
+			"self.hbox1",
+			"self.hbox1\n",
+			"showError",
+			"self.showErr",
+			"self.ashowErr",
+			"aself.showErr",
+			"self.showErr",
+			"showMSG",
+			"showgg",
+			"QLabel",
+			"QLable",
+			"#Autosuspend for",
+			"#Runtime PM",
+			"#Enable",
+			"	\necho",
+			"	\n",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/rawr/Downloads/CPP/pp.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1188,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								905,
+								905
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 638.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"file": "/home/rawr/Downloads/CPP/grade.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1495,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1475,
+								1475
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 198.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.486090775988,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 127.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/Cpp-11.sublime-build",
+	"project": "untitled.sublime-project",
+	"replace":
+	{
+		"height": 114.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
