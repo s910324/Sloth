@@ -1,7 +1,7 @@
 import sys
 import pickle
 import numpy as np
-
+import os
 from PySide.QtGui    import *
 from PySide.QtCore   import *
 from PySide.QtWebKit import *
@@ -25,9 +25,17 @@ class PlotWindowWidget(QMainWindow):
 
 		data = self.loadCrew()
 	
-		self.div= self.plot(1, data)
+		self.div= self.plot(0, data)
 		
+
 		html = file_html(self.div, CDN, "my plot")
+		js   = 'http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js'
+		css  = 'http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css'
+		offlinejs  =  'file://' + os.getcwd() + '/bokeh-0.10.0.min.js'
+		offlinecss =  'file://' + os.getcwd() + '/bokeh-0.10.0.min.css'
+		html = html.replace(js,  offlinejs)
+		html = html.replace(css, offlinecss)
+		
 		self.Web.setHtml(html)
 		self.setCentralWidget(self.Web)
 		self.initToolBar()
@@ -76,18 +84,24 @@ class PlotWindowWidget(QMainWindow):
 				self.addPlotHolder(plotArea, plotRange)
 				plotPack.append(plotArea)
 
-				self.addPlotLine(plotArea, data = data)
+				legendText = 'plot ' + str(self.lineIDCounter + 1)
+				self.addPlotLine(plotArea,legendText = legendText, data = data)
+				self.addLineHolder(None)
+				
 			html = self.insertPlot(plotPack)
+
 		else:
 			plotRange = self.getRange(dataSet)
 			plotArea  = self.initPlotArea(rng = plotRange)
 			self.addPlotHolder(plotArea, plotRange)
 			for i, data in enumerate(dataSet):
-				self.addPlotLine(plotArea, data = data)
-	
+				legendText = 'plot ' + str(self.lineIDCounter + 1)
+				self.addPlotLine(plotArea,legendText = legendText, data = data)
+				self.addLineHolder(None)
 			
 			plotPack.append(plotArea)
-			html = self.insertPlot(plotPack)			
+			html = self.insertPlot(plotPack)		
+
 		return html
 
 	def getRange(self, dataSet):
@@ -155,24 +169,9 @@ class PlotWindowWidget(QMainWindow):
 		plotArea.ygrid.grid_line_color = "#C8C8C8"
 		plotArea.ygrid.grid_line_alpha =  0.5
 		plotArea.ygrid.grid_line_dash  = [3,3]
-
-		# legendText = 'plot'
-		# plotArea.line(x, y, legend=legendText, line_color=colors)
-		# plotArea.scatter(x, y, radius=radii, radius_dimension='y',  fill_color=colors, fill_alpha=1, line_color=None, legend=legendText)
-
-		plotArea.legend.orientation           = "top_left"
-		plotArea.legend.background_fill_alpha = 0.5
-		plotArea.legend.border_line_width     = 1
-		plotArea.legend.border_line_color     = "#C8C8C8"
-		plotArea.legend.label_standoff        = 5
-		plotArea.legend.glyph_width           = 20
-		plotArea.legend.legend_spacing        = 5
-		plotArea.legend.legend_padding        = 20
-
-
 		return plotArea
 
-	def addPlotLine(self, plotArea, data = [None, None], legendText = 'plot', radii = 0.01, color = "#00000"):
+	def addPlotLine(self, plotArea, data = [None, None], legendText = 'plot', radii = 0.01, color = "#c8c8c8"):
 		x = np.array(data[0])
 		y = np.array(data[1])
 		plotArea.line(x, y, legend=legendText, line_color=color)
@@ -183,6 +182,14 @@ class PlotWindowWidget(QMainWindow):
 			fill_alpha      = 1, 
 			line_color      = None, 
 			legend          = legendText)
+		plotArea.legend.orientation           = "top_left"
+		plotArea.legend.background_fill_alpha = 0.5
+		plotArea.legend.border_line_width     = 1
+		plotArea.legend.border_line_color     = "#C8C8C8"
+		plotArea.legend.label_standoff        = 5
+		plotArea.legend.glyph_width           = 20
+		plotArea.legend.legend_spacing        = 5
+		plotArea.legend.legend_padding        = 20
 
 
 	def addPlotArea(self, data):
@@ -284,7 +291,26 @@ class PlotWindowWidget(QMainWindow):
 		package.close()
 		return data
 
+class bokehLine(object):
+	def __init__(self, data = [None, None], parent = None):
+		self.data    = data
+		self.name    = name
+		self.color   = color
+		self.width   = width
+		self.style   = style
+		self.symbol  = symbol
+		self.visible = visible
+		self.viewNum = viewNum
 
+class bokehSymbol(object):
+	def __init__(self, data = [None, None], parent = None):
+		self.color   = color
+		self.size    = size
+		self.outline = outline
+		self.width   = width
+		self.visible = visible
+
+	
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	window =  PlotWindowWidget()
