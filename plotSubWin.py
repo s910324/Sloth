@@ -530,8 +530,11 @@ class DebugWindow(QMainWindow):
 		package.close()
 		return data
 def Debugger():
+	
 	app  = QApplication(sys.argv)
 	form = DebugWindow()
 	form.show()
+	import os
+	print  os.path.realpath(__file__)
 	app.exec_()
-Debugger()
+# Debugger()

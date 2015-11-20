@@ -4,6 +4,54 @@
 		"selected_items":
 		[
 			[
+				"o",
+				"open"
+			],
+			[
+				"Tra",
+				"trainImg	(statement)"
+			],
+			[
+				"tar",
+				"targetImg	(statement)"
+			],
+			[
+				"d",
+				"Draw	(function)"
+			],
+			[
+				"im",
+				"img2	(statement)"
+			],
+			[
+				"Im",
+				"ImageDraw	(module)"
+			],
+			[
+				"ne",
+				"newMatch	(statement)"
+			],
+			[
+				"w",
+				"with"
+			],
+			[
+				"wid",
+				"width2	(statement)"
+			],
+			[
+				"ma",
+				"matches	(statement)"
+			],
+			[
+				"N",
+				"new	(function)"
+			],
+			[
+				"set",
+				"setFixedSize	(function)"
+			],
+			[
 				"number",
 				"number1"
 			],
@@ -48,10 +96,6 @@
 				"AlignLeft	(class)"
 			],
 			[
-				"w",
-				"width	(statement)"
-			],
-			[
 				"Qpa",
 				"QPainter	(class)"
 			],
@@ -62,10 +106,6 @@
 			[
 				"de",
 				"drawRect	(function)"
-			],
-			[
-				"N",
-				"None	(class)"
 			],
 			[
 				"h",
@@ -178,10 +218,6 @@
 			[
 				"draw",
 				"drawEllipse	(function)"
-			],
-			[
-				"set",
-				"setWidth	(function)"
 			],
 			[
 				"dra",
@@ -436,10 +472,6 @@
 				"vbox1	(statement)"
 			],
 			[
-				"ma",
-				"MainWindow	(statement)"
-			],
-			[
 				"chec",
 				"checkBoxList	(statement)"
 			],
@@ -482,38 +514,6 @@
 			[
 				"plotI",
 				"plotIDDict"
-			],
-			[
-				"das",
-				"DashDotLine	(class)"
-			],
-			[
-				"Das",
-				"DashDotLine	(class)"
-			],
-			[
-				"sym",
-				"symbol_penColor"
-			],
-			[
-				"is",
-				"isVisible"
-			],
-			[
-				"pl",
-				"plotName	(param)"
-			],
-			[
-				"line_",
-				"line_name"
-			],
-			[
-				"nam",
-				"line_name"
-			],
-			[
-				"pen",
-				"penStyle"
 			]
 		]
 	},
@@ -528,10 +528,34 @@
 			}
 		},
 		{
+			"file": "bokehPlotter/bokehp.py",
+			"settings":
+			{
+				"buffer_size": 5096,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "/home/rawr/Downloads/CPP/grade.h",
 			"settings":
 			{
 				"buffer_size": 1495,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "plotSubWin.py",
+			"settings":
+			{
+				"buffer_size": 17633,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "import sys\nimport pickle\nimport numpy as np\n\nfrom PySide.QtGui    import *\nfrom PySide.QtCore   import *\nfrom PySide.QtWebKit import *\n\nfrom bokeh.resources import CDN\nfrom bokeh.embed     import file_html\nfrom bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d\nfrom bokeh.plotting  import figure, show, output_file,  vplot\n\n\nclass PlotWindowWidget(QMainWindow):\n	def __init__(self, parent = None):\n		super(PlotWindowWidget, self).__init__(parent)\n		self.Web = QWebView()\n		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)\n		data = self.loadCrew()\n	\n		self.div= self.plot(0, data)\n		\n		html = file_html(self.div, CDN, \"my plot\")\n		self.Web.setHtml(html)\n		self.setCentralWidget(self.Web)\n		self.initToolBar()\n\n	def initToolBar(self):\n		self.toolbar = QToolBar()\n		self.addToolBar( Qt.TopToolBarArea , self.toolbar)\n		resetAction = QAction('reset', self)\n		self.toolbar.addAction(resetAction)\n		resetAction.triggered.connect(self.resetGraph)\n\n\n	def plot(self, stack, dataSet):\n		plotPack = []\n		if not stack:\n			for i, data in enumerate(dataSet):\n				plot, rng = self.addPlotArea(data)\n				print rng\n				plotPack.append(plot)\n			html = self.insertPlot(plotPack)\n		return html\n\n\n	def addPlotArea(self, data):\n		x     = np.array(data[0])\n		y     = np.array(data[1])\n\n		radii = 0.008\n		\n		colors       = [\"#%02x%02x%02x\" % (200,200,200) for i in range(len(x))]\n		spamX, spamY = [float(max(x)-min(x))*0.05, float(max(y)-min(y))*0.05]\n\n		p1 = figure(title='Pan and Zoom Here', x_range=(min(x)-spamX, max(x)+spamX), y_range=(min(y)-spamY, max(y)+spamY),\n		            tools='box_zoom,box_select,crosshair, save, reset', plot_width=800, plot_height=300,\n		            background_fill=\"#001133\", border_fill=\"#001133\")\n\n		p1.title_text_color      = \"#C8C8C8\"\n		p1.title_text_font_style = \"bold\"\n		p1.title_text_font_size  = \"10pt\"\n\n		p1.add_layout(LinearAxis(axis_line_color=\"#C8C8C8\" ), 'right')\n		p1.add_layout(LinearAxis(axis_line_color=\"#C8C8C8\" ), 'above')\n\n		p1.xaxis.axis_line_color        = \"#C8C8C8\"\n		p1.xaxis.major_label_text_color = \"#C8C8C8\"\n		p1.xaxis.major_tick_line_color  = \"#C8C8C8\"\n		p1.xaxis.major_tick_line_width  = 1\n		p1.xaxis.minor_tick_line_color  = \"#C8C8C8\"\n		p1.xaxis.minor_tick_line_width  = 1\n\n		p1.yaxis.axis_line_color        = \"#C8C8C8\"\n		p1.yaxis.major_label_text_color = \"#C8C8C8\"\n		p1.yaxis.major_tick_line_color  = \"#C8C8C8\"\n		p1.yaxis.major_tick_line_width  = 1\n		p1.yaxis.minor_tick_line_color  = \"#C8C8C8\"\n		p1.yaxis.minor_tick_line_width  = 1\n\n		p1.xaxis.major_tick_in  =  5 \n		p1.xaxis.major_tick_out =  0\n		p1.xaxis.minor_tick_in  =  3\n		p1.xaxis.minor_tick_out =  0\n\n		p1.yaxis.major_tick_in  =  5 \n		p1.yaxis.major_tick_out =  0\n		p1.yaxis.minor_tick_in  =  3\n		p1.yaxis.minor_tick_out =  0\n\n\n		p1.xgrid.grid_line_color = \"#C8C8C8\"\n		p1.xgrid.grid_line_alpha =  0.5\n		p1.xgrid.grid_line_dash  = [3,3]\n		p1.ygrid.grid_line_color = \"#C8C8C8\"\n		p1.ygrid.grid_line_alpha =  0.5\n		p1.ygrid.grid_line_dash  = [3,3]\n\n		legendText = 'plot'\n		p1.line(x, y, legend=legendText, line_color=colors)\n		p1.scatter(x, y, radius=radii, radius_dimension='y',  fill_color=colors, fill_alpha=1, line_color=None, legend=legendText)\n\n		p1.legend.orientation           = \"top_left\"\n		p1.legend.background_fill_alpha = 0.5\n		p1.legend.border_line_width     = 1\n		p1.legend.border_line_color     = \"#C8C8C8\"\n		p1.legend.label_standoff        = 5\n		p1.legend.glyph_width           = 20\n		p1.legend.legend_spacing        = 5\n		p1.legend.legend_padding        = 20\n		# output_file(\"les_mis.html\")\n		# show(p1)\n		# p1.toolbar_location = None\n		return p1, [min(x)-spamX, max(x)+spamX, min(y)-spamY, max(y)+spamY]\n\n\n	def insertPlot(self, plotSets):\n		\n		layout = vplot(*plotSets)\n		output_file(\"les_mis.html\")\n		# show(layout)\n		for plot in plotSets:\n			plot.toolbar_location = None\n		return layout\n\n	def resetGraph(self):\n		self.div.x_range = Range1d(start=self.rng[0], end=self.rng[1])\n		self.div.y_range = Range1d(start=self.rng[2], end=self.rng[3])\n\n		html = file_html(self.div, CDN, \"my plot\")\n		\n		self.Web.setHtml(html)\n		print 'a'\n\n	def loadCrew(self):\n		fileName = './savedData.pkl'\n		package  = open( fileName, 'rb' )\n		data = pickle.load( package )\n\n		package.close()\n		return data\n\n\nif __name__ == '__main__':\n	app = QApplication(sys.argv)\n	window =  PlotWindowWidget()\n	window.show()\n	app.exec_()",
+			"settings":
+			{
+				"buffer_size": 4349,
 				"line_ending": "Unix"
 			}
 		}
@@ -677,6 +701,52 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/Desktop/perspective.py",
+		"/home/rawr/github/Sloth/NightlyBuild.py",
+		"/home/rawr/github/Sloth/wbSubWin.py",
+		"/home/rawr/Desktop/untitled.py",
+		"/home/rawr/Desktop/crop.py",
+		"/home/rawr/Desktop/a.py",
+		"/home/rawr/Desktop/comp.py",
+		"/home/rawr/Desktop/Contours.py",
+		"/home/rawr/github/AutoSchedule/AutoSchedule.py",
+		"/home/rawr/Downloads/CPP/CV.cpp",
+		"/home/rawr/Downloads/opencv-3.0.0/modules/highgui/src/window_QT.h",
+		"/home/rawr/Desktop/SubWinList.py",
+		"/home/rawr/Desktop/abc.py",
+		"/home/rawr/github/Sloth/plotSubWin.py",
+		"/home/rawr/github/Sloth/graphSelectorListEditor.py",
+		"/home/rawr/github/Sloth/GraphEditor/EditorWindow.py",
+		"/home/rawr/github/Sloth/expTableWidget.py",
+		"/home/rawr/github/Sloth/graphSelectorWindow.py",
+		"/home/rawr/github/NodeGUI/HoverScene.py",
+		"/home/rawr/github/NodeGUI/JNode.py",
+		"/home/rawr/github/NodeGUI/JackNode.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MLineListWidget.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MViewBoxListWidget.py",
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/viewBoxListWidget.py",
+		"/home/rawr/github/NodeGUI (copy)/NodeGUI2.py",
+		"/home/rawr/github/NodeGUI (copy)/JNode.py",
+		"/home/rawr/github/NodeGUI (copy)/HoverScene.py",
+		"/home/rawr/github/NodeGUI (copy)/PysideGraph.py",
+		"/home/rawr/github/NodeGUI (copy)/ErrorClass.py",
+		"/home/rawr/github/NodeGUI (copy)/Untitled Document",
+		"/home/rawr/github/Changer/Changer.py",
+		"/home/rawr/github/NodeGUI/NodeGUI2.py",
+		"/home/rawr/github/Changer/ListEditor.py",
+		"/home/rawr/github/AutoSchedule/style.qss",
+		"/home/rawr/github/Changer/README.md",
+		"/home/rawr/github/AutoSchedule/README.md",
+		"/home/rawr/Google Drive/codework/WSpre/wsPRE2.py",
+		"/home/rawr/Google Drive/codework/WSpre/t.py",
+		"/home/rawr/Google Drive/codework/schedule/wsGUI.py",
+		"/home/rawr/Google Drive/codework/schedule_v2/wsGUI.py",
+		"/home/rawr/github/revealEditor/README.md",
+		"/home/rawr/github/revealEditor/Reveal Editor.py",
+		"/home/rawr/github/revealEditor/css/theme/README.md",
+		"/home/rawr/github/NodeGUI/README.md",
+		"/home/rawr/github/revealEditor/js.py",
+		"/home/rawr/github/loginGUI/AutoLoginBot.py",
 		"/home/rawr/.config/sublime-text-3/Packages/User/Cpp-11.sublime-build",
 		"/home/rawr/Downloads/CPP/grade.cpp",
 		"/home/rawr/.config/sublime-text-3/Installed Packages/C++11.sublime-package",
@@ -697,12 +767,8 @@
 		"/home/rawr/Downloads/Untitled Document",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehp.py",
 		"/home/rawr/github/revealEditor/index (copy).html",
-		"/home/rawr/github/Sloth/plotSubWin.py",
-		"/home/rawr/github/revealEditor/Reveal Editor.py",
-		"/home/rawr/github/revealEditor/js.py",
 		"/home/rawr/.config/sublime-text-3/Packages/CTags/CTags.sublime-settings",
 		"/home/rawr/Desktop/jsplot.txt",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MLineListWidget.py",
 		"/home/rawr/Desktop/bokehp.py",
 		"/home/rawr/Downloads/bokeh-master/examples/interactions/us_marriages_divorces/us_marriages_divorces_interactive.py",
 		"/home/rawr/Downloads/bokeh-master/examples/embed/widget.py",
@@ -731,9 +797,7 @@
 		"/home/rawr/Downloads/bokeh-master/examples/plotting/file/grid.py",
 		"/home/rawr/Desktop/asc.py",
 		"/home/rawr/Desktop/js.py",
-		"/home/rawr/github/Sloth/wbSubWin.py",
 		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MColorPicker.py",
-		"/home/rawr/github/Sloth/NightlyBuild.py",
 		"/home/rawr/Desktop/zxczxc",
 		"/home/rawr/Downloads/reveal.js-3.1.0/index (copy).html",
 		"/home/rawr/Desktop/ascasc.py",
@@ -743,27 +807,19 @@
 		"/usr/share/alsa/alsa.conf",
 		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/QLineNumber255.py",
 		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/QLineNumber.py",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MViewBoxListWidget.py",
 		"/home/rawr/github/Sloth/graphOptions.py",
 		"/home/rawr/github/Sloth/GraphEditor/viewBoxList.py",
 		"/home/rawr/github/Sloth/GraphEditor/viewLineList.py",
 		"/home/rawr/github/Sloth/GraphEditor/QStyleComboBox.py",
 		"/home/rawr/github/Sloth/GraphEditor/lineControlWidget.py",
-		"/home/rawr/github/Sloth/GraphEditor/EditorWindow.py",
-		"/home/rawr/github/Changer/Changer.py",
 		"/home/rawr/github/Sloth/GraphEditor/QLineNumber.py",
 		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/__init__.py",
 		"/home/rawr/Desktop/aa.py",
 		"/home/rawr/github/Sloth/GraphEditor/viewBoxControlWidget.py",
-		"/home/rawr/github/Sloth/graphSelectorWindow.py",
 		"/home/rawr/github/Sloth/SubWinList.py",
-		"/home/rawr/github/NodeGUI/JNode.py",
-		"/home/rawr/github/NodeGUI/JackNode.py",
-		"/home/rawr/github/NodeGUI/NodeGUI2.py",
 		"/home/rawr/github/NodeGUI/PlugNode.py",
 		"/home/rawr/github/NodeGUI/ImageNode.py",
 		"/home/rawr/github/Sloth/GraphEditor/untitled.py",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/viewBoxListWidget.py",
 		"/home/rawr/github/Sloth/GraphEditor/ MaterialDesignList.py",
 		"/home/rawr/github/Sloth/GraphEditor/SubWinList.py",
 		"/home/rawr/github/Sloth/GraphEditor/QSpacer.py",
@@ -772,43 +828,11 @@
 		"/home/rawr/github/Sloth/GraphEditor/QRighter.py",
 		"/home/rawr/github/Sloth/GraphEditor/QHeader/QHeader.py",
 		"/home/rawr/github/NodeGUI/NodeGUI.py",
-		"/home/rawr/Downloads/untitled.py",
-		"/home/rawr/github/Sloth/GraphEditor/Header.py",
-		"/home/rawr/Downloads/1318211-41be6b5f8f3bd6dc148d56efa60f3178671c5ef2/ui_widget.py",
-		"/home/rawr/Downloads/1318211-41be6b5f8f3bd6dc148d56efa60f3178671c5ef2/widget.py",
-		"/home/rawr/github/Sloth/GraphEditor/viewLineListWidget.py",
-		"/home/rawr/github/Sloth/GraphEditor/viewBoxListWidget.py",
-		"/home/rawr/github/Sloth/GraphEditor/ viewLineListWidget.py",
-		"/home/rawr/github/temp_shit/temp1.py",
-		"/home/rawr/github/Changer/ListEditor.py",
-		"/home/rawr/github/Sloth/GraphEditor/viewBoxControlWidget .py",
-		"/home/rawr/github/Sloth/graphSelectorListEditor.py",
-		"/home/rawr/github/Sloth/graphEditorWindow.py",
-		"/home/rawr/github/Sloth/README.md",
-		"/home/rawr/github/nodeSHit/rq.js",
-		"/home/rawr/github/temp_shit/json.json",
-		"/home/rawr/github/temp_shit/untitled.py",
-		"/home/rawr/github/temp_shit/del.py",
-		"/home/rawr/Downloads/toyplot.csv",
-		"/home/rawr/Downloads/iris.csv",
-		"/home/rawr/.config/sublime-text-3/Packages/SublimePythonIDE/SublimePython.sublime-settings",
-		"/home/rawr/Downloads/eagle-lin64-7.4.0.run",
-		"/home/rawr/Downloads/SolidWorks 2013 SP3.0 [32 Bits & 64 Bits][MULTi][WwW.LoKoTorrents.CoM]/SolidWorks 2013 SP3.0 [32 Bits & 64 Bits][MULTi][WwW.LoKoTorrents.CoM]/Instrucciones.txt",
-		"/media/rawr/UUI/Uni-USB-Installer-Readme.txt",
-		"/media/rawr/IRM_CCSA_X64FRE_EN-US_DV5/autorun.inf",
-		"/home/rawr/.cxoffice/setup/dosdevices/c:/users/crossover/Temp/Other Application.log",
-		"/home/rawr/github/temp_shit/flaskShit.py",
-		"/home/rawr/github/Heroku-master/FlaskWeb/test.py",
-		"/home/rawr/ProgramFiles/node_js_lib/app/data/node_modules/appjs-linux-x64/index.js",
-		"/home/rawr/github/nodeSHit/gg.js",
-		"/home/rawr/ProgramFiles/node_js_lib/app/data/app.js",
-		"/home/rawr/ProgramFiles/node_js_lib/node-five-master/test/canvas.js",
-		"/home/rawr/ProgramFiles/node_js_lib/node-qt-master/examples/helloworld.js",
-		"/home/rawr/ProgramFiles/node_js_lib/node-qt-master/examples/sound.js"
+		"/home/rawr/Downloads/untitled.py"
 	],
 	"find":
 	{
-		"height": 38.0
+		"height": 44.0
 	},
 	"find_in_files":
 	{
@@ -822,6 +846,22 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"plotIDCounter",
+			"lineIDCounter",
+			"p1.",
+			"rng",
+			"matchesMask",
+			"img3",
+			"img2",
+			"img1",
+			"5",
+			"./free-random-object-vectors-43244",
+			"free-random-object-vectors-43244.jpg",
+			"sys.argv",
+			"OpenNewWorkBook",
+			"newwb",
+			"SubWinList",
+			"CreateTableSub",
 			"title",
 			"', '",
 			"np",
@@ -933,23 +973,7 @@
 			"Alpha",
 			"', '",
 			"255",
-			"parent.",
-			"brush",
-			"paint",
-			"', '",
-			"pen",
-			"visi",
-			"', '",
-			"line",
-			"sym",
-			"pen",
-			"colo",
-			"pen",
-			"color",
-			"visi",
-			"', ",
-			"doublec",
-			"getLine"
+			"parent."
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -957,6 +981,13 @@
 		"regex": false,
 		"replace_history":
 		[
+			"plotArea.",
+			"cropImg",
+			"trainImg",
+			"targetImg",
+			"./a\n",
+			"a.jpg\n",
+			"imageSample\n",
 			"\n",
 			"width",
 			"\n",
@@ -1013,7 +1044,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1029,8 +1060,8 @@
 						"selection":
 						[
 							[
-								905,
-								905
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1039,7 +1070,36 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 638.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "bokehPlotter/bokehp.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5096,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1249,
+								1249
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1428.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1048,11 +1108,11 @@
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": "/home/rawr/Downloads/CPP/grade.h",
 					"semi_transient": false,
 					"settings":
@@ -1064,8 +1124,8 @@
 						"selection":
 						[
 							[
-								1475,
-								1475
+								306,
+								306
 							]
 						],
 						"settings":
@@ -1073,10 +1133,67 @@
 							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 198.0,
+						"translation.y": 252.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "plotSubWin.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17633,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2597,
+								2412
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2009.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4349,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4349,
+								4349
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 31.0,
+						"translation.y": 2755.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1084,7 +1201,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 31.0
+		"height": 27.0
 	},
 	"input":
 	{
@@ -1110,7 +1227,7 @@
 		"cols":
 		[
 			0.0,
-			0.486090775988,
+			0.707174231333,
 			1.0
 		],
 		"rows":
@@ -1122,17 +1239,17 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 127.0
+		"height": 250.0
 	},
 	"output.find_results":
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "Packages/User/Cpp-11.sublime-build",
+	"pinned_build_system": "Packages/Python/Python.sublime-build",
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 114.0
+		"height": 82.0
 	},
 	"save_all_on_build": true,
 	"select_file":
