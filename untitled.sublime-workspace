@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"Not",
+				"not	(keyword)"
+			],
+			[
+				"lineI",
+				"lineIDDict	(statement)"
+			],
+			[
+				"bok",
+				"bokehLine"
+			],
+			[
+				"re",
+				"reload	(function)"
+			],
+			[
 				"name",
 				"name	(statement)"
 			],
@@ -498,81 +514,43 @@
 			[
 				"get",
 				"get_values	(function)"
-			],
-			[
-				"pad",
-				"pandas	(module)"
-			],
-			[
-				"daa",
-				"Data	(function)"
-			],
-			[
-				"viewb",
-				"viewBoxIDCounter	(statement)"
-			],
-			[
-				"linec",
-				"line_color"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "/home/rawr/Downloads/CPP/pp.cpp",
-			"settings":
-			{
-				"buffer_size": 1188,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "bokehPlotter/bokehp.py",
 			"settings":
 			{
-				"buffer_size": 10128,
+				"buffer_size": 14057,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/rawr/Desktop/untitled.html",
+			"file": "/home/rawr/Desktop/bokehp compare",
 			"settings":
 			{
-				"buffer_size": 54728,
+				"buffer_size": 2730,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/rawr/Desktop/testpy.py",
+			"file": "/home/rawr/Desktop/Line",
 			"settings":
 			{
-				"buffer_size": 28,
-				"line_ending": "Unix"
+				"buffer_size": 1954,
+				"line_ending": "Unix",
+				"name": "Line"
 			}
 		},
 		{
-			"file": "/home/rawr/Downloads/CPP/grade.h",
+			"file": "/home/rawr/Desktop/plotArea",
 			"settings":
 			{
-				"buffer_size": 1495,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "plotSubWin.py",
-			"settings":
-			{
-				"buffer_size": 17633,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "import sys\nimport pickle\nimport numpy as np\n\nfrom PySide.QtGui    import *\nfrom PySide.QtCore   import *\nfrom PySide.QtWebKit import *\n\nfrom bokeh.resources import CDN\nfrom bokeh.embed     import file_html\nfrom bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d\nfrom bokeh.plotting  import figure, show, output_file,  vplot\n\n\nclass PlotWindowWidget(QMainWindow):\n	def __init__(self, parent = None):\n		super(PlotWindowWidget, self).__init__(parent)\n		self.Web = QWebView()\n		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)\n		data = self.loadCrew()\n	\n		self.div= self.plot(0, data)\n		\n		html = file_html(self.div, CDN, \"my plot\")\n		self.Web.setHtml(html)\n		self.setCentralWidget(self.Web)\n		self.initToolBar()\n\n	def initToolBar(self):\n		self.toolbar = QToolBar()\n		self.addToolBar( Qt.TopToolBarArea , self.toolbar)\n		resetAction = QAction('reset', self)\n		self.toolbar.addAction(resetAction)\n		resetAction.triggered.connect(self.resetGraph)\n\n\n	def plot(self, stack, dataSet):\n		plotPack = []\n		if not stack:\n			for i, data in enumerate(dataSet):\n				plot, rng = self.addPlotArea(data)\n				print rng\n				plotPack.append(plot)\n			html = self.insertPlot(plotPack)\n		return html\n\n\n	def addPlotArea(self, data):\n		x     = np.array(data[0])\n		y     = np.array(data[1])\n\n		radii = 0.008\n		\n		colors       = [\"#%02x%02x%02x\" % (200,200,200) for i in range(len(x))]\n		spamX, spamY = [float(max(x)-min(x))*0.05, float(max(y)-min(y))*0.05]\n\n		p1 = figure(title='Pan and Zoom Here', x_range=(min(x)-spamX, max(x)+spamX), y_range=(min(y)-spamY, max(y)+spamY),\n		            tools='box_zoom,box_select,crosshair, save, reset', plot_width=800, plot_height=300,\n		            background_fill=\"#001133\", border_fill=\"#001133\")\n\n		p1.title_text_color      = \"#C8C8C8\"\n		p1.title_text_font_style = \"bold\"\n		p1.title_text_font_size  = \"10pt\"\n\n		p1.add_layout(LinearAxis(axis_line_color=\"#C8C8C8\" ), 'right')\n		p1.add_layout(LinearAxis(axis_line_color=\"#C8C8C8\" ), 'above')\n\n		p1.xaxis.axis_line_color        = \"#C8C8C8\"\n		p1.xaxis.major_label_text_color = \"#C8C8C8\"\n		p1.xaxis.major_tick_line_color  = \"#C8C8C8\"\n		p1.xaxis.major_tick_line_width  = 1\n		p1.xaxis.minor_tick_line_color  = \"#C8C8C8\"\n		p1.xaxis.minor_tick_line_width  = 1\n\n		p1.yaxis.axis_line_color        = \"#C8C8C8\"\n		p1.yaxis.major_label_text_color = \"#C8C8C8\"\n		p1.yaxis.major_tick_line_color  = \"#C8C8C8\"\n		p1.yaxis.major_tick_line_width  = 1\n		p1.yaxis.minor_tick_line_color  = \"#C8C8C8\"\n		p1.yaxis.minor_tick_line_width  = 1\n\n		p1.xaxis.major_tick_in  =  5 \n		p1.xaxis.major_tick_out =  0\n		p1.xaxis.minor_tick_in  =  3\n		p1.xaxis.minor_tick_out =  0\n\n		p1.yaxis.major_tick_in  =  5 \n		p1.yaxis.major_tick_out =  0\n		p1.yaxis.minor_tick_in  =  3\n		p1.yaxis.minor_tick_out =  0\n\n\n		p1.xgrid.grid_line_color = \"#C8C8C8\"\n		p1.xgrid.grid_line_alpha =  0.5\n		p1.xgrid.grid_line_dash  = [3,3]\n		p1.ygrid.grid_line_color = \"#C8C8C8\"\n		p1.ygrid.grid_line_alpha =  0.5\n		p1.ygrid.grid_line_dash  = [3,3]\n\n		legendText = 'plot'\n		p1.line(x, y, legend=legendText, line_color=colors)\n		p1.scatter(x, y, radius=radii, radius_dimension='y',  fill_color=colors, fill_alpha=1, line_color=None, legend=legendText)\n\n		p1.legend.orientation           = \"top_left\"\n		p1.legend.background_fill_alpha = 0.5\n		p1.legend.border_line_width     = 1\n		p1.legend.border_line_color     = \"#C8C8C8\"\n		p1.legend.label_standoff        = 5\n		p1.legend.glyph_width           = 20\n		p1.legend.legend_spacing        = 5\n		p1.legend.legend_padding        = 20\n		# output_file(\"les_mis.html\")\n		# show(p1)\n		# p1.toolbar_location = None\n		return p1, [min(x)-spamX, max(x)+spamX, min(y)-spamY, max(y)+spamY]\n\n\n	def insertPlot(self, plotSets):\n		\n		layout = vplot(*plotSets)\n		output_file(\"les_mis.html\")\n		# show(layout)\n		for plot in plotSets:\n			plot.toolbar_location = None\n		return layout\n\n	def resetGraph(self):\n		self.div.x_range = Range1d(start=self.rng[0], end=self.rng[1])\n		self.div.y_range = Range1d(start=self.rng[2], end=self.rng[3])\n\n		html = file_html(self.div, CDN, \"my plot\")\n		\n		self.Web.setHtml(html)\n		print 'a'\n\n	def loadCrew(self):\n		fileName = './savedData.pkl'\n		package  = open( fileName, 'rb' )\n		data = pickle.load( package )\n\n		package.close()\n		return data\n\n\nif __name__ == '__main__':\n	app = QApplication(sys.argv)\n	window =  PlotWindowWidget()\n	window.show()\n	app.exec_()",
-			"settings":
-			{
-				"buffer_size": 4349,
-				"line_ending": "Unix"
+				"buffer_size": 4344,
+				"line_ending": "Unix",
+				"name": "plotArea"
 			}
 		}
 	],
@@ -717,7 +695,12 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/github/Sloth/plotSubWin.py",
+		"/home/rawr/Downloads/CPP/grade.h",
+		"/home/rawr/Downloads/CPP/pp.cpp",
 		"/home/rawr/Desktop/testpy.py",
+		"/home/rawr/github/Sloth/bokehPlotter/bokeh-0.10.0.min.js",
+		"/home/rawr/Desktop/untitled.html",
 		"/home/rawr/Desktop/perspective.py",
 		"/home/rawr/github/Sloth/NightlyBuild.py",
 		"/home/rawr/github/Sloth/wbSubWin.py",
@@ -731,7 +714,6 @@
 		"/home/rawr/Downloads/opencv-3.0.0/modules/highgui/src/window_QT.h",
 		"/home/rawr/Desktop/SubWinList.py",
 		"/home/rawr/Desktop/abc.py",
-		"/home/rawr/github/Sloth/plotSubWin.py",
 		"/home/rawr/github/Sloth/graphSelectorListEditor.py",
 		"/home/rawr/github/Sloth/GraphEditor/EditorWindow.py",
 		"/home/rawr/github/Sloth/expTableWidget.py",
@@ -840,15 +822,11 @@
 		"/home/rawr/github/Sloth/GraphEditor/ MaterialDesignList.py",
 		"/home/rawr/github/Sloth/GraphEditor/SubWinList.py",
 		"/home/rawr/github/Sloth/GraphEditor/QSpacer.py",
-		"/home/rawr/github/Sloth/GraphEditor/QHeader.py",
-		"/home/rawr/github/Sloth/GraphEditor/QLefter.py",
-		"/home/rawr/github/Sloth/GraphEditor/QRighter.py",
-		"/home/rawr/github/Sloth/GraphEditor/QHeader/QHeader.py",
-		"/home/rawr/github/NodeGUI/NodeGUI.py"
+		"/home/rawr/github/Sloth/GraphEditor/QHeader.py"
 	],
 	"find":
 	{
-		"height": 44.0
+		"height": 46.0
 	},
 	"find_in_files":
 	{
@@ -862,6 +840,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"title",
+			"', '",
+			"title",
+			"addLineHolder",
+			"color",
+			"viewNum",
+			"set",
+			"color",
+			"', '",
+			"glyph",
+			"color",
+			"', '",
+			"target,",
+			"target.",
 			"http",
 			"plotIDCounter",
 			"lineIDCounter",
@@ -975,21 +967,7 @@
 			"ine_val",
 			"print ",
 			"addItem",
-			"insertPlot",
-			"addPlotHolder",
-			"self.vb",
-			"addPlotArea",
-			"self.w",
-			"plotLineHolder",
-			"self.plotIDCounter",
-			"plotCounter",
-			"addLineHolder",
-			"sym",
-			"set",
-			"alpha",
-			"Alpha",
-			"', '",
-			"255"
+			"insertPlot"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -997,6 +975,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"\n",
+			"self,",
+			"self.",
 			"plotArea.",
 			"cropImg",
 			"trainImg",
@@ -1060,53 +1041,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/home/rawr/Downloads/CPP/pp.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1188,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "bokehPlotter/bokehp.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10128,
+						"buffer_size": 14057,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10013,
-								10013
+								10484,
+								10484
 							]
 						],
 						"settings":
@@ -1115,119 +1067,33 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8175.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/home/rawr/Desktop/untitled.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 54728,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								144,
-								144
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 8762.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/home/rawr/Desktop/testpy.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 28,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								28,
-								28
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 2,
 			"sheets":
 			[
 				{
-					"buffer": 4,
-					"file": "/home/rawr/Downloads/CPP/grade.h",
+					"buffer": 1,
+					"file": "/home/rawr/Desktop/bokehp compare",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1495,
+						"buffer_size": 2730,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								306,
-								306
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 252.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "plotSubWin.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 17633,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								8996,
-								8996
+								669,
+								669
 							]
 						],
 						"settings":
@@ -1235,39 +1101,69 @@
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 164.0,
-						"translation.y": 7001.0,
+						"translation.x": 0.0,
+						"translation.y": 336.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/rawr/Desktop/Line",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1954,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1918,
+								1918
+							]
+						],
+						"settings":
+						{
+							"auto_name": "Line",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4157.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 3,
+					"file": "/home/rawr/Desktop/plotArea",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4349,
+						"buffer_size": 4344,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4349,
-								4349
+								1971,
+								1971
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"auto_name": "plotArea",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
-						"translation.x": 31.0,
-						"translation.y": 2755.0,
+						"translation.x": 0.0,
+						"translation.y": 4157.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -1301,7 +1197,7 @@
 		"cols":
 		[
 			0.0,
-			0.494143484627,
+			0.562957540264,
 			1.0
 		],
 		"rows":
@@ -1313,7 +1209,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 396.0
+		"height": 213.0
 	},
 	"output.find_results":
 	{
@@ -1323,7 +1219,7 @@
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 82.0
+		"height": 138.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1353,7 +1249,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},

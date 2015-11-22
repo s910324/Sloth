@@ -5,7 +5,6 @@ import os
 from PySide.QtGui    import *
 from PySide.QtCore   import *
 from PySide.QtWebKit import *
-
 from bokeh.resources import CDN
 from bokeh.embed     import file_html
 from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
@@ -23,19 +22,14 @@ class PlotWindowWidget(QMainWindow):
 		self.plotIDCounter    = -1
 		self.plotIDDict       = {}
 
-		data = self.loadCrew()
-	
-		self.div= self.plot(0, data)
-		
+		data     = self.loadCrew()
+		self.div = self.plot(0, data)
 
-		html = file_html(self.div, CDN, "my plot")
-		js   = 'http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js'
-		css  = 'http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css'
-		offlinejs  =  'file://' + os.getcwd() + '/bokeh-0.10.0.min.js'
-		offlinecss =  'file://' + os.getcwd() + '/bokeh-0.10.0.min.css'
-		html = html.replace(js,  offlinejs)
-		html = html.replace(css, offlinecss)
-		
+		html     = file_html(self.div, CDN, "my plot")
+		online   = 'http://cdn.pydata.org/bokeh/release'
+		offline  =  'file://' + os.getcwd() 
+		html     = html.replace(online,  offline)
+
 		self.Web.setHtml(html)
 		self.setCentralWidget(self.Web)
 		self.initToolBar()
@@ -50,7 +44,7 @@ class PlotWindowWidget(QMainWindow):
 	def addLineHolder(self, line):	
 		self.lineIDCounter += 1
 		lineID  = self.lineIDCounter
-		self.lineIDDict[lineID] = line		
+		self.lineIDDict[lineID] = line
 		return self.lineIDCounter	
 
 	def addPlotHolder(self, plot, rng):	
@@ -85,8 +79,8 @@ class PlotWindowWidget(QMainWindow):
 				plotPack.append(plotArea)
 
 				legendText = 'plot ' + str(self.lineIDCounter + 1)
-				self.addPlotLine(plotArea,legendText = legendText, data = data)
-				self.addLineHolder(None)
+				line       =  self.addPlotLine(plotArea,legendText = legendText, data = data)
+				self.addLineHolder(line)
 				
 			html = self.insertPlot(plotPack)
 
@@ -96,8 +90,8 @@ class PlotWindowWidget(QMainWindow):
 			self.addPlotHolder(plotArea, plotRange)
 			for i, data in enumerate(dataSet):
 				legendText = 'plot ' + str(self.lineIDCounter + 1)
-				self.addPlotLine(plotArea,legendText = legendText, data = data)
-				self.addLineHolder(None)
+				line       =  self.addPlotLine(plotArea,legendText = legendText, data = data)
+				self.addLineHolder(line)
 			
 			plotPack.append(plotArea)
 			html = self.insertPlot(plotPack)		
@@ -130,6 +124,7 @@ class PlotWindowWidget(QMainWindow):
 			plot_height     = h, 
 			background_fill = "#001133", 
 			border_fill     = "#001133" )
+
 
 		plotArea.title_text_color      = "#C8C8C8"
 		plotArea.title_text_font_style = "bold"
@@ -171,17 +166,32 @@ class PlotWindowWidget(QMainWindow):
 		plotArea.ygrid.grid_line_dash  = [3,3]
 		return plotArea
 
-	def addPlotLine(self, plotArea, data = [None, None], legendText = 'plot', radii = 0.01, color = "#c8c8c8"):
-		x = np.array(data[0])
-		y = np.array(data[1])
-		plotArea.line(x, y, legend=legendText, line_color=color)
-		plotArea.scatter(x, y, 
-			radius          = radii, 
-			radius_dimension= 'y',  
-			fill_color      = color,
-			fill_alpha      = 1, 
-			line_color      = None, 
-			legend          = legendText)
+	def addPlotLine(self, plotArea, data = [None, None], legendText = 'plot', radii = 0.005, 
+						  color = "#c8c8c8", width = 1.5, symbol = 'o', visible = True):
+		x    = np.array(data[0])
+		y    = np.array(data[1])
+		l    = plotArea.line(x, y, legend=legendText, line_color=color, line_width = width, visible = visible)
+		line = bokehLine(l.glyph)
+
+		line.line_val( 
+			name    = legendText, 
+			color   = color, 
+			width   = width,
+			style   = None, 
+			symbol  = symbol, 
+			visible = visible, 
+			viewNum = None
+			)
+
+		if symbol != None:
+			plotArea.scatter(x, y, 
+				radius          = radii, 
+				radius_dimension= 'y',  
+				fill_color      = color,
+				fill_alpha      = 1, 
+				line_color      = None, 
+				legend          = legendText)
+
 		plotArea.legend.orientation           = "top_left"
 		plotArea.legend.background_fill_alpha = 0.5
 		plotArea.legend.border_line_width     = 1
@@ -190,7 +200,7 @@ class PlotWindowWidget(QMainWindow):
 		plotArea.legend.glyph_width           = 20
 		plotArea.legend.legend_spacing        = 5
 		plotArea.legend.legend_padding        = 20
-
+		return line
 
 	def addPlotArea(self, data):
 		x     = np.array(data[0])
@@ -277,10 +287,15 @@ class PlotWindowWidget(QMainWindow):
 			plot, rng = self.plotIDDict[ID]
 			plot.x_range = Range1d(start=rng[0], end=rng[1])
 			plot.y_range = Range1d(start=rng[2], end=rng[3])
-
+		for ID in self.lineIDDict:
+			line = self.lineIDDict[ID]
+			line.line_visible(False)
 		html = file_html(self.div, CDN, "my plot")
-		
+		online   = 'http://cdn.pydata.org/bokeh/release'
+		offline  =  'file://' + os.getcwd() 
+		html = html.replace(online,  offline)
 		self.Web.setHtml(html)
+		self.Web.reload()
 		print 'a'
 
 	def loadCrew(self):
@@ -291,24 +306,148 @@ class PlotWindowWidget(QMainWindow):
 		package.close()
 		return data
 
-class bokehLine(object):
-	def __init__(self, data = [None, None], parent = None):
-		self.data    = data
-		self.name    = name
-		self.color   = color
-		self.width   = width
-		self.style   = style
-		self.symbol  = symbol
-		self.visible = visible
-		self.viewNum = viewNum
 
-class bokehSymbol(object):
-	def __init__(self, data = [None, None], parent = None):
-		self.color   = color
-		self.size    = size
-		self.outline = outline
-		self.width   = width
-		self.visible = visible
+class bokehPlot(object):
+	def __init__(self, plot, parent = None):
+		self.title = [None, None, None, None]
+
+	def plot_title(self, text  = None, color = None, 
+						 style = None, size  = None):
+		if text is not None:
+			self._plot_.title                 = text
+		
+		if color:
+			self._plot_.title_text_color      = color
+		
+		if style:
+			self._plot_.title_text_font_style = style
+
+		if size is not None:
+			self._plot_.title_text_font_size  = str(size)+"pt"
+
+		self.title = [text, color, style, size]
+		return self.title
+	# def plot_axis():
+
+class bokehLine(object):
+	def __init__(self, line, parent = None):
+		self.data,    self.name,    self.color  = None, None, None
+		self.width,   self.style,   self.symbol = None, None, None
+		self.visible, self.viewNum, self._line_ = None, None, line
+
+	def line_name(self, name = None):
+		if name:
+			self.name = name
+		return self.name
+
+	def line_color(self, color = None ):
+		if color:
+			self.color = color
+			self._line_.line_color = color
+		return self.color
+
+	def line_width(self, width = None ):
+		if width:
+			self.width = width
+			self._line_.line_width = width
+		return self.width	
+
+	def line_style(self, style = None ):
+		if style:
+			self.style = style
+
+		return self.style	
+
+	def line_symbol(self, symbol = None ):
+		if symbol:
+			self.symbol = symbol
+		return self.symbol
+
+	def line_visible(self, visible = None ):
+		if visible is not None:
+			self._line_.visible = visible
+		return  self.visible	
+
+
+	def line_viewNum(self, viewNum = None):
+		if viewNum is not None:
+			self.viewNum = viewNum
+		return self.viewNum
+
+	def line_val(self, name  = None, color  = None, width   = None,
+					   style = None, symbol = None, visible = None, viewNum = None):
+		
+		return [self.line_name(name),     self.line_color(color),
+				self.line_width(width),   self.line_style(style),
+				self.line_symbol(symbol), self.line_visible(visible), self.line_viewNum(viewNum)]
+
+
+# class bokehSymbol(object):
+# 	def __init__(self, data = [None, None], parent = None):
+# 		self.color   = color
+# 		self.size    = size
+# 		self.outline = outline
+# 		self.width   = width
+# 		self.visible = visible
+# 	def symbol_color(self, color = None):
+# 		if color:
+# 			self.scolor = color
+# 			self.setSymbolBrush(pg.mkBrush(color = color))
+# 		return self.scolor
+
+# 	def symbol_size(self, size = None):
+# 		if size:
+# 			self.ssize = size
+# 			self.setSymbolSize(size)
+# 		return self.ssize
+
+# 	def symbol_penColor(self, penC = None):
+# 		if penC:
+# 			self.spenColor = penC
+# 			self.setSymbolPen(pg.mkPen(color = penC))
+# 		return self.spenColor	
+
+# 	def symbol_penWidth(self, penW = None):
+# 		if penW != None:
+# 			pen = self.symbol_penColor()
+# 			self.spenWidth = penW
+# 			if penW <= 0:
+# 				self.symbol_penColor((pen[0], pen[1], pen[2], 0))
+# 			if penW >  0:
+# 				self.symbol_penColor((pen[0], pen[1], pen[2], 255))
+# 				self.spenWidth = penW
+# 			self.setSymbolPen(pg.mkPen(width = penW))
+# 		return self.spenWidth	
+
+# 	def symbol_outLine(self, outLine = None ):
+# 		pen   = self.symbol_penColor()
+# 		if outLine == True:
+# 			self.symbol_penColor( (pen[0],   pen[1],   pen[2],   255))
+# 			self.soutLine = outLine
+# 		if outLine == False:
+# 			self.symbol_penColor( (pen[0],   pen[1],   pen[2],   0))
+# 			self.soutLine = outLine
+# 		return self.soutLine
+
+# 	def symbol_visible(self, visible = None ):
+# 		color = self.symbol_color()
+# 		if visible == True:
+# 			self.symbol_color((   color[0], color[1], color[2], 255))
+# 			self.svisible = visible
+# 		if visible == False:
+# 			self.symbol_color((    color[0], color[1], color[2], 0))
+# 			self.symbol_outLine(False)
+# 			self.svisible = visible
+# 		return  self.svisible	
+
+
+
+# 	def symbol_val(self, color   = None, size  = None,
+# 						   penC    = None, penW  = None,
+# 						   outLine = None, visible = None):
+# 		return [self.symbol_color(color),     self.symbol_size(size),
+# 				self.symbol_penColor(penC),   self.symbol_penWidth(penW),
+# 				self.symbol_outLine(outLine), self.symbol_visible(visible)]
 
 	
 if __name__ == '__main__':
