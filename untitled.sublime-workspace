@@ -4,16 +4,72 @@
 		"selected_items":
 		[
 			[
+				"la",
+				"label"
+			],
+			[
+				"plo",
+				"plotArea	(statement)"
+			],
+			[
+				"bok",
+				"bokehPlot	(class)"
+			],
+			[
+				"w",
+				"width	(statement)"
+			],
+			[
+				"border",
+				"borderfill"
+			],
+			[
+				"b",
+				"borderfill	(statement)"
+			],
+			[
+				"ya",
+				"yaxis_maximum	(statement)"
+			],
+			[
+				"xaxis",
+				"xaxis_width"
+			],
+			[
+				"xa",
+				"xaxis_color"
+			],
+			[
+				"min",
+				"minorTick	(param)"
+			],
+			[
+				"plot_xa",
+				"plot_xaxis_minorTick	(function)"
+			],
+			[
+				"ma",
+				"majorTick	(param)"
+			],
+			[
+				"ti",
+				"tickOut	(param)"
+			],
+			[
+				"x",
+				"xaxis	(statement)"
+			],
+			[
+				"si",
+				"title_size"
+			],
+			[
 				"Not",
 				"not	(keyword)"
 			],
 			[
 				"lineI",
 				"lineIDDict	(statement)"
-			],
-			[
-				"bok",
-				"bokehLine"
 			],
 			[
 				"re",
@@ -64,16 +120,8 @@
 				"newMatch	(statement)"
 			],
 			[
-				"w",
-				"with"
-			],
-			[
 				"wid",
 				"width2	(statement)"
-			],
-			[
-				"ma",
-				"matches	(statement)"
 			],
 			[
 				"N",
@@ -440,10 +488,6 @@
 				"setupList	(function)"
 			],
 			[
-				"la",
-				"layout	(statement)"
-			],
-			[
 				"setStyle",
 				"setStyleSheet	(function)"
 			],
@@ -470,50 +514,6 @@
 			[
 				"te",
 				"textChanged	(class)"
-			],
-			[
-				"po",
-				"point2	(statement)"
-			],
-			[
-				"che",
-				"checkValueValid	(function)"
-			],
-			[
-				"ali",
-				"AlignCenter	(class)"
-			],
-			[
-				"Qline",
-				"QLineEdit	(class)"
-			],
-			[
-				"seup",
-				"setUpApplyUI	(function)"
-			],
-			[
-				"vbox",
-				"vbox1	(statement)"
-			],
-			[
-				"chec",
-				"checkBoxList	(statement)"
-			],
-			[
-				"rad",
-				"radio4	(statement)"
-			],
-			[
-				"gr",
-				"groupBox	(statement)"
-			],
-			[
-				"Dsn",
-				"Dense1Pattern	(class)"
-			],
-			[
-				"get",
-				"get_values	(function)"
 			]
 		]
 	},
@@ -523,7 +523,15 @@
 			"file": "bokehPlotter/bokehp.py",
 			"settings":
 			{
-				"buffer_size": 14057,
+				"buffer_size": 22098,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/rawr/github/NodeGUI/NodeGUI2.py",
+			"settings":
+			{
+				"buffer_size": 4288,
 				"line_ending": "Unix"
 			}
 		},
@@ -551,6 +559,14 @@
 				"buffer_size": 4344,
 				"line_ending": "Unix",
 				"name": "plotArea"
+			}
+		},
+		{
+			"contents": "import sys\nimport pickle\nimport numpy as np\nimport os\nfrom PySide.QtGui    import *\nfrom PySide.QtCore   import *\nfrom PySide.QtWebKit import *\nfrom bokeh.resources import CDN\nfrom bokeh.embed     import file_html\nfrom bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d\nfrom bokeh.plotting  import figure, show, output_file,  vplot\n\n\nclass PlotWindowWidget(QMainWindow):\n	def __init__(self, parent = None):\n		super(PlotWindowWidget, self).__init__(parent)\n		self.Web = QWebView()\n		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)\n		self.lineIDCounter    = -1\n		self.lineIDDict       = {}\n\n		self.plotIDCounter    = -1\n		self.plotIDDict       = {}\n\n		data     = self.loadCrew()\n		self.div = self.plot(0, data)\n\n		html     = file_html(self.div, CDN, \"my plot\")\n		online   = 'http://cdn.pydata.org/bokeh/release'\n		offline  =  'file://' + os.getcwd() \n		html     = html.replace(online,  offline)\n\n		self.Web.setHtml(html)\n		self.setCentralWidget(self.Web)\n		self.initToolBar()\n\n	def initToolBar(self):\n		self.toolbar = QToolBar()\n		self.addToolBar( Qt.TopToolBarArea , self.toolbar)\n		resetAction = QAction('reset', self)\n		self.toolbar.addAction(resetAction)\n		resetAction.triggered.connect(self.resetGraph)\n\n	def addLineHolder(self, line):	\n		self.lineIDCounter += 1\n		lineID  = self.lineIDCounter\n		self.lineIDDict[lineID] = line\n		return self.lineIDCounter	\n\n	def addPlotHolder(self, plot, rng):	\n		self.plotIDCounter += 1\n		plotID  = self.plotIDCounter\n		self.plotIDDict[plotID] = plot, rng\n		return self.plotIDCounter	\n\n	# def plot(self, stack, dataSet):\n	# 	plotPack = []\n	# 	if not stack:\n	# 		for i, data in enumerate(dataSet):\n	# 			plot, rng = self.addPlotArea(data)\n	# 			self.addPlotHolder(plot, rng)\n	# 			plotPack.append(plot)\n	# 		html = self.insertPlot(plotPack)\n	# 	else:\n	# 		plot, rng = self.addPlotArea(dataSet)\n	# 		self.addPlotHolder(plot, rng)\n	# 		plotPack.append(plot)\n	# 		html = self.insertPlot(plotPack)			\n	# 	return html\n\n	def plot(self, stack, dataSet):\n		plotPack = []\n		if not stack:\n			for i, data in enumerate(dataSet):\n				plotRange = self.getRange([data])\n\n				plotArea  = self.initPlotArea(rng = plotRange)\n				self.addPlotHolder(plotArea, plotRange)\n				plotPack.append(plotArea)\n\n				legendText = 'plot ' + str(self.lineIDCounter + 1)\n				line       =  self.addPlotLine(plotArea,legendText = legendText, data = data)\n				self.addLineHolder(line)\n				\n			html = self.insertPlot(plotPack)\n\n		else:\n			plotRange = self.getRange(dataSet)\n			plotArea  = self.initPlotArea(rng = plotRange)\n			self.addPlotHolder(plotArea, plotRange)\n			for i, data in enumerate(dataSet):\n				legendText = 'plot ' + str(self.lineIDCounter + 1)\n				line       =  self.addPlotLine(plotArea,legendText = legendText, data = data)\n				self.addLineHolder(line)\n			\n			plotPack.append(plotArea)\n			html = self.insertPlot(plotPack)		\n\n		return html\n\n	def getRange(self, dataSet):\n\n		xMins, xMaxs, yMins, yMaxs = [], [], [], []\n		for data in dataSet:\n			xMins.append(min(data[0]))\n			xMaxs.append(max(data[0]))\n			yMins.append(min(data[1]))\n			yMaxs.append(max(data[1]))\n		xmin, xmax, ymin, ymax = min(xMins), max(xMaxs), min(yMins), max(yMaxs)\n\n		spamX, spamY = [float(xmax-xmin)*0.05, float(ymin-ymin)*0.05]\n		rng = [xmin-spamX, xmax+spamX, ymin-spamY, ymax+spamY]\n		return rng\n\n	# def initPlotArea(self, title = \"Unitled graph\", rng = [0,1,0,1],  w=800, h=300, bgc = \"#001133\", bdc = \"#001133\"):\n	# 	tool  = 'box_zoom,box_select,crosshair, save, reset'\n	# 	[xmin, xmax, ymin, ymax] = rng\n\n	# 	plotArea = figure(title=title, \n	# 		x_range         = (xmin, xmax), \n	# 		y_range         = (ymin, ymax), \n	# 		tools           = tool, \n	# 		plot_width      = w, \n	# 		plot_height     = h, \n	# 		background_fill = \"#001133\", \n	# 		border_fill     = \"#001133\" )\n\n\n	# 	plotArea.title_text_color      = \"#C8C8C8\"\n	# 	plotArea.title_text_font_style = \"bold\"\n	# 	plotArea.title_text_font_size  = \"10pt\"\n\n	# 	plotArea.add_layout(LinearAxis(axis_line_color = \"#C8C8C8\" ), 'right')\n	# 	plotArea.add_layout(LinearAxis(axis_line_color = \"#C8C8C8\" ), 'above')\n\n	# 	plotArea.xaxis.axis_line_color        = \"#C8C8C8\"\n	# 	plotArea.xaxis.major_label_text_color = \"#C8C8C8\"\n	# 	plotArea.xaxis.major_tick_line_color  = \"#C8C8C8\"\n	# 	plotArea.xaxis.major_tick_line_width  = 1\n	# 	plotArea.xaxis.minor_tick_line_color  = \"#C8C8C8\"\n	# 	plotArea.xaxis.minor_tick_line_width  = 1\n\n	# 	plotArea.yaxis.axis_line_color        = \"#C8C8C8\"\n	# 	plotArea.yaxis.major_label_text_color = \"#C8C8C8\"\n	# 	plotArea.yaxis.major_tick_line_color  = \"#C8C8C8\"\n	# 	plotArea.yaxis.major_tick_line_width  = 1\n	# 	plotArea.yaxis.minor_tick_line_color  = \"#C8C8C8\"\n	# 	plotArea.yaxis.minor_tick_line_width  = 1\n\n	# 	plotArea.xaxis.major_tick_in  =  5 \n	# 	plotArea.xaxis.major_tick_out =  0\n	# 	plotArea.xaxis.minor_tick_in  =  3\n	# 	plotArea.xaxis.minor_tick_out =  0\n\n	# 	plotArea.yaxis.major_tick_in  =  5 \n	# 	plotArea.yaxis.major_tick_out =  0\n	# 	plotArea.yaxis.minor_tick_in  =  3\n	# 	plotArea.yaxis.minor_tick_out =  0\n\n\n	# 	plotArea.xgrid.grid_line_color = \"#C8C8C8\"\n	# 	plotArea.xgrid.grid_line_alpha =  0.5\n	# 	plotArea.xgrid.grid_line_dash  = [3,3]\n	# 	plotArea.ygrid.grid_line_color = \"#C8C8C8\"\n	# 	plotArea.ygrid.grid_line_alpha =  0.5\n	# 	plotArea.ygrid.grid_line_dash  = [3,3]\n	# 	return plotArea\n\n	\n	def initPlotArea(self, title = \"Unitled graph\", rng = [0,1,0,1],  w=800, h=300, bgc = \"#001133\", bdc = \"#001133\"):\n		tool  = 'box_zoom,box_select,crosshair, save, reset'\n		[xmin, xmax, ymin, ymax] = rng\n\n		plotArea = figure(title=title, \n			x_range         = (xmin, xmax), \n			y_range         = (ymin, ymax), \n			tools           = tool, \n			plot_width      = w, \n			plot_height     = h, \n			background_fill = \"#001133\", \n			border_fill     = \"#001133\" )\n		plotArea        = bokehPlot(plotArea)\n\n		spec            = {'width'      : w,\n						   'height'      : h,\n						   'tools'      : tool,\n						   'background' : \"#001133\",\n						   'borderfill' : \"#001133\"}\n\n		title           = {'text'     : title,\n						   'color'    : \"#ffffff\",\n						   'style'    : \"bold\",\n						   'size'     : 10}\n\n		xaxis_label     = {'text'     : \"x\",\n						   'color'    : \"#ffffff\"}\n\n		xaxis_majorTick = { 'tickIn'  : 5,\n							'tickOut' : 0,\n							'width'   : 2,\n							'color'   : \"#ffffff\"}  \n\n		xaxis_minorTick = { 'tickIn'  : 3,\n							'tickOut' : 0,\n							'width'   : 2,\n							'color'   : \"#ffffff\"}  \n\n		yaxis_majorTick = { 'tickIn'  : 5,\n							'tickOut' : 0,\n							'width'   : 2,\n							'color'   : \"#ffffff\"}  \n\n		yaxis_minorTick = { 'tickIn'  : 3,\n							'tickOut' : 0,\n							'width'   : 2,\n							'color'   : \"#ffffff\"}  \n\n		plotArea.plot_spec(**spec)\n		plotArea.title(**title)\n		plotArea.label(**xaxis_label)\n		plotArea.xaxis_majorTick(**xaxis_majorTick)\n		plotArea.yaxis_majorTick(**yaxis_majorTick)\n		plotArea.xaxis_minorTick(**xaxis_minorTick)\n		plotArea.yaxis_minorTick(**yaxis_minorTick)\n\n		plotArea.add_layout(LinearAxis(axis_line_color = \"#C8C8C8\" ), 'right')\n		plotArea.add_layout(LinearAxis(axis_line_color = \"#C8C8C8\" ), 'above')\n\n		# plotArea.xgrid.grid_line_color = \"#C8C8C8\"\n		# plotArea.xgrid.grid_line_alpha =  0.5\n		# plotArea.xgrid.grid_line_dash  = [3,3]\n		# plotArea.ygrid.grid_line_color = \"#C8C8C8\"\n		# plotArea.ygrid.grid_line_alpha =  0.5\n		# plotArea.ygrid.grid_line_dash  = [3,3]\n		return plotArea\n\n	\n\n	def addPlotLine(self, plotArea, data = [None, None], legendText = 'plot', radii = 0.005, \n						  color = \"#c8c8c8\", width = 1.5, symbol = 'o', visible = True):\n		x    = np.array(data[0])\n		y    = np.array(data[1])\n		l    = plotArea.line(x, y, legend=legendText, line_color=color, line_width = width, visible = visible)\n		line = bokehLine(l.glyph)\n\n		line.line_val( \n			name    = legendText, \n			color   = color, \n			width   = width,\n			style   = None, \n			symbol  = symbol, \n			visible = visible, \n			viewNum = None\n			)\n\n		if symbol != None:\n			plotArea.scatter(x, y, \n				radius          = radii, \n				radius_dimension= 'y',  \n				fill_color      = color,\n				fill_alpha      = 1, \n				line_color      = None, \n				legend          = legendText)\n\n		plotArea.legend.orientation           = \"top_left\"\n		plotArea.legend.background_fill_alpha = 0.5\n		plotArea.legend.border_line_width     = 1\n		plotArea.legend.border_line_color     = \"#C8C8C8\"\n		plotArea.legend.label_standoff        = 5\n		plotArea.legend.glyph_width           = 20\n		plotArea.legend.legend_spacing        = 5\n		plotArea.legend.legend_padding        = 20\n		return line\n\n\n	def insertPlot(self, plotSets):\n		\n		layout = vplot(*plotSets)\n		output_file(\"les_mis.html\")\n		# show(layout)\n		for plot in plotSets:\n			plot.toolbar_location = None\n		return layout\n\n	def resetGraph(self):\n		for ID in self.plotIDDict:\n			plot, rng = self.plotIDDict[ID]\n			plot.x_range = Range1d(start=rng[0], end=rng[1])\n			plot.y_range = Range1d(start=rng[2], end=rng[3])\n		for ID in self.lineIDDict:\n			line = self.lineIDDict[ID]\n			line.line_visible(False)\n		html = file_html(self.div, CDN, \"my plot\")\n		online   = 'http://cdn.pydata.org/bokeh/release'\n		offline  =  'file://' + os.getcwd() \n		html = html.replace(online,  offline)\n		self.Web.setHtml(html)\n		self.Web.reload()\n		print 'a'\n\n	def loadCrew(self):\n		fileName = './savedData.pkl'\n		package  = open( fileName, 'rb' )\n		data = pickle.load( package )\n\n		package.close()\n		return data\n\n\nclass bokehPlot(object):\n	def __init__(self, plot, parent = None):\n		self._plot_                  = plot\n		self.width                   = None\n		self.height                  = None\n		self.tools                   = None\n		self.background              = None\n		self.borderfill              = None\n		self.spec        = {'width' : self.width,\n							'height': self.height,\n							'tools' : self.tools,\n						'background': self.background,\n						'borderfill': self.borderfill}\n\n		self.title_text              = None\n		self.title_color             = None\n		self.title_style             = None\n		self.title_size              = None\n		self.title       = {'text'  : self.title_text,\n							'color' : self.title_color,\n							'style' : self.title_style,\n							'size'  : self.title_size}\n\n\n		self.xaxis_label_text        = None\n		self.xaxis_label_color       = None\n		self.xaxis_label = {'text'  : self.xaxis_label_text,\n							'color' : self.xaxis_label_color}\n\n\n		self.xaxis_majorTick_tickIn  = None\n		self.xaxis_majorTick_tickOut = None\n		self.xaxis_majorTick_width   = None\n		self.xaxis_majorTick_color   = None\n		self.xaxis_majorTick = { 'tickIn'  : self.xaxis_majorTick_tickIn,\n								 'tickOut' : self.xaxis_majorTick_tickOut,\n								 'width'   : self.xaxis_majorTick_width,\n								 'color'   : self.xaxis_majorTick_color}   \n\n\n		self.xaxis_minorTick_tickIn  = None\n		self.xaxis_minorTick_tickOut = None\n		self.xaxis_minorTick_width   = None\n		self.xaxis_minorTick_color   = None\n		self.xaxis_minorTick = { 'tickIn'  : self.xaxis_minorTick_tickIn,\n								 'tickOut' : self.xaxis_minorTick_tickOut,\n								 'width'   : self.xaxis_minorTick_width,\n								 'color'   : self.xaxis_minorTick_color} \n\n		self.xaxis_minimun           = None\n		self.xaxis_maximum           = None\n		self.xaxis_range = {'minimum'   : self.xaxis_minimun,\n							'maximum'   : self.xaxis_maximum}\n\n		self.xaxis_color             = None\n		self.xaxis_width             = None		\n		self.xaxis       = {'color'     : self.xaxis_color,\n							'width'     : self.xaxis_width,\n							'label'     : self.xaxis_label,\n							'majorTick' : self.xaxis_majorTick,\n							'minorTick' : self.xaxis_minorTick}\n\n		self.yaxis_label_text        = None\n		self.yaxis_label_color       = None\n		self.yaxis_label = {'text'  : self.yaxis_label_text,\n							'color' : self.yaxis_label_color}\n\n\n		self.yaxis_majorTick_tickIn  = None\n		self.yaxis_majorTick_tickOut = None\n		self.yaxis_majorTick_width   = None\n		self.yaxis_majorTick_color   = None\n		self.yaxis_majorTick = { 'tickIn'  : self.yaxis_majorTick_tickIn,\n								 'tickOut' : self.yaxis_majorTick_tickOut,\n								 'width'   : self.yaxis_majorTick_width,\n								 'color'   : self.yaxis_majorTick_color}   \n\n\n		self.yaxis_minorTick_tickIn  = None\n		self.yaxis_minorTick_tickOut = None\n		self.yaxis_minorTick_width   = None\n		self.yaxis_minorTick_color   = None\n		self.yaxis_minorTick = { 'tickIn'  : self.yaxis_minorTick_tickIn,\n								 'tickOut' : self.yaxis_minorTick_tickOut,\n								 'width'   : self.yaxis_minorTick_width,\n								 'color'   : self.yaxis_minorTick_color} \n		\n		self.yaxis_minimun           = None\n		self.yaxis_maximum           = None\n		self.yaxis_range = {'minimum'   : self.yaxis_minimun,\n							'maximum'   : self.yaxis_maximum}\n\n		self.yaxis_color             = None\n		self.yaxis_width             = None		\n		self.yaxis       = {'color'     : self.yaxis_color,\n							'width'     : self.yaxis_width,\n							'label'     : self.yaxis_label,\n							'majorTick' : self.yaxis_majorTick,\n							'minorTick' : self.yaxis_minorTick}\n	def plot_spec(self,  width      = None, height     = None, tools = None, \n						 background = None, borderfill = None):\n		if width is not None:\n			self._plot_.plot_width                   = width\n			self.width                               = width\n\n		if height is not None:\n			self._plot_.plot_height                  = height\n			self.height                              = height\n\n		if background:\n			self._plot_.background_fill              = background\n			self.background                          = background\n\n		if borderfill:\n			self._plot_.border_fill                  = borderfill\n			self.borderfill                          = borderfill\n		return self.plot_spec\n\n\n	def plot_title(self, text  = None, color = None, \n						 style = None, size  = None):\n		if text is not None:\n			self._plot_.title                        = text\n			self.title_text                          = text\n		\n		if color:\n			self._plot_.title_text_color             = color\n			self.title_color                         = color\n\n		if style:\n			self._plot_.title_text_font_style        = style\n			self.title_style                         = style\n\n		if size is not None:\n			self._plot_.title_text_font_size         = str(size)+\"pt\"\n			self.title_size                          = size\n\n		return self.title\n		\n	def plot_xaxis(self, color     = None, width     = None, label = None,\n						 majorTick = None, minorTick = None):\n		if color:\n			self.xaxis_color                         = color\n			self._plot_.xaxis_color                  = color\n		if width is not None:\n			self.xaxis_width                         = width\n			self._plot_.xaxis_width                  = width\n		if label:\n			self.plot_xaxis_label(**label)\n		if majorTick:\n			self.plot_xaxis_majorTick(**majorTick)\n		if minorTick:\n			self.plot_xaxis_minorTick(**minorTick)\n		return self.xaxis\n\n	def plot_xaxis_label(self, text = None, color = None):\n		if text is not None:\n			self._plot_.xaxis_label_text            = text\n			self.xaxis_label_text                   = text\n		if color:\n			self._plot_.xaxis_label_color           = color\n			self.xaxis_label_color                  = color\n		return self.xaxis_label\n\n	def plot_xaxis_majorTick(self, tickIn = None, tickOut = None, width = None, color  = None):\n		if tickIn  is not None:\n			self._plot_.xaxis.major_tick_in         = tickIn \n			self.xaxis_majorTick_tickIn             = tickIn\n		if tickOut is not None:\n			self._plot_.xaxis.major_tick_out        = tickIn \n			self.xaxis_majorTick_tickOut            = tickIn\n		if width   is not None:\n			self._plot_.xaxis.major_tick_line_width = width\n			self.xaxis_majorTick_width              = width\n		if color:\n			self._plot_.xaxis.major_tick_line_color = color\n			self.xaxis_majorTick_color              = color\n		return self.xaxis_majorTick\n\n	def plot_xaxis_minorTick(self, tickIn = None, tickOut = None, width = None, color  = None):\n		if tickIn  is not None:\n			self._plot_.xaxis.minor_tick_in         = tickIn \n			self.xaxis_minorTick_tickIn             = tickIn\n		if tickOut is not None:\n			self._plot_.xaxis.minor_tick_out        = tickIn \n			self.xaxis_minorTick_tickOut            = tickIn\n		if width   is not None:\n			self._plot_.xaxis.minor_tick_line_width = width\n			self.xaxis_minorTick_width              = width\n		if color:\n			self._plot_.xaxis.minor_tick_line_color = color\n			self.xaxis_minorTick_color              = color\n		return self.xaxis_minorTick\n\n\n	def plot_yaxis(self, color     = None, width     = None, label = None,\n						 majorTick = None, minorTick = None):\n		if color:\n			self.yaxis_color                         = color\n			self._plot_.yaxis_color                  = color\n		if width is not None:\n			self.yaxis_width                         = width\n			self._plot_.yaxis_width                  = width\n		if label:\n			self.plot_yaxis_label(**label)\n		if majorTick:\n			self.plot_yaxis_majorTick(**majorTick)\n		if minorTick:\n			self.plot_yaxis_minorTick(**minorTick)\n		return self.yaxis\n\n	def plot_yaxis_label(self, text = None, color = None):\n		if text is not None:\n			self._plot_.yaxis_label_text             = text\n			self.yaxis_label_text                    = text\n		if color:\n			self._plot_.yaxis_label_color            = color\n			self.yaxis_label_color                   = color\n		return self.yaxis_label\n\n	def plot_yaxis_majorTick(self, tickIn = None, tickOut = None, width = None, color  = None):\n		if tickIn  is not None:\n			self._plot_.yaxis.major_tick_in          = tickIn \n			self.yaxis_majorTick_tickIn              = tickIn\n		if tickOut is not None:\n			self._plot_.yaxis.major_tick_out         = tickIn \n			self.yaxis_majorTick_tickOut             = tickIn\n		if width   is not None:\n			self._plot_.yaxis.major_tick_line_width  = width\n			self.yaxis_majorTick_width               = width\n		if color:\n			self._plot_.yaxis.major_tick_line_color  = color\n			self.yaxis_majorTick_color               = color\n		return self.yaxis_majorTick\n\n	def plot_yaxis_minorTick(self, tickIn = None, tickOut = None, width = None, color  = None):\n		if tickIn  is not None:\n			self._plot_.yaxis.minor_tick_in          = tickIn \n			self.yaxis_minorTick_tickIn              = tickIn\n		if tickOut is not None:\n			self._plot_.yaxis.minor_tick_out         = tickIn \n			self.yaxis_minorTick_tickOut             = tickIn\n		if width   is not None:\n			self._plot_.yaxis.minor_tick_line_width  = width\n			self.yaxis_minorTick_width               = width\n		if color:\n			self._plot_.yaxis.minor_tick_line_color  = color\n			self.yaxis_minorTick_color               = color\n		return self.yaxis_minorTick		\n\n\n\n\nclass bokehLine(object):\n	def __init__(self, line, parent = None):\n		self.data,    self.name,    self.color  = None, None, None\n		self.width,   self.style,   self.symbol = None, None, None\n		self.visible, self.viewNum, self._line_ = None, None, line\n\n	def line_name(self, name = None):\n		if name:\n			self.name = name\n		return self.name\n\n	def line_color(self, color = None ):\n		if color:\n			self.color = color\n			self._line_.line_color = color\n		return self.color\n\n	def line_width(self, width = None ):\n		if width:\n			self.width = width\n			self._line_.line_width = width\n		return self.width	\n\n	def line_style(self, style = None ):\n		if style:\n			self.style = style\n\n		return self.style	\n\n	def line_symbol(self, symbol = None ):\n		if symbol:\n			self.symbol = symbol\n		return self.symbol\n\n	def line_visible(self, visible = None ):\n		if visible is not None:\n			self._line_.visible = visible\n		return  self.visible	\n\n\n	def line_viewNum(self, viewNum = None):\n		if viewNum is not None:\n			self.viewNum = viewNum\n		return self.viewNum\n\n	def line_val(self, name  = None, color  = None, width   = None,\n					   style = None, symbol = None, visible = None, viewNum = None):\n		\n		return [self.line_name(name),     self.line_color(color),\n				self.line_width(width),   self.line_style(style),\n				self.line_symbol(symbol), self.line_visible(visible), self.line_viewNum(viewNum)]\n\n\n# class bokehSymbol(object):\n# 	def __init__(self, data = [None, None], parent = None):\n# 		self.color   = color\n# 		self.size    = size\n# 		self.outline = outline\n# 		self.width   = width\n# 		self.visible = visible\n# 	def symbol_color(self, color = None):\n# 		if color:\n# 			self.scolor = color\n# 			self.setSymbolBrush(pg.mkBrush(color = color))\n# 		return self.scolor\n\n# 	def symbol_size(self, size = None):\n# 		if size:\n# 			self.ssize = size\n# 			self.setSymbolSize(size)\n# 		return self.ssize\n\n# 	def symbol_penColor(self, penC = None):\n# 		if penC:\n# 			self.spenColor = penC\n# 			self.setSymbolPen(pg.mkPen(color = penC))\n# 		return self.spenColor	\n\n# 	def symbol_penWidth(self, penW = None):\n# 		if penW != None:\n# 			pen = self.symbol_penColor()\n# 			self.spenWidth = penW\n# 			if penW <= 0:\n# 				self.symbol_penColor((pen[0], pen[1], pen[2], 0))\n# 			if penW >  0:\n# 				self.symbol_penColor((pen[0], pen[1], pen[2], 255))\n# 				self.spenWidth = penW\n# 			self.setSymbolPen(pg.mkPen(width = penW))\n# 		return self.spenWidth	\n\n# 	def symbol_outLine(self, outLine = None ):\n# 		pen   = self.symbol_penColor()\n# 		if outLine == True:\n# 			self.symbol_penColor( (pen[0],   pen[1],   pen[2],   255))\n# 			self.soutLine = outLine\n# 		if outLine == False:\n# 			self.symbol_penColor( (pen[0],   pen[1],   pen[2],   0))\n# 			self.soutLine = outLine\n# 		return self.soutLine\n\n# 	def symbol_visible(self, visible = None ):\n# 		color = self.symbol_color()\n# 		if visible == True:\n# 			self.symbol_color((   color[0], color[1], color[2], 255))\n# 			self.svisible = visible\n# 		if visible == False:\n# 			self.symbol_color((    color[0], color[1], color[2], 0))\n# 			self.symbol_outLine(False)\n# 			self.svisible = visible\n# 		return  self.svisible	\n\n\n\n# 	def symbol_val(self, color   = None, size  = None,\n# 						   penC    = None, penW  = None,\n# 						   outLine = None, visible = None):\n# 		return [self.symbol_color(color),     self.symbol_size(size),\n# 				self.symbol_penColor(penC),   self.symbol_penWidth(penW),\n# 				self.symbol_outLine(outLine), self.symbol_visible(visible)]\n\n	\nif __name__ == '__main__':\n	app = QApplication(sys.argv)\n	window =  PlotWindowWidget()\n	window.show()\n	app.exec_()",
+			"settings":
+			{
+				"buffer_size": 22003,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -695,10 +711,20 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/Downloads/scipy-0.14.0/scipy/version.py",
+		"/home/rawr/Downloads/PyXRD-0.6.7/run.py",
+		"/home/rawr/Downloads/PyXRD-0.6.7/setup.py",
+		"/home/rawr/Downloads/PyXRD-0.6.7/run_tests.py",
+		"/home/rawr/.wine/dosdevices/c:/power cell/AN_RU20.RAW",
+		"/home/rawr/Desktop/testpy.py",
+		"/etc/bumblebee/bumblebee.conf",
+		"/etc/bumblebee/sudo",
+		"/etc/bumblebee/gedit",
+		"/etc/bumblebee/xorg.conf.nvidia",
+		"/etc/bumblebee/xorg.conf.nouveau",
 		"/home/rawr/github/Sloth/plotSubWin.py",
 		"/home/rawr/Downloads/CPP/grade.h",
 		"/home/rawr/Downloads/CPP/pp.cpp",
-		"/home/rawr/Desktop/testpy.py",
 		"/home/rawr/github/Sloth/bokehPlotter/bokeh-0.10.0.min.js",
 		"/home/rawr/Desktop/untitled.html",
 		"/home/rawr/Desktop/perspective.py",
@@ -812,21 +838,11 @@
 		"/home/rawr/github/Sloth/GraphEditor/QStyleComboBox.py",
 		"/home/rawr/github/Sloth/GraphEditor/lineControlWidget.py",
 		"/home/rawr/github/Sloth/GraphEditor/QLineNumber.py",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/__init__.py",
-		"/home/rawr/Desktop/aa.py",
-		"/home/rawr/github/Sloth/GraphEditor/viewBoxControlWidget.py",
-		"/home/rawr/github/Sloth/SubWinList.py",
-		"/home/rawr/github/NodeGUI/PlugNode.py",
-		"/home/rawr/github/NodeGUI/ImageNode.py",
-		"/home/rawr/github/Sloth/GraphEditor/untitled.py",
-		"/home/rawr/github/Sloth/GraphEditor/ MaterialDesignList.py",
-		"/home/rawr/github/Sloth/GraphEditor/SubWinList.py",
-		"/home/rawr/github/Sloth/GraphEditor/QSpacer.py",
-		"/home/rawr/github/Sloth/GraphEditor/QHeader.py"
+		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/__init__.py"
 	],
 	"find":
 	{
-		"height": 46.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -840,6 +856,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"hight",
+			"lable",
+			"major",
+			"back",
+			"width",
+			"wid",
+			"height",
+			"hight",
+			"xaxis",
+			"major",
+			"xaxis",
+			"plotArea",
+			"340",
 			"title",
 			"', '",
 			"title",
@@ -954,20 +983,7 @@
 			"set",
 			"', '",
 			"set",
-			"color",
-			"vis",
-			"alph",
-			"set",
-			"enable",
-			"', '",
-			"fini",
-			"200, 200, 200, 255",
-			"(200, 200, 200, 255)",
-			"'a",
-			"ine_val",
-			"print ",
-			"addItem",
-			"insertPlot"
+			"color"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -975,6 +991,12 @@
 		"regex": false,
 		"replace_history":
 		[
+			"minor",
+			"hight",
+			"yaxis",
+			"minor",
+			"yaxis",
+			"self._plot_",
 			"\n",
 			"self,",
 			"self.",
@@ -1041,7 +1063,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1050,15 +1072,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14057,
+						"buffer_size": 22098,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10484,
-								10484
+								8046,
+								8046
 							]
 						],
 						"settings":
@@ -1067,20 +1089,48 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8762.0,
+						"translation.y": 5682.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/rawr/github/NodeGUI/NodeGUI2.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4288,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								182,
+								182
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": "/home/rawr/Desktop/bokehp compare",
 					"semi_transient": false,
 					"settings":
@@ -1092,8 +1142,8 @@
 						"selection":
 						[
 							[
-								669,
-								669
+								813,
+								813
 							]
 						],
 						"settings":
@@ -1102,14 +1152,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 336.0,
+						"translation.y": 264.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "/home/rawr/Desktop/Line",
 					"semi_transient": false,
 					"settings":
@@ -1131,14 +1181,14 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4157.0,
+						"translation.y": 328.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "/home/rawr/Desktop/plotArea",
 					"semi_transient": false,
 					"settings":
@@ -1150,8 +1200,8 @@
 						"selection":
 						[
 							[
-								1971,
-								1971
+								3034,
+								3034
 							]
 						],
 						"settings":
@@ -1160,10 +1210,38 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4157.0,
+						"translation.y": 5214.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22003,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13049,
+								13060
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 13.0,
+						"translation.y": 8740.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1197,7 +1275,7 @@
 		"cols":
 		[
 			0.0,
-			0.562957540264,
+			0.603221083456,
 			1.0
 		],
 		"rows":
@@ -1219,7 +1297,7 @@
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 138.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1249,7 +1327,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},

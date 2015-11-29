@@ -1,10 +1,12 @@
 import sys
+import types
 import pickle
 import numpy as np
 import os
 from PySide.QtGui    import *
 from PySide.QtCore   import *
 from PySide.QtWebKit import *
+import bokeh
 from bokeh.resources import CDN
 from bokeh.embed     import file_html
 from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
@@ -112,6 +114,61 @@ class PlotWindowWidget(QMainWindow):
 		rng = [xmin-spamX, xmax+spamX, ymin-spamY, ymax+spamY]
 		return rng
 
+	# def initPlotArea(self, title = "Unitled graph", rng = [0,1,0,1],  w=800, h=300, bgc = "#001133", bdc = "#001133"):
+	# 	tool  = 'box_zoom,box_select,crosshair, save, reset'
+	# 	[xmin, xmax, ymin, ymax] = rng
+
+	# 	plotArea = figure(title=title, 
+	# 		x_range         = (xmin, xmax), 
+	# 		y_range         = (ymin, ymax), 
+	# 		tools           = tool, 
+	# 		plot_width      = w, 
+	# 		plot_height     = h, 
+	# 		background_fill = "#001133", 
+	# 		border_fill     = "#001133" )
+
+
+	# 	plotArea.title_text_color      = "#C8C8C8"
+	# 	plotArea.title_text_font_style = "bold"
+	# 	plotArea.title_text_font_size  = "10pt"
+
+	# 	plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
+	# 	plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')
+
+	# 	plotArea.xaxis.axis_line_color        = "#C8C8C8"
+	# 	plotArea.xaxis.major_label_text_color = "#C8C8C8"
+	# 	plotArea.xaxis.major_tick_line_color  = "#C8C8C8"
+	# 	plotArea.xaxis.major_tick_line_width  = 1
+	# 	plotArea.xaxis.minor_tick_line_color  = "#C8C8C8"
+	# 	plotArea.xaxis.minor_tick_line_width  = 1
+
+	# 	plotArea.yaxis.axis_line_color        = "#C8C8C8"
+	# 	plotArea.yaxis.major_label_text_color = "#C8C8C8"
+	# 	plotArea.yaxis.major_tick_line_color  = "#C8C8C8"
+	# 	plotArea.yaxis.major_tick_line_width  = 1
+	# 	plotArea.yaxis.minor_tick_line_color  = "#C8C8C8"
+	# 	plotArea.yaxis.minor_tick_line_width  = 1
+
+	# 	plotArea.xaxis.major_tick_in  =  5 
+	# 	plotArea.xaxis.major_tick_out =  0
+	# 	plotArea.xaxis.minor_tick_in  =  3
+	# 	plotArea.xaxis.minor_tick_out =  0
+
+	# 	plotArea.yaxis.major_tick_in  =  5 
+	# 	plotArea.yaxis.major_tick_out =  0
+	# 	plotArea.yaxis.minor_tick_in  =  3
+	# 	plotArea.yaxis.minor_tick_out =  0
+
+
+	# 	plotArea.xgrid.grid_line_color = "#C8C8C8"
+	# 	plotArea.xgrid.grid_line_alpha =  0.5
+	# 	plotArea.xgrid.grid_line_dash  = [3,3]
+	# 	plotArea.ygrid.grid_line_color = "#C8C8C8"
+	# 	plotArea.ygrid.grid_line_alpha =  0.5
+	# 	plotArea.ygrid.grid_line_dash  = [3,3]
+	# 	return plotArea
+
+	
 	def initPlotArea(self, title = "Unitled graph", rng = [0,1,0,1],  w=800, h=300, bgc = "#001133", bdc = "#001133"):
 		tool  = 'box_zoom,box_select,crosshair, save, reset'
 		[xmin, xmax, ymin, ymax] = rng
@@ -125,38 +182,54 @@ class PlotWindowWidget(QMainWindow):
 			background_fill = "#001133", 
 			border_fill     = "#001133" )
 
+		
 
-		plotArea.title_text_color      = "#C8C8C8"
-		plotArea.title_text_font_style = "bold"
-		plotArea.title_text_font_size  = "10pt"
+		plotWrapper         = bokehPlot(plotArea)
+
+		spec            = {'width'      : w,
+						   'height'     : h,
+						   'tools'      : tool,
+						   'background' : "#001133",
+						   'borderfill' : "#001133"}
+
+		title           = {'text'     : title,
+						   'color'    : "#ffffff",
+						   'style'    : "bold",
+						   'size'     : 10}
+
+		xaxis_label     = {'text'     : "x",
+						   'color'    : "#ffffff"}
+
+		xaxis_majorTick = {'tickIn'  : 5,
+						   'tickOut' : 0,
+						   'width'   : 2,
+						   'color'   : "#ffffff"}  
+
+		xaxis_minorTick = { 'tickIn'  : 3,
+							'tickOut' : 0,
+							'width'   : 2,
+							'color'   : "#ffffff"}  
+
+		yaxis_majorTick = { 'tickIn'  : 5,
+							'tickOut' : 0,
+							'width'   : 2,
+							'color'   : "#ffffff"}  
+
+		yaxis_minorTick = { 'tickIn'  : 3,
+							'tickOut' : 0,
+							'width'   : 2,
+							'color'   : "#ffffff"}  
+
+		plotWrapper.plot_spec(**spec)
+		plotWrapper.plot_title(**title)
+		plotWrapper.plot_xaxis_label(**xaxis_label)
+		plotWrapper.xaxis_majorTick(**xaxis_majorTick)
+		plotWrapper.yaxis_majorTick(**yaxis_majorTick)
+		plotWrapper.xaxis_minorTick(**xaxis_minorTick)
+		plotWrapper.yaxis_minorTick(**yaxis_minorTick)
 
 		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
 		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')
-
-		plotArea.xaxis.axis_line_color        = "#C8C8C8"
-		plotArea.xaxis.major_label_text_color = "#C8C8C8"
-		plotArea.xaxis.major_tick_line_color  = "#C8C8C8"
-		plotArea.xaxis.major_tick_line_width  = 1
-		plotArea.xaxis.minor_tick_line_color  = "#C8C8C8"
-		plotArea.xaxis.minor_tick_line_width  = 1
-
-		plotArea.yaxis.axis_line_color        = "#C8C8C8"
-		plotArea.yaxis.major_label_text_color = "#C8C8C8"
-		plotArea.yaxis.major_tick_line_color  = "#C8C8C8"
-		plotArea.yaxis.major_tick_line_width  = 1
-		plotArea.yaxis.minor_tick_line_color  = "#C8C8C8"
-		plotArea.yaxis.minor_tick_line_width  = 1
-
-		plotArea.xaxis.major_tick_in  =  5 
-		plotArea.xaxis.major_tick_out =  0
-		plotArea.xaxis.minor_tick_in  =  3
-		plotArea.xaxis.minor_tick_out =  0
-
-		plotArea.yaxis.major_tick_in  =  5 
-		plotArea.yaxis.major_tick_out =  0
-		plotArea.yaxis.minor_tick_in  =  3
-		plotArea.yaxis.minor_tick_out =  0
-
 
 		plotArea.xgrid.grid_line_color = "#C8C8C8"
 		plotArea.xgrid.grid_line_alpha =  0.5
@@ -165,6 +238,8 @@ class PlotWindowWidget(QMainWindow):
 		plotArea.ygrid.grid_line_alpha =  0.5
 		plotArea.ygrid.grid_line_dash  = [3,3]
 		return plotArea
+
+	
 
 	def addPlotLine(self, plotArea, data = [None, None], legendText = 'plot', radii = 0.005, 
 						  color = "#c8c8c8", width = 1.5, symbol = 'o', visible = True):
@@ -202,76 +277,6 @@ class PlotWindowWidget(QMainWindow):
 		plotArea.legend.legend_padding        = 20
 		return line
 
-	def addPlotArea(self, data):
-		x     = np.array(data[0])
-		y     = np.array(data[1])
-
-		radii = 0.008
-		
-		colors       = ["#%02x%02x%02x" % (200,200,200) for i in range(len(x))]
-		spamX, spamY = [float(max(x)-min(x))*0.05, float(max(y)-min(y))*0.05]
-
-		plotArea = figure(title='Pan and Zoom Here', x_range=(min(x)-spamX, max(x)+spamX), y_range=(min(y)-spamY, max(y)+spamY),
-		            tools='box_zoom,box_select,crosshair, save, reset', plot_width=800, plot_height=300,
-		            background_fill="#001133", border_fill="#001133")
-
-		plotArea.title_text_color      = "#C8C8C8"
-		plotArea.title_text_font_style = "bold"
-		plotArea.title_text_font_size  = "10pt"
-
-		plotArea.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'right')
-		plotArea.add_layout(LinearAxis(axis_line_color="#C8C8C8" ), 'above')
-
-		plotArea.xaxis.axis_line_color        = "#C8C8C8"
-		plotArea.xaxis.major_label_text_color = "#C8C8C8"
-		plotArea.xaxis.major_tick_line_color  = "#C8C8C8"
-		plotArea.xaxis.major_tick_line_width  = 1
-		plotArea.xaxis.minor_tick_line_color  = "#C8C8C8"
-		plotArea.xaxis.minor_tick_line_width  = 1
-
-		plotArea.yaxis.axis_line_color        = "#C8C8C8"
-		plotArea.yaxis.major_label_text_color = "#C8C8C8"
-		plotArea.yaxis.major_tick_line_color  = "#C8C8C8"
-		plotArea.yaxis.major_tick_line_width  = 1
-		plotArea.yaxis.minor_tick_line_color  = "#C8C8C8"
-		plotArea.yaxis.minor_tick_line_width  = 1
-
-		plotArea.xaxis.major_tick_in  =  5 
-		plotArea.xaxis.major_tick_out =  0
-		plotArea.xaxis.minor_tick_in  =  3
-		plotArea.xaxis.minor_tick_out =  0
-
-		plotArea.yaxis.major_tick_in  =  5 
-		plotArea.yaxis.major_tick_out =  0
-		plotArea.yaxis.minor_tick_in  =  3
-		plotArea.yaxis.minor_tick_out =  0
-
-
-		plotArea.xgrid.grid_line_color = "#C8C8C8"
-		plotArea.xgrid.grid_line_alpha =  0.5
-		plotArea.xgrid.grid_line_dash  = [3,3]
-		plotArea.ygrid.grid_line_color = "#C8C8C8"
-		plotArea.ygrid.grid_line_alpha =  0.5
-		plotArea.ygrid.grid_line_dash  = [3,3]
-
-		legendText = 'plot'
-		plotArea.line(x, y, legend=legendText, line_color=colors)
-		plotArea.scatter(x, y, radius=radii, radius_dimension='y',  fill_color=colors, fill_alpha=1, line_color=None, legend=legendText)
-
-		plotArea.legend.orientation           = "top_left"
-		plotArea.legend.background_fill_alpha = 0.5
-		plotArea.legend.border_line_width     = 1
-		plotArea.legend.border_line_color     = "#C8C8C8"
-		plotArea.legend.label_standoff        = 5
-		plotArea.legend.glyph_width           = 20
-		plotArea.legend.legend_spacing        = 5
-		plotArea.legend.legend_padding        = 20
-		# output_file("les_mis.html")
-		# show(p1)
-		# plotArea.toolbar_location = None
-		plotRange = [min(x)-spamX, max(x)+spamX, min(y)-spamY, max(y)+spamY]
-		return plotArea, plotRange
-
 
 	def insertPlot(self, plotSets):
 		
@@ -307,27 +312,177 @@ class PlotWindowWidget(QMainWindow):
 		return data
 
 
+
 class bokehPlot(object):
-	def __init__(self, plot, parent = None):
-		self.title = [None, None, None, None]
+	def __init__(self, plot, parent=None):
+		super(bokehPlot, self).__init__()
+		self.plot  = plot
+		self.xaxis = self.plot.axis[0]
+		self.yaxis = self.plot.axis[1]
+		self.spec              = {'width'      : self.plot.plot_width,
+								  'height'     : self.plot.plot_height,
+								  'tools'      : self.plot.tools,
+								  'background' : self.plot.background_fill,
+								  'borderfill' : self.plot.border_fill} 
+
+		self.title             = {'text'    : self.plot.title,
+								  'color'   : self.plot.title_text_color ,
+								  'style'   : self.plot.title_text_font_style,
+								  'size'    : self.plot.title_text_font_size}
+
+		self.xaxis_label       = {'text'    : self.xaxis.axis_label,
+								  'color'   : self.xaxis.axis_label_text_color}
+
+		self.yaxis_label       = {'text'    : self.yaxis.axis_label,
+								  'color'   : self.yaxis.axis_label_text_color}
+
+		self.xaxis_majorTick   = {'tickIn'  : self.xaxis.major_tick_in,
+								  'tickOut' : self.xaxis.major_tick_out,
+								  'width'   : self.xaxis.major_tick_line_width,
+								  'color'   : self.xaxis.major_tick_line_color}  
+
+		self.xaxis_minorTick   = {'tickIn'  : self.xaxis.minor_tick_in,
+								  'tickOut' : self.xaxis.minor_tick_out,
+								  'width'   : self.xaxis.minor_tick_line_width,
+								  'color'   : self.xaxis.minor_tick_line_color}  
+ 
+		self.yaxis_majorTick   = {'tickIn'  : self.yaxis.major_tick_in,
+								  'tickOut' : self.yaxis.major_tick_out,
+								  'width'   : self.yaxis.major_tick_line_width,
+								  'color'   : self.yaxis.major_tick_line_color}  
+
+		self.yaxis_minorTick   = {'tickIn'  : self.yaxis.minor_tick_in,
+								  'tickOut' : self.yaxis.minor_tick_out,
+								  'width'   : self.yaxis.minor_tick_line_width,
+								  'color'   : self.yaxis.minor_tick_line_color}   
+
+	def plot_spec(self,  width      = None, height     = None, tools = None, 
+						 background = None, borderfill = None):
+		if width is not None:
+			self.plot.plot_width                   = width
+		if height is not None:
+			self.plot.plot_height                  = height
+		if background:
+			self.plot.background_fill              = background
+		if borderfill:
+			self.plot.border_fill                  = borderfill
+
+		return self.plot_spec
+
 
 	def plot_title(self, text  = None, color = None, 
 						 style = None, size  = None):
 		if text is not None:
-			self._plot_.title                 = text
-		
+			self.plot.title                        = text
 		if color:
-			self._plot_.title_text_color      = color
-		
+			self.plot.title_text_color             = color
 		if style:
-			self._plot_.title_text_font_style = style
-
+			self.plot.title_text_font_style        = style
 		if size is not None:
-			self._plot_.title_text_font_size  = str(size)+"pt"
+			self.plot.title_text_font_size         = str(size)+"pt"
 
-		self.title = [text, color, style, size]
 		return self.title
-	# def plot_axis():
+
+
+	def plot_xaxis(self, color     = None, width     = None, label = None,
+						 majorTick = None, minorTick = None):
+		if color:
+			self.xaxis_color                  = color
+		if width is not None:
+			self.xaxis_width                  = width
+		if label:
+			self.plot_xaxis_label(**label)
+		if majorTick:
+			self.plot_xaxis_majorTick(**majorTick)
+		if minorTick:
+			self.plot_xaxis_minorTick(**minorTick)
+
+		return self.xaxis
+
+
+	def plot_xaxis_label(self, text = None, color = None):
+		if text is not None:
+			self.xaxis.axis_label            = text
+		if color:
+			self.xaxis.axis_label_text_color = color
+
+		return self.xaxis_label
+
+
+	def plot_xaxis_majorTick(self, tickIn = None, tickOut = None, width = None, color  = None):
+		if tickIn  is not None:
+			self.xaxis.major_tick_in         = tickIn 
+		if tickOut is not None:
+			self.xaxis.major_tick_out        = tickIn 
+		if width   is not None:
+			self.xaxis.major_tick_line_width = width
+		if color:
+			self.xaxis.major_tick_line_color = color
+
+		return self.xaxis_majorTick
+
+
+	def plot_xaxis_minorTick(self, tickIn = None, tickOut = None, width = None, color  = None):
+		if tickIn  is not None:
+			self.xaxis.minor_tick_in         = tickIn 
+		if tickOut is not None:
+			self.xaxis.minor_tick_out        = tickIn 
+		if width   is not None:
+			self.xaxis.minor_tick_line_width = width
+		if color:
+			self.xaxis.minor_tick_line_color = color
+
+		return self.xaxis_minorTick
+
+
+	def plot_yaxis(self, color     = None, width     = None, label = None,
+						   majorTick = None, minorTick = None):
+		if color:
+			self.yaxis_color                  = color
+		if width is not None:
+			self.yaxis_width                  = width
+		if label:
+			self.plot_yaxis_label(**label)
+		if majorTick:
+			self.plot_yaxis_majorTick(**majorTick)
+		if minorTick:
+			self.plot_yaxis_minorTick(**minorTick)
+
+		return self.yaxis
+
+	def plot_yaxis_label(self, text = None, color = None):
+		if text is not None:
+			self.yaxis.axis_label                  = text
+		if color:
+			self.yaxis.axis_label_text_color       = color
+
+		return self.yaxis_label
+
+	def plot_yaxis_majorTick(self, tickIn = None, tickOut = None, width = None, color  = None):
+		if tickIn  is not None:
+			self.yaxis.major_tick_in          = tickIn 
+		if tickOut is not None:
+			self.yaxis.major_tick_out         = tickIn 
+		if width   is not None:
+			self.yaxis.major_tick_line_width  = width
+		if color:
+			self.yaxis.major_tick_line_color  = color
+
+		return self.yaxis_majorTick
+
+	def plot_yaxis_minorTick(self, tickIn = None, tickOut = None, width = None, color  = None):
+		if tickIn  is not None:
+			self.yaxis.minor_tick_in          = tickIn 
+		if tickOut is not None:
+			self.yaxis.minor_tick_out         = tickIn 
+		if width   is not None:
+			self.yaxis.minor_tick_line_width  = width
+		if color:
+			self.yaxis.minor_tick_line_color  = color
+
+		return self.yaxis_minorTick				
+
+
 
 class bokehLine(object):
 	def __init__(self, line, parent = None):
