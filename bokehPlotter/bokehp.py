@@ -181,7 +181,7 @@ class PlotWindowWidget(QMainWindow):
 			plot_height     = h, 
 			background_fill = "#001133", 
 			border_fill     = "#001133" )
-
+		
 		
 
 		plotWrapper         = bokehPlot(plotArea)
@@ -200,36 +200,29 @@ class PlotWindowWidget(QMainWindow):
 		xaxis_label     = {'text'     : "x",
 						   'color'    : "#ffffff"}
 
-		xaxis_majorTick = {'tickIn'  : 5,
-						   'tickOut' : 0,
-						   'width'   : 2,
-						   'color'   : "#ffffff"}  
-
-		xaxis_minorTick = { 'tickIn'  : 3,
+		majorTick       = { 'tickIn'  : 5,
 							'tickOut' : 0,
-							'width'   : 2,
+							'width'   : 1,
 							'color'   : "#ffffff"}  
 
-		yaxis_majorTick = { 'tickIn'  : 5,
+		minorTick       = { 'tickIn'  : 3,
 							'tickOut' : 0,
-							'width'   : 2,
+							'width'   : 1,
 							'color'   : "#ffffff"}  
 
-		yaxis_minorTick = { 'tickIn'  : 3,
-							'tickOut' : 0,
-							'width'   : 2,
-							'color'   : "#ffffff"}  
+		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
+		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')
 
 		plotWrapper.plot_spec(**spec)
 		plotWrapper.plot_title(**title)
 		plotWrapper.plot_xaxis_label(**xaxis_label)
-		plotWrapper.xaxis_majorTick(**xaxis_majorTick)
-		plotWrapper.yaxis_majorTick(**yaxis_majorTick)
-		plotWrapper.xaxis_minorTick(**xaxis_minorTick)
-		plotWrapper.yaxis_minorTick(**yaxis_minorTick)
-
-		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
-		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')
+		for index in range(len(plotArea.axis)):
+			plotWrapper.plot_axis_majorTick(num = index, **majorTick)
+			plotWrapper.plot_axis_minorTick(num = index, **minorTick)
+		# plotWrapper.plot_xaxis_majorTick(**majorTick)
+		# plotWrapper.plot_yaxis_majorTick(**majorTick)
+		# plotWrapper.plot_xaxis_minorTick(**minorTick)
+		# plotWrapper.plot_yaxis_minorTick(**minorTick)
 
 		plotArea.xgrid.grid_line_color = "#C8C8C8"
 		plotArea.xgrid.grid_line_alpha =  0.5
@@ -480,8 +473,46 @@ class bokehPlot(object):
 		if color:
 			self.yaxis.minor_tick_line_color  = color
 
-		return self.yaxis_minorTick				
+		return self.yaxis_minorTick		
 
+	def plot_axis_majorTick(self, num     = None, tickIn = None, 
+								  tickOut = None, width  = None, color  = None):
+		if num is not None:
+			axis = self.plot.axis[num]
+			if tickIn  is not None:
+				axis.major_tick_in          = tickIn 
+			if tickOut is not None:
+				axis.major_tick_out         = tickIn 
+			if width   is not None:
+				axis.major_tick_line_width  = width
+			if color:
+				axis.major_tick_line_color  = color
+
+			axis_majorTick   = {'tickIn'  : axis.major_tick_in,
+								'tickOut' : axis.major_tick_out,
+								'width'   : axis.major_tick_line_width,
+								'color'   : axis.major_tick_line_color}
+		return axis_majorTick
+
+
+	def plot_axis_minorTick(self, num     = None, tickIn = None, 
+								  tickOut = None, width  = None, color  = None):
+		if num is not None:
+			axis = self.plot.axis[num]
+			if tickIn  is not None:
+				axis.minor_tick_in          = tickIn 
+			if tickOut is not None:
+				axis.minor_tick_out         = tickIn 
+			if width   is not None:
+				axis.minor_tick_line_width  = width
+			if color:
+				axis.minor_tick_line_color  = color
+				
+			axis_minorTick   = {'tickIn'  : axis.minor_tick_in,
+								'tickOut' : axis.minor_tick_out,
+								'width'   : axis.minor_tick_line_width,
+								'color'   : axis.minor_tick_line_color}
+		return axis_minorTick 	
 
 
 class bokehLine(object):
