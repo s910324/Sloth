@@ -406,7 +406,7 @@ class bokehPlot(object):
 		if tickIn  is not None:
 			self.xaxis.major_tick_in         = tickIn 
 		if tickOut is not None:
-			self.xaxis.major_tick_out        = tickIn 
+			self.xaxis.major_tick_out        = tickOut 
 		if width   is not None:
 			self.xaxis.major_tick_line_width = width
 		if color:
@@ -419,7 +419,7 @@ class bokehPlot(object):
 		if tickIn  is not None:
 			self.xaxis.minor_tick_in         = tickIn 
 		if tickOut is not None:
-			self.xaxis.minor_tick_out        = tickIn 
+			self.xaxis.minor_tick_out        = tickOut 
 		if width   is not None:
 			self.xaxis.minor_tick_line_width = width
 		if color:
@@ -455,7 +455,7 @@ class bokehPlot(object):
 		if tickIn  is not None:
 			self.yaxis.major_tick_in          = tickIn 
 		if tickOut is not None:
-			self.yaxis.major_tick_out         = tickIn 
+			self.yaxis.major_tick_out         = tickOut 
 		if width   is not None:
 			self.yaxis.major_tick_line_width  = width
 		if color:
@@ -467,13 +467,40 @@ class bokehPlot(object):
 		if tickIn  is not None:
 			self.yaxis.minor_tick_in          = tickIn 
 		if tickOut is not None:
-			self.yaxis.minor_tick_out         = tickIn 
+			self.yaxis.minor_tick_out         = tickOut 
 		if width   is not None:
 			self.yaxis.minor_tick_line_width  = width
 		if color:
 			self.yaxis.minor_tick_line_color  = color
 
 		return self.yaxis_minorTick		
+
+
+	# def plot_axis(self, num   = None, color     = None, width     = None, 
+	# 					label = None, majorTick = None, minorTick = None):
+	# 	if num is not None:
+	# 		axis = self.plot.axis[num]
+	# 		if color:
+	# 			axis.axis_line_color                  = color
+	# 		if width is not None:
+	# 			axis.axis_line_width                  = width
+	# 		if label:
+	# 			self.plot_xaxis_label(**label)
+	# 		if majorTick:
+	# 			self.plot_axis_majorTick(**majorTick)
+	# 		if minorTick:
+	# 			self.plot_axis_minorTick(**minorTick)
+
+	# 		return self.axis
+
+
+	# def plot_axis_label(self, text = None, color = None):
+	# 	if text is not None:
+	# 		self.yaxis.axis_label                  = text
+	# 	if color:
+	# 		self.yaxis.axis_label_text_color       = color
+
+	# 	return self.yaxis_label
 
 	def plot_axis_majorTick(self, num     = None, tickIn = None, 
 								  tickOut = None, width  = None, color  = None):
@@ -482,7 +509,7 @@ class bokehPlot(object):
 			if tickIn  is not None:
 				axis.major_tick_in          = tickIn 
 			if tickOut is not None:
-				axis.major_tick_out         = tickIn 
+				axis.major_tick_out         = tickOut 
 			if width   is not None:
 				axis.major_tick_line_width  = width
 			if color:
@@ -502,7 +529,7 @@ class bokehPlot(object):
 			if tickIn  is not None:
 				axis.minor_tick_in          = tickIn 
 			if tickOut is not None:
-				axis.minor_tick_out         = tickIn 
+				axis.minor_tick_out         = tickOut 
 			if width   is not None:
 				axis.minor_tick_line_width  = width
 			if color:
