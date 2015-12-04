@@ -14,6 +14,7 @@ import numpy as np
 
 from GraphEditor import EditorWindow 
 from GraphEditor.MaterialDesignList import *
+
 # sys.path.append('./GraphEditor')
 # sys.path.append('./GraphEditor/MaterialDesignList')
 # import  GraphEditor.EditorWindow as EditorWindow
@@ -21,7 +22,7 @@ from GraphEditor.MaterialDesignList import *
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
 		super(MainWindow, self).__init__(parent)
-		self.mainWindow = QMainWindow()
+		# self.mainWindow = QMainWindow()
 		self.lock = True
 		self.ID   = -1
 		self.resize(1000,800)
@@ -529,12 +530,15 @@ class DebugWindow(QMainWindow):
 
 		package.close()
 		return data
+
+
 def Debugger():
-	
 	app  = QApplication(sys.argv)
 	form = DebugWindow()
+	form.lock = False
 	form.show()
 	import os
-	print  os.path.realpath(__file__)
+	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
+	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-# Debugger()
+Debugger()

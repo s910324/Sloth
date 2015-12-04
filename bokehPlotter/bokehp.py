@@ -16,6 +16,9 @@ from bokeh.plotting  import figure, show, output_file,  vplot
 class PlotWindowWidget(QMainWindow):
 	def __init__(self, parent = None):
 		super(PlotWindowWidget, self).__init__(parent)
+		self.lock = True
+		self.ID   = -1
+		self.resize(1000,800)
 		self.Web = QWebView()
 		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.lineIDCounter    = -1
@@ -23,18 +26,10 @@ class PlotWindowWidget(QMainWindow):
 
 		self.plotIDCounter    = -1
 		self.plotIDDict       = {}
-
-		data     = self.loadCrew()
-		self.div = self.plot(0, data)
-
-		html     = file_html(self.div, CDN, "my plot")
-		online   = 'http://cdn.pydata.org/bokeh/release'
-		offline  =  'file://' + os.getcwd() 
-		html     = html.replace(online,  offline)
-
-		self.Web.setHtml(html)
+		self.html = None
 		self.setCentralWidget(self.Web)
 		self.initToolBar()
+		self.show()
 
 	def initToolBar(self):
 		self.toolbar = QToolBar()
@@ -55,22 +50,23 @@ class PlotWindowWidget(QMainWindow):
 		self.plotIDDict[plotID] = plot, rng
 		return self.plotIDCounter	
 
-	# def plot(self, stack, dataSet):
-	# 	plotPack = []
-	# 	if not stack:
-	# 		for i, data in enumerate(dataSet):
-	# 			plot, rng = self.addPlotArea(data)
-	# 			self.addPlotHolder(plot, rng)
-	# 			plotPack.append(plot)
-	# 		html = self.insertPlot(plotPack)
-	# 	else:
-	# 		plot, rng = self.addPlotArea(dataSet)
-	# 		self.addPlotHolder(plot, rng)
-	# 		plotPack.append(plot)
-	# 		html = self.insertPlot(plotPack)			
-	# 	return html
 
-	def plot(self, stack, dataSet):
+	def getRange(self, dataSet):
+		xMins, xMaxs, yMins, yMaxs = [], [], [], []
+		for data in dataSet:
+			xMins.append(min(data[0]))
+			xMaxs.append(max(data[0]))
+			yMins.append(min(data[1]))
+			yMaxs.append(max(data[1]))
+		xmin, xmax, ymin, ymax = min(xMins), max(xMaxs), min(yMins), max(yMaxs)
+
+		spamX, spamY = [float(xmax-xmin)*0.05, float(ymax-ymin)*0.05]
+		rng = [xmin-spamX, xmax+spamX, ymin-spamY, ymax+spamY]
+
+		return rng
+
+
+	def plotData(self, stack, dataSet):
 		plotPack = []
 		if not stack:
 			for i, data in enumerate(dataSet):
@@ -96,93 +92,27 @@ class PlotWindowWidget(QMainWindow):
 				self.addLineHolder(line)
 			
 			plotPack.append(plotArea)
-			html = self.insertPlot(plotPack)		
-
-		return html
-
-	def getRange(self, dataSet):
-
-		xMins, xMaxs, yMins, yMaxs = [], [], [], []
-		for data in dataSet:
-			xMins.append(min(data[0]))
-			xMaxs.append(max(data[0]))
-			yMins.append(min(data[1]))
-			yMaxs.append(max(data[1]))
-		xmin, xmax, ymin, ymax = min(xMins), max(xMaxs), min(yMins), max(yMaxs)
-
-		spamX, spamY = [float(xmax-xmin)*0.05, float(ymin-ymin)*0.05]
-		rng = [xmin-spamX, xmax+spamX, ymin-spamY, ymax+spamY]
-		return rng
-
-	# def initPlotArea(self, title = "Unitled graph", rng = [0,1,0,1],  w=800, h=300, bgc = "#001133", bdc = "#001133"):
-	# 	tool  = 'box_zoom,box_select,crosshair, save, reset'
-	# 	[xmin, xmax, ymin, ymax] = rng
-
-	# 	plotArea = figure(title=title, 
-	# 		x_range         = (xmin, xmax), 
-	# 		y_range         = (ymin, ymax), 
-	# 		tools           = tool, 
-	# 		plot_width      = w, 
-	# 		plot_height     = h, 
-	# 		background_fill = "#001133", 
-	# 		border_fill     = "#001133" )
+			html = self.insertPlot(plotPack)	
 
 
-	# 	plotArea.title_text_color      = "#C8C8C8"
-	# 	plotArea.title_text_font_style = "bold"
-	# 	plotArea.title_text_font_size  = "10pt"
-
-	# 	plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
-	# 	plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')
-
-	# 	plotArea.xaxis.axis_line_color        = "#C8C8C8"
-	# 	plotArea.xaxis.major_label_text_color = "#C8C8C8"
-	# 	plotArea.xaxis.major_tick_line_color  = "#C8C8C8"
-	# 	plotArea.xaxis.major_tick_line_width  = 1
-	# 	plotArea.xaxis.minor_tick_line_color  = "#C8C8C8"
-	# 	plotArea.xaxis.minor_tick_line_width  = 1
-
-	# 	plotArea.yaxis.axis_line_color        = "#C8C8C8"
-	# 	plotArea.yaxis.major_label_text_color = "#C8C8C8"
-	# 	plotArea.yaxis.major_tick_line_color  = "#C8C8C8"
-	# 	plotArea.yaxis.major_tick_line_width  = 1
-	# 	plotArea.yaxis.minor_tick_line_color  = "#C8C8C8"
-	# 	plotArea.yaxis.minor_tick_line_width  = 1
-
-	# 	plotArea.xaxis.major_tick_in  =  5 
-	# 	plotArea.xaxis.major_tick_out =  0
-	# 	plotArea.xaxis.minor_tick_in  =  3
-	# 	plotArea.xaxis.minor_tick_out =  0
-
-	# 	plotArea.yaxis.major_tick_in  =  5 
-	# 	plotArea.yaxis.major_tick_out =  0
-	# 	plotArea.yaxis.minor_tick_in  =  3
-	# 	plotArea.yaxis.minor_tick_out =  0
-
-
-	# 	plotArea.xgrid.grid_line_color = "#C8C8C8"
-	# 	plotArea.xgrid.grid_line_alpha =  0.5
-	# 	plotArea.xgrid.grid_line_dash  = [3,3]
-	# 	plotArea.ygrid.grid_line_color = "#C8C8C8"
-	# 	plotArea.ygrid.grid_line_alpha =  0.5
-	# 	plotArea.ygrid.grid_line_dash  = [3,3]
-	# 	return plotArea
+		html      = file_html(html, CDN, "my plot")
+		online    = 'http://cdn.pydata.org/bokeh/release'
+		offline   =  'file://' + os.getcwd() + '/BokehJS'
+		self.html = html.replace(online,  offline)
+		self.Web.setHtml(self.html)
+		self.Web.reload()
+		return self.html
 
 	
 	def initPlotArea(self, title = "Unitled graph", rng = [0,1,0,1],  w=800, h=300, bgc = "#001133", bdc = "#001133"):
 		tool  = 'box_zoom,box_select,crosshair, save, reset'
 		[xmin, xmax, ymin, ymax] = rng
 
-		plotArea = figure(title=title, 
+		plotArea = figure(
 			x_range         = (xmin, xmax), 
 			y_range         = (ymin, ymax), 
-			tools           = tool, 
 			plot_width      = w, 
-			plot_height     = h, 
-			background_fill = "#001133", 
-			border_fill     = "#001133" )
-		
-		
+			plot_height     = h)
 
 		plotWrapper         = bokehPlot(plotArea)
 
@@ -193,38 +123,36 @@ class PlotWindowWidget(QMainWindow):
 						   'borderfill' : "#001133"}
 
 		title           = {'text'     : title,
-						   'color'    : "#ffffff",
+						   'color'    : "#AFAFAF",
 						   'style'    : "bold",
 						   'size'     : 10}
-
-		xaxis_label     = {'text'     : "x",
-						   'color'    : "#ffffff"}
 
 		majorTick       = { 'tickIn'  : 5,
 							'tickOut' : 0,
 							'width'   : 1,
-							'color'   : "#ffffff"}  
+							'color'   : "#AFAFAF"}  
 
 		minorTick       = { 'tickIn'  : 3,
 							'tickOut' : 0,
 							'width'   : 1,
-							'color'   : "#ffffff"}  
+							'color'   : "#AFAFAF"}  
 
-		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
-		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')
+		plotArea.add_layout(LinearAxis(), 'right')
+		plotArea.add_layout(LinearAxis(), 'above')
 
-		plotWrapper.plot_spec(**spec)
+		plotWrapper.plot_spec( **spec)
 		plotWrapper.plot_title(**title)
-		plotWrapper.plot_xaxis_label(**xaxis_label)
 		for index in range(len(plotArea.axis)):
-			plotWrapper.plot_axis_majorTick(num = index, **majorTick)
-			plotWrapper.plot_axis_minorTick(num = index, **minorTick)
-		# plotWrapper.plot_xaxis_majorTick(**majorTick)
-		# plotWrapper.plot_yaxis_majorTick(**majorTick)
-		# plotWrapper.plot_xaxis_minorTick(**minorTick)
-		# plotWrapper.plot_yaxis_minorTick(**minorTick)
+			other = "y" if index == 2 else ""
+			text  = "x" if index == 1 else other
+			
+			axis_label = {'text'     : text,
+						  'color'    : "#AFAFAF"}
+			plotWrapper.plot_axis(num   = index,      color     = '#AFAFAF', width     = 1, 
+								  label = axis_label, majorTick = majorTick, minorTick = minorTick)
 
-		plotArea.xgrid.grid_line_color = "#C8C8C8"
+
+		plotArea.xgrid.grid_line_color = "#AFAFAF"
 		plotArea.xgrid.grid_line_alpha =  0.5
 		plotArea.xgrid.grid_line_dash  = [3,3]
 		plotArea.ygrid.grid_line_color = "#C8C8C8"
@@ -281,20 +209,29 @@ class PlotWindowWidget(QMainWindow):
 		return layout
 
 	def resetGraph(self):
-		for ID in self.plotIDDict:
-			plot, rng = self.plotIDDict[ID]
-			plot.x_range = Range1d(start=rng[0], end=rng[1])
-			plot.y_range = Range1d(start=rng[2], end=rng[3])
+		# for ID in self.plotIDDict:
+		# 	plot, rng = self.plotIDDict[ID]
+		# 	plot.x_range = Range1d(start=rng[0], end=rng[1])
+		# 	plot.y_range = Range1d(start=rng[2], end=rng[3])
 		for ID in self.lineIDDict:
 			line = self.lineIDDict[ID]
 			line.line_visible(False)
-		html = file_html(self.div, CDN, "my plot")
-		online   = 'http://cdn.pydata.org/bokeh/release'
-		offline  =  'file://' + os.getcwd() 
-		html = html.replace(online,  offline)
-		self.Web.setHtml(html)
+		# html = file_html(self.div, CDN, "my plot")
+		# online   = 'http://cdn.pydata.org/bokeh/release'
+		# offline  =  'file://' + os.getcwd() 
+		# html = html.replace(online,  offline)
+		self.Web.setHtml(self.html)
 		self.Web.reload()
-		print 'a'
+
+
+	def saveCrew(self, dataSet):
+		fileName   = './savedData.pkl'
+		fileHolder = open(fileName, 'wb')
+		try:
+			pickle.dump(dataSet, fileHolder)
+		except (EnvironmentError, pickle.PicklingError) as err:
+			raise SaveError(str(err))
+		fileHolder.close()
 
 	def loadCrew(self):
 		fileName = './savedData.pkl'
@@ -304,7 +241,20 @@ class PlotWindowWidget(QMainWindow):
 		package.close()
 		return data
 
+	def closeEvent(self, event):
+		if self.lock:
+			self.showMinimized()
+			event.ignore()
 
+		else:
+			self.showMaximized()
+			event.accept()
+
+	def unlock(self) :
+		self.lock = False
+
+	def lock(self) :
+		self.lock = True	
 
 class bokehPlot(object):
 	def __init__(self, plot, parent=None):
@@ -312,6 +262,7 @@ class bokehPlot(object):
 		self.plot  = plot
 		self.xaxis = self.plot.axis[0]
 		self.yaxis = self.plot.axis[1]
+
 		self.spec              = {'width'      : self.plot.plot_width,
 								  'height'     : self.plot.plot_height,
 								  'tools'      : self.plot.tools,
@@ -476,31 +427,36 @@ class bokehPlot(object):
 		return self.yaxis_minorTick		
 
 
-	# def plot_axis(self, num   = None, color     = None, width     = None, 
-	# 					label = None, majorTick = None, minorTick = None):
-	# 	if num is not None:
-	# 		axis = self.plot.axis[num]
-	# 		if color:
-	# 			axis.axis_line_color                  = color
-	# 		if width is not None:
-	# 			axis.axis_line_width                  = width
-	# 		if label:
-	# 			self.plot_xaxis_label(**label)
-	# 		if majorTick:
-	# 			self.plot_axis_majorTick(**majorTick)
-	# 		if minorTick:
-	# 			self.plot_axis_minorTick(**minorTick)
+	def plot_axis(self, num   = None, color     = None, width     = None, 
+						label = None, majorTick = None, minorTick = None):
+		if num is not None:
+			axis = self.plot.axis[num]
+			if color:
+				axis.axis_line_color                  = color
+			if width is not None:
+				axis.axis_line_width                  = width
+			if label:
+				self.plot_axis_label(    num = num, **label)
+			if majorTick:
+				self.plot_axis_majorTick(num = num, **majorTick)
+			if minorTick:
+				self.plot_axis_minorTick(num = num, **minorTick)
 
-	# 		return self.axis
+			# return axis
 
 
-	# def plot_axis_label(self, text = None, color = None):
-	# 	if text is not None:
-	# 		self.yaxis.axis_label                  = text
-	# 	if color:
-	# 		self.yaxis.axis_label_text_color       = color
+	def plot_axis_label(self, num = None, text = None, color = None):
+		if num is not None:
+			axis = self.plot.axis[num]
+			if text is not None:
+				axis.axis_label                  = text
+			if color:
+				axis.axis_label_text_color       = color
 
-	# 	return self.yaxis_label
+		axis_label = {'text'    : axis.axis_label,
+					  'color'   : axis.axis_label_text_color}
+
+		return axis_label
 
 	def plot_axis_majorTick(self, num     = None, tickIn = None, 
 								  tickOut = None, width  = None, color  = None):
@@ -663,8 +619,17 @@ class bokehLine(object):
 # 				self.symbol_outLine(outLine), self.symbol_visible(visible)]
 
 	
-if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	window =  PlotWindowWidget()
-	window.show()
+
+def Debugger():
+	
+	app  = QApplication(sys.argv)
+	form = PlotWindowWidget()
+	data = form.loadCrew()
+	form.plotData(0, data)
+	form.lock = False
+	form.show()
+	import os
+	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
+	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
+Debugger()

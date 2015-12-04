@@ -14,7 +14,7 @@ import pandasOpenfile  as oFile
 from PySide.QtCore import *
 from PySide.QtGui  import *
 from PySide.QtGui  import QFont as QFont
-
+from bokehPlotter  import bokehp
 
 class Sloth(QMainWindow):
 	def __init__(self, parent=None):
@@ -370,14 +370,16 @@ class Sloth(QMainWindow):
 			subWinTitle  = '[plot]' + subWinHandle.windowTitle()
 			tableHandle  = subWinHandle.widget().centralWidget()
 
-			plotWindow   = qtplt.MainWindow()
+			plotWindow   = bokehp.PlotWindowWidget()
+			# plotWindow   = qtplt.MainWindow()
 			tabID        = self.AddMdiSubWindow(plotWindow)
 
 
 			selectArray, dataSet = tableHandle.getSelectedData()
 			for column in selectArray:
 					print 'selected Columns: {0}'.format(column)
-			self.saveData(dataSet) 
+					
+			# self.saveData(dataSet) 
 
 
 			plotWindow.plotData(stack, dataSet)
