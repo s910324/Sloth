@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
 	def showOptionPanel(self):
 		# self.option.importPlotItems(self.lineIDDict)
 		# self.option.show()
-		
+
 		self.optionWindow.importPlotItems(self.plotIDDict, self.lineIDDict)
 		self.optionWindow.show()
 
