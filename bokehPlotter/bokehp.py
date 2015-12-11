@@ -12,14 +12,19 @@ from bokeh.resources import CDN
 from bokeh.embed     import file_html
 from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
 from bokeh.plotting  import figure, show, output_file,  vplot
-sys.path.append("..")
-from GraphEditor import EditorWindow 
-from GraphEditor.MaterialDesignList import *
-
-from bokehPlot   import bokehPlot
-from bokehAxis   import bokehAxis
-from bokehLine   import bokehLine
-from bokehSymbol import bokehSymbol
+# sys.path.append("./BokehGraphEditor")
+from BokehGraphEditor import EditorWindow 
+from BokehGraphEditor.MaterialDesignList import *
+try:
+	from bokehPlot   import bokehPlot
+	from bokehAxis   import bokehAxis
+	from bokehLine   import bokehLine
+	from bokehSymbol import bokehSymbol
+except:
+	from bokehPlotter.bokehPlot   import bokehPlot
+	from bokehPlotter.bokehAxis   import bokehAxis
+	from bokehPlotter.bokehLine   import bokehLine
+	from bokehPlotter.bokehSymbol import bokehSymbol
 
 class PlotWindowWidget(QMainWindow):
 	def __init__(self, parent = None):
@@ -34,19 +39,15 @@ class PlotWindowWidget(QMainWindow):
 
 		self.plotIDCounter    = -1
 		self.plotIDDict       = {}
-		self.html = None
+		self.html             = None
 		self.setCentralWidget(self.Web)
 		self.initToolBar()
 		self.optionWindow     = EditorWindow.EditorWindow()
 		self.show()
 
 
-
-
-
 	def initToolBar(self):
-		self.toolbar = QToolBar()
-		
+		self.toolbar  = QToolBar()
 		resetAction   = QAction('reset', self)
 		optionsAction = QAction('_Options', self)		
 		self.toolbar.addAction(resetAction)
@@ -60,16 +61,16 @@ class PlotWindowWidget(QMainWindow):
 		self.optionWindow.importPlotItems(self.plotIDDict, self.lineIDDict)
 		self.optionWindow.show()
 
-	def addLineHolder(self, line):	
+	def addLineHolder(self, lineWrap):	
 		self.lineIDCounter += 1
 		lineID  = self.lineIDCounter
-		self.lineIDDict[lineID] = line
+		self.lineIDDict[lineID] = lineWrap
 		return self.lineIDCounter	
 
-	def addPlotHolder(self, plot, rng):	
+	def addPlotHolder(self, plotWrap, rng):	
 		self.plotIDCounter += 1
 		plotID  = self.plotIDCounter
-		self.plotIDDict[plotID] = plot, rng
+		self.plotIDDict[plotID] = plotWrap, rng
 		return self.plotIDCounter	
 
 
@@ -96,13 +97,12 @@ class PlotWindowWidget(QMainWindow):
 				plotRange = self.getRange([data])
 
 				plotWrap  = self.initPlotArea(rng = plotRange, num = num)
-				plotArea  = plotWrap.plot
 				self.addPlotHolder(plotWrap, plotRange)
-				plotPack.append(plotArea)
+				plotPack.append(plotWrap)
 
 				legendText = 'plot ' + str(num)
-				line       =  self.addPlotLine(plotWrap,legendText = legendText, data = data)
-				self.addLineHolder(line)
+				lineWrap   =  self.addPlotLine(plotWrap,legendText = legendText, data = data)
+				self.addLineHolder(lineWrap)
 				
 			html = self.insertPlot(plotPack)
 
@@ -110,14 +110,13 @@ class PlotWindowWidget(QMainWindow):
 			num       = self.lineIDCounter + 1
 			plotRange = self.getRange(dataSet)
 			plotWrap  = self.initPlotArea(rng = plotRange, num = num)
-			plotArea  = plotWrap.plot
 			self.addPlotHolder(plotWrap, plotRange)
 			for i, data in enumerate(dataSet):
 				legendText = 'plot ' + str(num)
-				line       =  self.addPlotLine(plotWrap, legendText = legendText, data = data)
-				self.addLineHolder(line)
+				lineWrap   =  self.addPlotLine(plotWrap, legendText = legendText, data = data)
+				self.addLineHolder(lineWrap)
 			
-			plotPack.append(plotArea)
+			plotPack.append(plotWrap)
 			html = self.insertPlot(plotPack)	
 
 
@@ -155,10 +154,10 @@ class PlotWindowWidget(QMainWindow):
 						   'size'     : 10}
 
 
-
-
 		plotWrapper.plot_spec( **spec)
 		plotWrapper.plot_title(**title)
+		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'right')
+ 		plotArea.add_layout(LinearAxis(axis_line_color = "#C8C8C8" ), 'above')		
 		for index in range(len(plotArea.axis)):
 
 			axisWrapper = bokehAxis(plotArea, index)
@@ -186,11 +185,6 @@ class PlotWindowWidget(QMainWindow):
 								'majorTick' : axis_majorTick,
 								'minorTick' : axis_minorTick}			
 			axisWrapper.plot_axis(**axis_val)
-			# axis_label = {'text'     : text,
-			# 			  'color'    : "#AFAFAF"}
-			# plotWrapper.plot_axis(num   = index,      color     = '#AFAFAF', width     = 1, 
-			# 					  label = axis_label, majorTick = majorTick, minorTick = minorTick)
-
 
 		plotArea.xgrid.grid_line_color = "#AFAFAF"
 		plotArea.xgrid.grid_line_alpha =  0.5
@@ -205,7 +199,6 @@ class PlotWindowWidget(QMainWindow):
 	def addPlotLine(self, plotWrap, data = [None, None], legendText = 'plot', radii = 2, 
 						  color = "#c8c8c8", width = 1.5, symbol = 'o', visible = True):
 		viewNum  = plotWrap.spec['viewNum']
-		print viewNum
 		plotArea = plotWrap.plot
 		x    = np.array(data[0])
 		y    = np.array(data[1])
@@ -219,7 +212,7 @@ class PlotWindowWidget(QMainWindow):
 			val     = { 'color'    : color,
 						'size'     : radii,
 						'outLine'  : outLine,
-						'visible'  : False}
+						'visible'  : True}
 			symbolWrapper.symbol_val(**val)
 		else:
 			symbolWrapper = None
@@ -248,8 +241,8 @@ class PlotWindowWidget(QMainWindow):
 
 
 	def insertPlot(self, plotSets):
-		
-		layout = vplot(*plotSets)
+		plotSets = [wrapper.plot for wrapper in plotSets]
+		layout   = vplot( *plotSets )
 		output_file("les_mis.html")
 		# show(layout)
 		for plot in plotSets:
@@ -261,9 +254,9 @@ class PlotWindowWidget(QMainWindow):
 		# 	plot, rng = self.plotIDDict[ID]
 		# 	plot.x_range = Range1d(start=rng[0], end=rng[1])
 		# 	plot.y_range = Range1d(start=rng[2], end=rng[3])
-		for ID in self.lineIDDict:
-			line = self.lineIDDict[ID]
-			line.line_visible(False)
+		# for ID in self.lineIDDict:
+		# 	line = self.lineIDDict[ID]
+		# 	line.line_visible(False)
 		# html = file_html(self.div, CDN, "my plot")
 		# online   = 'http://cdn.pydata.org/bokeh/release'
 		# offline  =  'file://' + os.getcwd() 

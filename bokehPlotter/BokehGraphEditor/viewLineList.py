@@ -78,8 +78,8 @@ class viewLineListWidget(QWidget):
 
 
 	def getLineValues(self):
-		name, color, width, style, symbol, visible, viewNum = self.line.line_val()
-		return name, color, width, style, symbol, visible, viewNum
+		# name, color, width, style, symbol, visible, viewNum 
+		return self.line.line_val()
 
 
 	def returnVal(self):

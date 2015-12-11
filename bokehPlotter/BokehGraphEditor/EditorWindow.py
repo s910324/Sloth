@@ -64,8 +64,8 @@ class EditorWindow(QGroupBox):
 		viewBox, vListWidget = self.viewBoxList.viewBoxDict[viewBoxNum]
 		vlineListWidget      = self.viewBoxList.addLine(viewBoxNum, line)
 		values               = vlineListWidget.getLineValues()
-		print values
-		vlineListWidget.doubleClicked.connect(lambda val = values : self.lcontrol.setPanelVal(val))
+		
+		vlineListWidget.doubleClicked.connect(lambda val = values : self.lcontrol.setPanelVal(**val))
 		return vlineListWidget
 
 	# def importPlotItem(self, line = None):
@@ -83,8 +83,11 @@ class EditorWindow(QGroupBox):
 			# ItemWidget = self.addView(lineDict[index])
 			ItemWidget = self.addView()
 		for index in lineDict:
-			line       = lineDict[index]
-			viewboxNum = line.line_viewNum()
+			line           = lineDict[index]
+			try:
+				viewboxNum = line.line_viewNum()
+			except:
+				viewboxNum = line.val['viewNum']
 			ItemWidget = self.addPlot(viewboxNum, line)
 			ItemWidgets.append(ItemWidget)
 		return ItemWidgets
@@ -108,4 +111,4 @@ def Debugger():
 	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-Debugger()
+# Debugger()

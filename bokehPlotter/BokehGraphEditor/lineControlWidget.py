@@ -185,16 +185,19 @@ class lineControlWidget (QWidget):
 		box.addWidget(groupBox)
 		return box
 
-	def setPanelVal(self, val):
-		print val
-		name, color, width, style, symbol, visible, viewNum = val
-		self.nameLine.setText(name)
+	def setPanelVal(self, name  = None, color  = None, width   = None,
+						  style = None, symbol = None, visible = None, viewNum = None):
+		if name is not None:
+			self.nameLine.setText(name)
 		if visible:
 			self.lineVisi.setChecked(True)
 		else:
 			self.lineVisi.setChecked(False)
-		self.lColorLine.setText(str(color))
-		self.lWidthLine.setText(str(width))
+
+		if color:
+			self.lColorLine.setText(str(color))
+		if width is not None:
+			self.lWidthLine.setText(str(width))
 
 
 

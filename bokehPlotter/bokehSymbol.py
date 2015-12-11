@@ -19,6 +19,7 @@ class bokehSymbol(object):
 	def symbol_size(self, size = None):
 		if size is not None:
 			self.symbol.size = size
+			print self.symbol.size
 		return self.symbol.size
 
 	def symbol_penColor(self, color = None):
