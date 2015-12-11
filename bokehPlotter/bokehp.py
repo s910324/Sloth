@@ -17,6 +17,7 @@ from GraphEditor import EditorWindow
 from GraphEditor.MaterialDesignList import *
 
 from bokehPlot   import bokehPlot
+from bokehAxis   import bokehAxis
 from bokehLine   import bokehLine
 from bokehSymbol import bokehSymbol
 
@@ -153,29 +154,42 @@ class PlotWindowWidget(QMainWindow):
 						   'style'    : "bold",
 						   'size'     : 10}
 
-		majorTick       = { 'tickIn'  : 5,
-							'tickOut' : 0,
-							'width'   : 1,
-							'color'   : "#AFAFAF"}  
 
-		minorTick       = { 'tickIn'  : 3,
-							'tickOut' : 0,
-							'width'   : 1,
-							'color'   : "#AFAFAF"}  
 
-		plotArea.add_layout(LinearAxis(), 'right')
-		plotArea.add_layout(LinearAxis(), 'above')
 
 		plotWrapper.plot_spec( **spec)
 		plotWrapper.plot_title(**title)
 		for index in range(len(plotArea.axis)):
+
+			axisWrapper = bokehAxis(plotArea, index)
+			plotWrapper.axis.append(axisWrapper)
+
 			other = "y" if index == 2 else ""
 			text  = "x" if index == 1 else other
-			
-			axis_label = {'text'     : text,
-						  'color'    : "#AFAFAF"}
-			plotWrapper.plot_axis(num   = index,      color     = '#AFAFAF', width     = 1, 
-								  label = axis_label, majorTick = majorTick, minorTick = minorTick)
+
+			axis_label       = {'text'      : text,
+								'color'     : "#AFAFAF"}
+
+			axis_majorTick   = {'tickIn'    : 5,
+								'tickOut'   : 0,
+								'width'     : 1,
+								'color'     : "#AFAFAF"}  
+
+			axis_minorTick   = {'tickIn'    : 3,
+								'tickOut'   : 0,
+								'width'     : 1,
+								'color'     : "#AFAFAF"}  
+
+	 		axis_val         = {'color'     : "#AFAFAF",
+								'width'     : "#AFAFAF",
+								'label'     : axis_label,
+								'majorTick' : axis_majorTick,
+								'minorTick' : axis_minorTick}			
+			axisWrapper.plot_axis(**axis_val)
+			# axis_label = {'text'     : text,
+			# 			  'color'    : "#AFAFAF"}
+			# plotWrapper.plot_axis(num   = index,      color     = '#AFAFAF', width     = 1, 
+			# 					  label = axis_label, majorTick = majorTick, minorTick = minorTick)
 
 
 		plotArea.xgrid.grid_line_color = "#AFAFAF"

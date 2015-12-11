@@ -10,7 +10,7 @@ __getattribute__
 __hash__
 __init__
 __module__
-__new__
+__new__ 
 __properties__
 __properties_with_refs__
 __reduce__
