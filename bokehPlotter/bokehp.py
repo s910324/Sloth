@@ -48,19 +48,21 @@ class PlotWindowWidget(QMainWindow):
 
 	def initToolBar(self):
 		self.toolbar  = QToolBar()
-		resetAction   = QAction('reset', self)
-		optionsAction = QAction('_Options', self)		
-		self.toolbar.addAction(resetAction)
-		self.toolbar.addAction(optionsAction)
+		self.resetAction   = QAction('reset', self)
+		self.optionsAction = QAction('_Options', self)		
+		self.toolbar.addAction(self.resetAction)
+		self.toolbar.addAction(self.optionsAction)
 		
-		resetAction.triggered.connect(self.resetGraph)
-		optionsAction.triggered.connect(self.showOptionPanel)
+		self.resetAction.triggered.connect(self.resetGraph)
+		self.optionsAction.triggered.connect(self.showOptionPanel)
 		self.addToolBar( Qt.TopToolBarArea , self.toolbar)
 
 	def showOptionPanel(self):
 		self.optionWindow = EditorWindow.EditorWindow()
 		self.optionWindow.valChanged.connect(self.resetGraph)
+		self.optionWindow.onClosed.connect(lambda:self.optionsAction.setEnabled(True))
 		self.optionWindow.importPlotItems(self.plotIDDict, self.lineIDDict)
+		self.optionsAction.setEnabled(False)
 		self.optionWindow.show()
 
 	def addLineHolder(self, lineWrap):	

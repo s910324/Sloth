@@ -8,6 +8,7 @@ from   viewBoxControlWidget import *
 
 class EditorWindow(QGroupBox):
 	valChanged = Signal()
+	onClosed   = Signal()
 	def __init__(self, parent=None):
 		super(EditorWindow, self).__init__(parent)
 		self.resize(650, 700)
@@ -110,7 +111,9 @@ class EditorWindow(QGroupBox):
 			ItemWidgets.append(ItemWidget)
 		return ItemWidgets
 
-
+	def closeEvent(self, event):
+		self.onClosed.emit()
+		event.accept()
 
 
 
