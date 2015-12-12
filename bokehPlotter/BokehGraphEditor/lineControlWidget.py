@@ -12,6 +12,7 @@ class lineControlWidget (QWidget):
 		boxZ.addLayout(box0)
 		boxZ.addLayout(box1)
 		self.setLayout(boxZ)
+		self.activeVlineListWidget = None
 
 
 	def setupLineUI(self):
@@ -189,16 +190,31 @@ class lineControlWidget (QWidget):
 						  style = None, symbol = None, visible = None, viewNum = None):
 		if name is not None:
 			self.nameLine.setText(name)
-		if visible:
-			self.lineVisi.setChecked(True)
-		else:
-			self.lineVisi.setChecked(False)
-
 		if color:
 			self.lColorLine.setText(str(color))
 		if width is not None:
 			self.lWidthLine.setText(str(width))
+		# if style:			
+		# 	self.lStyleLine.set
+		# if symbol:
+		# 	self.symbol          = symbol
+					
+		if visible:
+			self.lineVisi.setChecked(True)
+		else:
+			self.lineVisi.setChecked(False)
+		return self.getPanelVal()
 
+
+	def getPanelVal(self):
+		self.val = {'name'    : self.nameLine.text(),
+					'color'   : self.lColorLine.text(),
+					'width'   : float(self.lWidthLine.text()),
+					'style'   : None,
+					'symbol'  : None, 
+					'visible' : self.lineVisi.isChecked(), 
+					'viewNum' : None}
+		return self.val
 
 
 
@@ -229,6 +245,9 @@ def run():
 	app        = QApplication(sys.argv)
 	MainWindow = lineControlWidget()
 
-
+	import os
+	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
+	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
+	MainWindow.show()
 # run()		

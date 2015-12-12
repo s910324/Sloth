@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"plot",
+				"plotPack	(statement)"
+			],
+			[
 				"c",
 				"checkio	(function)"
 			],
@@ -42,10 +46,6 @@
 			[
 				"chk",
 				"chkValid	(function)"
-			],
-			[
-				"plot",
-				"plotArea	(statement)"
 			],
 			[
 				"vi",
@@ -520,10 +520,13 @@
 	"buffers":
 	[
 		{
+			"contents": "from __future__ import absolute_import\nimport sys\nimport types\nimport pickle\nimport numpy as np\nimport os\nfrom PySide.QtGui    import *\nfrom PySide.QtCore   import *\nfrom PySide.QtWebKit import *\nimport bokeh\nfrom bokeh.resources import CDN\nfrom bokeh.embed     import file_html\nfrom bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d\nfrom bokeh.plotting  import figure, show, output_file,  vplot\n# sys.path.append(\"./BokehGraphEditor\")\nfrom BokehGraphEditor import EditorWindow \nfrom BokehGraphEditor.MaterialDesignList import *\ntry:\n	from bokehPlot   import bokehPlot\n	from bokehAxis   import bokehAxis\n	from bokehLine   import bokehLine\n	from bokehSymbol import bokehSymbol\nexcept:\n	from bokehPlotter.bokehPlot   import bokehPlot\n	from bokehPlotter.bokehAxis   import bokehAxis\n	from bokehPlotter.bokehLine   import bokehLine\n	from bokehPlotter.bokehSymbol import bokehSymbol\n\nclass PlotWindowWidget(QMainWindow):\n	def __init__(self, parent = None):\n		super(PlotWindowWidget, self).__init__(parent)\n		self.lock = True\n		self.ID   = -1\n		self.resize(1000,800)\n		self.Web = QWebView()\n		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)\n		self.lineIDCounter    = -1\n		self.lineIDDict       = {}\n\n		self.plotIDCounter    = -1\n		self.plotIDDict       = {}\n		self.html             = None\n		self.setCentralWidget(self.Web)\n		self.initToolBar()\n		self.optionWindow     = EditorWindow.EditorWindow()\n		self.show()\n\n\n	def initToolBar(self):\n		self.toolbar  = QToolBar()\n		resetAction   = QAction('reset', self)\n		optionsAction = QAction('_Options', self)		\n		self.toolbar.addAction(resetAction)\n		self.toolbar.addAction(optionsAction)\n		\n		resetAction.triggered.connect(self.resetGraph)\n		optionsAction.triggered.connect(self.showOptionPanel)\n		self.addToolBar( Qt.TopToolBarArea , self.toolbar)\n\n	def showOptionPanel(self):\n		self.optionWindow.importPlotItems(self.plotIDDict, self.lineIDDict)\n		self.optionWindow.show()\n\n	def addLineHolder(self, lineWrap):	\n		self.lineIDCounter += 1\n		lineID  = self.lineIDCounter\n		self.lineIDDict[lineID] = lineWrap\n		return self.lineIDCounter	\n\n	def addPlotHolder(self, plotWrap, rng):	\n		self.plotIDCounter += 1\n		plotID  = self.plotIDCounter\n		self.plotIDDict[plotID] = plotWrap, rng\n		return self.plotIDCounter	\n\n\n	def getRange(self, dataSet):\n		xMins, xMaxs, yMins, yMaxs = [], [], [], []\n		for data in dataSet:\n			xMins.append(min(data[0]))\n			xMaxs.append(max(data[0]))\n			yMins.append(min(data[1]))\n			yMaxs.append(max(data[1]))\n		xmin, xmax, ymin, ymax = min(xMins), max(xMaxs), min(yMins), max(yMaxs)\n\n		spamX, spamY = [float(xmax-xmin)*0.05, float(ymax-ymin)*0.05]\n		rng = [xmin-spamX, xmax+spamX, ymin-spamY, ymax+spamY]\n\n		return rng\n\n\n	def plotData(self, stack, dataSet):\n		plotPack = []\n		if not stack:\n			for i, data in enumerate(dataSet):\n				num       = self.lineIDCounter + 1\n				plotRange = self.getRange([data])\n\n				plotWrap  = self.initPlotArea(rng = plotRange, num = num)\n				self.addPlotHolder(plotWrap, plotRange)\n				plotPack.append(plotWrap)\n\n				legendText = 'plot ' + str(num)\n				lineWrap   =  self.addPlotLine(plotWrap,legendText = legendText, data = data)\n				self.addLineHolder(lineWrap)\n				\n			html = self.insertPlot(plotPack)\n\n		else:\n			num       = self.lineIDCounter + 1\n			plotRange = self.getRange(dataSet)\n			plotWrap  = self.initPlotArea(rng = plotRange, num = num)\n			self.addPlotHolder(plotWrap, plotRange)\n			for i, data in enumerate(dataSet):\n				legendText = 'plot ' + str(num)\n				lineWrap   =  self.addPlotLine(plotWrap, legendText = legendText, data = data)\n				self.addLineHolder(lineWrap)\n			\n			plotPack.append(plotWrap)\n			html = self.insertPlot(plotPack)	\n\n\n		html      = file_html(html, CDN, \"my plot\")\n		online    = 'http://cdn.pydata.org/bokeh/release'\n		offline   =  'file://' + os.getcwd() + '/BokehJS'\n		self.html = html.replace(online,  offline)\n		self.Web.setHtml(self.html)\n		self.Web.reload()\n		return self.html\n\n	\n	def initPlotArea(self, title = \"Unitled graph\", rng = [0,1,0,1], num = 0, w=800, h=300, bgc = \"#001133\", bdc = \"#001133\"):\n		tool  = 'box_zoom,box_select,crosshair, save, reset'\n		[xmin, xmax, ymin, ymax] = rng\n\n		plotArea = figure(\n			x_range         = (xmin, xmax), \n			y_range         = (ymin, ymax), \n			plot_width      = w, \n			plot_height     = h)\n\n		plotWrapper         = bokehPlot(plotArea, num)\n\n		spec            = {'width'      : w,\n						   'height'     : h,\n						   'tools'      : tool,\n						   'background' : \"#001133\",\n						   'borderfill' : \"#001133\",\n						   'viewNum'    : num}\n\n		title           = {'text'     : title,\n						   'color'    : \"#AFAFAF\",\n						   'style'    : \"bold\",\n						   'size'     : 10}\n\n\n		plotWrapper.plot_spec( **spec)\n		plotWrapper.plot_title(**title)\n		plotArea.add_layout(LinearAxis(axis_line_color = \"#C8C8C8\" ), 'right')\n 		plotArea.add_layout(LinearAxis(axis_line_color = \"#C8C8C8\" ), 'above')		\n		for index in range(len(plotArea.axis)):\n\n			axisWrapper = bokehAxis(plotArea, index)\n			plotWrapper.axis.append(axisWrapper)\n\n			other = \"y\" if index == 2 else \"\"\n			text  = \"x\" if index == 1 else other\n\n			axis_label       = {'text'      : text,\n								'color'     : \"#AFAFAF\"}\n\n			axis_majorTick   = {'tickIn'    : 5,\n								'tickOut'   : 0,\n								'width'     : 1,\n								'color'     : \"#AFAFAF\"}  \n\n			axis_minorTick   = {'tickIn'    : 3,\n								'tickOut'   : 0,\n								'width'     : 1,\n								'color'     : \"#AFAFAF\"}  \n\n	 		axis_val         = {'color'     : \"#AFAFAF\",\n								'width'     : \"#AFAFAF\",\n								'label'     : axis_label,\n								'majorTick' : axis_majorTick,\n								'minorTick' : axis_minorTick}			\n			axisWrapper.plot_axis(**axis_val)\n\n		plotArea.xgrid.grid_line_color = \"#AFAFAF\"\n		plotArea.xgrid.grid_line_alpha =  0.5\n		plotArea.xgrid.grid_line_dash  = [3,3]\n		plotArea.ygrid.grid_line_color = \"#C8C8C8\"\n		plotArea.ygrid.grid_line_alpha =  0.5\n		plotArea.ygrid.grid_line_dash  = [3,3]\n		return plotWrapper\n\n	\n\n	def addPlotLine(self, plotWrap, data = [None, None], legendText = 'plot', radii = 2, \n						  color = \"#c8c8c8\", width = 1.5, symbol = 'o', visible = True):\n		viewNum  = plotWrap.spec['viewNum']\n		plotArea = plotWrap.plot\n		x    = np.array(data[0])\n		y    = np.array(data[1])\n		\n		if symbol != None:\n			scatter       = plotArea.scatter(x, y, legend = legendText)\n			symbolWrapper = bokehSymbol(scatter.glyph)\n\n			outLine = { 'color'    : color,\n						'width'    : None}		\n			val     = { 'color'    : color,\n						'size'     : radii,\n						'outLine'  : outLine,\n						'visible'  : True}\n			symbolWrapper.symbol_val(**val)\n		else:\n			symbolWrapper = None\n\n		l    = plotArea.line(x, y, legend=legendText, line_color=color, line_width = width, visible = visible)\n		lineWrapper = bokehLine(l.glyph)\n		lineWrapper.line_val( \n			name    = legendText, \n			color   = color, \n			width   = width,\n			style   = None, \n			symbol  = symbolWrapper, \n			visible = visible, \n			viewNum = viewNum\n			)\n		\n		plotArea.legend.orientation           = \"top_left\"\n		plotArea.legend.background_fill_alpha = 0.5\n		plotArea.legend.border_line_width     = 1\n		plotArea.legend.border_line_color     = \"#C8C8C8\"\n		plotArea.legend.label_standoff        = 5\n		plotArea.legend.glyph_width           = 20\n		plotArea.legend.legend_spacing        = 5\n		plotArea.legend.legend_padding        = 20\n		return lineWrapper\n\n\n	def insertPlot(self, plotSets):\n		plotSets = [wrapper.plot for wrapper in plotSets]\n		layout   = vplot( *plotSets )\n		output_file(\"les_mis.html\")\n		# show(layout)\n		for plot in plotSets:\n			plot.toolbar_location = None\n		return layout\n\n	def resetGraph(self):\n\n\n		plotPack = []\n		for ID in self.plotIDDict:\n			plotWrap, rng = self.plotIDDict[ID]\n			plotPack.append(plotWrap)\n\n		html      = self.insertPlot(plotPack)	\n		html      = file_html(html, CDN, \"my plot\")\n		online    = 'http://cdn.pydata.org/bokeh/release'\n		offline   =  'file://' + os.getcwd() + '/BokehJS'\n		self.html = html.replace(online,  offline)\n		self.Web.setHtml(self.html)\n		self.Web.reload()\n\n\n	def saveCrew(self, dataSet):\n		fileName   = './savedData.pkl'\n		fileHolder = open(fileName, 'wb')\n		try:\n			pickle.dump(dataSet, fileHolder)\n		except (EnvironmentError, pickle.PicklingError) as err:\n			raise SaveError(str(err))\n		fileHolder.close()\n\n	def loadCrew(self):\n		fileName = './savedData.pkl'\n		package  = open( fileName, 'rb' )\n		data = pickle.load( package )\n\n		package.close()\n		return data\n\n	def closeEvent(self, event):\n		if self.lock:\n			self.showMinimized()\n			event.ignore()\n\n		else:\n			self.showMaximized()\n			event.accept()\n\n	def unlock(self) :\n		self.lock = False\n\n	def lock(self) :\n		self.lock = True	\n\ndef Debugger():\n	app  = QApplication(sys.argv)\n	form = PlotWindowWidget()\n	data = form.loadCrew()\n	form.plotData(0, data)\n	form.lock = False\n	form.show()\n	import os\n	print \"   *-*-*-*-* deBug mode is on *-*-*-*-*\"\n	print \"File Path: \" + os.path.realpath(__file__)\n	app.exec_()\nDebugger()",
 			"file": "bokehPlotter/bokehp.py",
+			"file_size": 9004,
+			"file_write_time": 130943027799047741,
 			"settings":
 			{
-				"buffer_size": 9002,
+				"buffer_size": 8902,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +542,7 @@
 			"file": "bokehPlotter/BokehGraphEditor/lineControlWidget.py",
 			"settings":
 			{
-				"buffer_size": 6031,
+				"buffer_size": 6129,
 				"line_ending": "Unix"
 			}
 		},
@@ -726,6 +729,7 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/Desktop/asd.html",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/Symbol",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/axis",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/plotArea",
@@ -852,8 +856,7 @@
 		"/home/rawr/Downloads/Untitled Document",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehp.py",
 		"/home/rawr/github/revealEditor/index (copy).html",
-		"/home/rawr/.config/sublime-text-3/Packages/CTags/CTags.sublime-settings",
-		"/home/rawr/Desktop/jsplot.txt"
+		"/home/rawr/.config/sublime-text-3/Packages/CTags/CTags.sublime-settings"
 	],
 	"find":
 	{
@@ -871,6 +874,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"plotIDDict",
 			"visibe",
 			"print",
 			"plotID",
@@ -997,8 +1001,7 @@
 			"OpenNewWorkBook",
 			"newwb",
 			"SubWinList",
-			"CreateTableSub",
-			"title"
+			"CreateTableSub"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1096,7 +1099,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1105,15 +1108,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9002,
+						"buffer_size": 8902,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4679,
-								4679
+								7586,
+								7586
 							]
 						],
 						"settings":
@@ -1122,10 +1125,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6781.0,
+						"translation.y": 5732.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1151,10 +1154,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 22.0,
-						"translation.y": 143.0,
+						"translation.y": 764.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1163,15 +1166,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6031,
+						"buffer_size": 6129,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5171,
-								5171
+								5280,
+								5280
 							]
 						],
 						"settings":
@@ -1180,10 +1183,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4228.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1209,7 +1212,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1725.0,
+						"translation.y": 775.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -1247,7 +1250,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1263,8 +1266,8 @@
 						"selection":
 						[
 							[
-								381,
-								381
+								449,
+								449
 							]
 						],
 						"settings":
@@ -1272,11 +1275,11 @@
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 483.0,
+						"translation.x": 4.0,
+						"translation.y": 138.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1292,8 +1295,8 @@
 						"selection":
 						[
 							[
-								634,
-								634
+								1218,
+								1218
 							]
 						],
 						"settings":
@@ -1302,10 +1305,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 828.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1334,7 +1337,7 @@
 						"translation.y": 1242.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -1368,7 +1371,7 @@
 		"cols":
 		[
 			0.0,
-			0.540995607613,
+			0.735724743777,
 			1.0
 		],
 		"rows":
@@ -1380,7 +1383,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 215.0
+		"height": 232.0
 	},
 	"output.find_results":
 	{

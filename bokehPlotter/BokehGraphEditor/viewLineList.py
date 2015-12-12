@@ -71,16 +71,18 @@ class viewLineListWidget(QWidget):
 		self.header.setLineVisible(visible)
 		return name, color, width, style, symbol, visible, viewNum
 
-
 	def setShadow(self, shadow):
 		self.shadow = 180 * shadow
 		self.header.setShadow(self.shadow)
 
 
-	def getLineValues(self):
+	def getLineVal(self):
 		# name, color, width, style, symbol, visible, viewNum 
 		return self.line.line_val()
 
+	def setLineVal(self, val):
+		return self.line.line_val(**val)
+		
 
 	def returnVal(self):
 		return [ self.typLabel.text(), self.nameLineE.text(), self.time ]

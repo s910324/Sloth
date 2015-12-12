@@ -42,7 +42,7 @@ class PlotWindowWidget(QMainWindow):
 		self.html             = None
 		self.setCentralWidget(self.Web)
 		self.initToolBar()
-		self.optionWindow     = EditorWindow.EditorWindow()
+		self.optionWindow     = None
 		self.show()
 
 
@@ -58,6 +58,8 @@ class PlotWindowWidget(QMainWindow):
 		self.addToolBar( Qt.TopToolBarArea , self.toolbar)
 
 	def showOptionPanel(self):
+		self.optionWindow = EditorWindow.EditorWindow()
+		self.optionWindow.valChanged.connect(self.resetGraph)
 		self.optionWindow.importPlotItems(self.plotIDDict, self.lineIDDict)
 		self.optionWindow.show()
 
@@ -250,17 +252,18 @@ class PlotWindowWidget(QMainWindow):
 		return layout
 
 	def resetGraph(self):
-		# for ID in self.plotIDDict:
-		# 	plot, rng = self.plotIDDict[ID]
-		# 	plot.x_range = Range1d(start=rng[0], end=rng[1])
-		# 	plot.y_range = Range1d(start=rng[2], end=rng[3])
-		# for ID in self.lineIDDict:
-		# 	line = self.lineIDDict[ID]
-		# 	line.line_visible(False)
-		# html = file_html(self.div, CDN, "my plot")
-		# online   = 'http://cdn.pydata.org/bokeh/release'
-		# offline  =  'file://' + os.getcwd() 
-		# html = html.replace(online,  offline)
+
+
+		plotPack = []
+		for ID in self.plotIDDict:
+			plotWrap, rng = self.plotIDDict[ID]
+			plotPack.append(plotWrap)
+
+		html      = self.insertPlot(plotPack)	
+		html      = file_html(html, CDN, "my plot")
+		online    = 'http://cdn.pydata.org/bokeh/release'
+		offline   =  'file://' + os.getcwd() + '/BokehJS'
+		self.html = html.replace(online,  offline)
 		self.Web.setHtml(self.html)
 		self.Web.reload()
 

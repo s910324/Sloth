@@ -176,7 +176,9 @@ def run():
 	MainWindow = MColorPicker()
 	MainWindow.show()
 	app.exec_()
-
+	import os
+	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
+	print "File Path: " + os.path.realpath(__file__)
 
 run()
 

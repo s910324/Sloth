@@ -7,11 +7,13 @@ from   lineControlWidget    import *
 from   viewBoxControlWidget import *
 
 class EditorWindow(QGroupBox):
+	valChanged = Signal()
 	def __init__(self, parent=None):
 		super(EditorWindow, self).__init__(parent)
 		self.resize(650, 700)
-	
 		self.setupLayout()
+		self.setUIEnable(False)
+
 
 	def setupLayout(self):
 		box1  = self.setupList()
@@ -27,6 +29,8 @@ class EditorWindow(QGroupBox):
 		vbox1.addLayout(box3)
 		self.setLayout(hbox1)
 		self.setContentsMargins(0,0,0,0)
+
+
 
 	def setupList(self):
 		self.viewBoxList = viewBoxList()
@@ -54,7 +58,15 @@ class EditorWindow(QGroupBox):
 		hbox.addStretch()
 		hbox.addWidget(self.applyPB)
 		hbox.addWidget(self.canclePB)
+		self.applyPB.clicked.connect(self.setLineVal)
 		return hbox
+
+	def setUIEnable(self, state = True):
+		self.applyPB.setEnabled(state)
+		self.canclePB.setEnabled(state)
+		self.vcontrol.setEnabled(state)
+		self.lcontrol.setEnabled(state)
+
 
 	def addView(self, viewBox = None):
 		viewBoxListWidget = self.viewBoxList.addView(viewBox)
@@ -63,16 +75,22 @@ class EditorWindow(QGroupBox):
 	def addPlot(self, viewBoxNum = 0, line = None):
 		viewBox, vListWidget = self.viewBoxList.viewBoxDict[viewBoxNum]
 		vlineListWidget      = self.viewBoxList.addLine(viewBoxNum, line)
-		values               = vlineListWidget.getLineValues()
-		
-		vlineListWidget.doubleClicked.connect(lambda val = values : self.lcontrol.setPanelVal(**val))
+		vlineListWidget.doubleClicked.connect(lambda widget = vlineListWidget : self.setPanelVal(widget))
 		return vlineListWidget
 
-	# def importPlotItem(self, line = None):
-	# 	vlineListWidget = self.plotTab.addPlotItem(line)
-	# 	values     = ItemWidget.getLineValues()
-	# 	ItemWidget.doubleClicked.connect(lambda val = values :self.plotTab.setPanelVal(val))
-	# 	return ItemWidget
+	def setPanelVal(self, vlineListWidget):
+		values               = vlineListWidget.getLineVal()
+		self.lcontrol.setPanelVal(**values)
+		self.lcontrol.activeVlineListWidget = vlineListWidget
+		self.setUIEnable(True)
+
+	def setLineVal(self):
+		vlineListWidget = self.lcontrol.activeVlineListWidget
+		if vlineListWidget:
+			values               = self.lcontrol.getPanelVal()
+			vlineListWidget.setLineVal(values)
+			self.valChanged.emit()
+
 
 	def importPlotItems(self,viewBoxDict = None, lineDict = None):
 		ItemWidgets = []
@@ -81,26 +99,19 @@ class EditorWindow(QGroupBox):
 		for index in viewBoxDict:
 			# plot, legend, viewBox = viewBoxDict[index]
 			# ItemWidget = self.addView(lineDict[index])
-			ItemWidget = self.addView()
+			ItemWidget     = self.addView()
 		for index in lineDict:
 			line           = lineDict[index]
 			try:
 				viewboxNum = line.line_viewNum()
 			except:
 				viewboxNum = line.val['viewNum']
-			ItemWidget = self.addPlot(viewboxNum, line)
+			ItemWidget     = self.addPlot(viewboxNum, line)
 			ItemWidgets.append(ItemWidget)
 		return ItemWidgets
 
 
-	# def importPlotItems(self, lineDict = None):
-	# 	ItemWidgets = []
-	# 	# try:
-	# 	self.plotTab.plotListWidget.clear()
-	# 	for index in lineDict:
-	# 		ItemWidget = self.importPlotItem(lineDict[index])
-	# 		ItemWidgets.append(ItemWidget)
-	# 	return ItemWidgets
+
 
 
 def Debugger():
