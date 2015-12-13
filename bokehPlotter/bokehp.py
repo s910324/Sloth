@@ -12,19 +12,25 @@ from bokeh.resources import CDN
 from bokeh.embed     import file_html
 from bokeh.models    import ColumnDataSource, Grid, GridPlot, LinearAxis, Plot, Range1d
 from bokeh.plotting  import figure, show, output_file,  vplot
-# sys.path.append("./BokehGraphEditor")
-from BokehGraphEditor import EditorWindow 
-from BokehGraphEditor.MaterialDesignList import *
+
 try:
-	from bokehPlot   import bokehPlot
-	from bokehAxis   import bokehAxis
-	from bokehLine   import bokehLine
-	from bokehSymbol import bokehSymbol
+	from bokehPlotter.BokehGraphEditor import EditorWindow 
+	from bokehPlotter.BokehGraphEditor.MaterialDesignList import *
 except:
+	from BokehGraphEditor import EditorWindow 
+	from BokehGraphEditor.MaterialDesignList import *
+
+try:
+	
 	from bokehPlotter.bokehPlot   import bokehPlot
 	from bokehPlotter.bokehAxis   import bokehAxis
 	from bokehPlotter.bokehLine   import bokehLine
 	from bokehPlotter.bokehSymbol import bokehSymbol
+except:
+	from bokehPlot   import bokehPlot
+	from bokehAxis   import bokehAxis
+	from bokehLine   import bokehLine
+	from bokehSymbol import bokehSymbol
 
 class PlotWindowWidget(QMainWindow):
 	def __init__(self, parent = None):
@@ -313,4 +319,4 @@ def Debugger():
 	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-Debugger()
+# Debugger()

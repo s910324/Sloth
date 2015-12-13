@@ -93,6 +93,7 @@ class EditorWindow(QGroupBox):
 			self.valChanged.emit()
 
 
+
 	def importPlotItems(self,viewBoxDict = None, lineDict = None):
 		ItemWidgets = []
 		# try:

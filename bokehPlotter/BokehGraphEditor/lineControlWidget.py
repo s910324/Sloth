@@ -26,12 +26,12 @@ class lineControlWidget (QWidget):
 		hbox0.addWidget(self.nameLine)
 		hbox0.addWidget(self.lineVisi)
 
-		pos1Label0 = QLabel('Position1 (X, Y):     [')
+		pos1Label0 = QLabel('X Axis Range:     [')
 		pos1Label0.setFixedWidth(100)
 		pos1Label1 = QLabel(', ')
 		pos1Label2 = QLabel(']')
 
-		pos2Label0 = QLabel('Position2 (X, Y):     [')
+		pos2Label0 = QLabel('Y Axis Range:     [')
 		pos2Label0.setFixedWidth(100)
 		pos2Label1 = QLabel(', ')
 		pos2Label2 = QLabel(']')
@@ -196,9 +196,16 @@ class lineControlWidget (QWidget):
 			self.lWidthLine.setText(str(width))
 		# if style:			
 		# 	self.lStyleLine.set
-		# if symbol:
-		# 	self.symbol          = symbol
-					
+		if symbol:
+			self.symbol     = symbol
+			self.symbol_val = symbol.symbol_val()
+			self.oColorLine.setText(self.symbol_val['outLine']['color'])
+			self.oWidthLine.setText(str(self.symbol_val['outLine']['width']))
+			self.outlineVisi.setChecked(self.symbol_val['outLine']['visible'])
+			self.sColorLine.setText(self.symbol_val['color'])
+			self.sSizeLine.setText(str(self.symbol_val['size']))
+			self.symbolVisi.setChecked(self.symbol_val['visible'])
+
 		if visible:
 			self.lineVisi.setChecked(True)
 		else:
@@ -207,13 +214,23 @@ class lineControlWidget (QWidget):
 
 
 	def getPanelVal(self):
-		self.val = {'name'    : self.nameLine.text(),
-					'color'   : self.lColorLine.text(),
-					'width'   : float(self.lWidthLine.text()),
-					'style'   : None,
-					'symbol'  : None, 
-					'visible' : self.lineVisi.isChecked(), 
-					'viewNum' : None}
+		self.outLine_val = {'color'   : self.oColorLine.text(),
+							'width'   : float(self.oWidthLine.text()),	
+							'visible' : self.outlineVisi.isChecked()}	
+
+		self.symbol_val  = {'color'   : self.sColorLine.text(),
+							'size'    : float(self.sSizeLine.text()),
+							'outLine' : self.outLine_val,
+							'visible' : self.symbolVisi.isChecked()}						
+		
+		self.symbol.symbol_val(**self.symbol_val)
+		self.val         = {'name'    : self.nameLine.text(),
+							'color'   : self.lColorLine.text(),
+							'width'   : float(self.lWidthLine.text()),
+							'style'   : None,
+							'symbol'  : self.symbol, 
+							'visible' : self.lineVisi.isChecked(), 
+							'viewNum' : None}
 		return self.val
 
 
