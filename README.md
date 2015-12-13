@@ -20,7 +20,7 @@
 ### Youtube Demo
 -----
 <h5>Build #56</h5>
->[![Demo](https://github.com/s910324/Sloth/blob/master/screen%20shots/NightlyBuild%2056.jpeg)](https://www.youtube.com/watch?v=x6tH2DkPFXY)
+>[![Demo](https://github.com/s910324/Sloth/blob/master/screen%20shots/NightlyBuild%2056.jpg)](https://www.youtube.com/watch?v=x6tH2DkPFXY)
 
 <h5>Build #39</h5>
 >[![Demo](https://github.com/s910324/Sloth/blob/master/screen%20shots/NightlyBuild%2039.jpeg)](https://www.youtube.com/watch?v=yXr62x98pXQ)
