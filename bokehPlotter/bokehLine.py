@@ -17,6 +17,7 @@ class bokehLine(object):
 					   style = None, symbol = None, visible = None, viewNum = None):
 		if name is not None:
 			self.line.name       = name
+
 		if color:
 			self.line.line_color = color	
 		if width is not None:

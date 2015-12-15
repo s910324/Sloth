@@ -2,8 +2,8 @@
 class bokehSymbol(object):
 	def __init__(self, symbol, parent = None):
 		self.symbol  = symbol
-		self.symbol.radius_dimension = 'y'
-		self.symbol.radius_units     = 'screen'
+		# self.symbol.radius_dimension = 'y'
+		# self.symbol.radius_units     = 'screen'
 		self.outLine = {'color'   : self.symbol.line_color,
 						'width'   : self.symbol.line_width,
 						'visible' : self.symbol.line_alpha}	

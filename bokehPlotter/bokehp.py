@@ -212,11 +212,12 @@ class PlotWindowWidget(QMainWindow):
 		plotArea = plotWrap.plot
 		x    = np.array(data[0])
 		y    = np.array(data[1])
-		
+		plotArea.webgl = True
 		if symbol != None:
-			scatter       = plotArea.scatter(x, y, legend = legendText)
+			scatter          = plotArea.scatter(x, y, marker="square", legend = legendText)
+			# asterisk_glyph   = bokeh.models.glyphs.Asterisk(**scatter.glyph.changed_properties_with_values())
+			# scatter.set(glyph=asterisk_glyph)
 			symbolWrapper = bokehSymbol(scatter.glyph)
-
 			outLine = { 'color'    : color,
 						'width'    : None}		
 			val     = { 'color'    : color,
@@ -224,6 +225,7 @@ class PlotWindowWidget(QMainWindow):
 						'outLine'  : outLine,
 						'visible'  : True}
 			symbolWrapper.symbol_val(**val)
+
 		else:
 			symbolWrapper = None
 
@@ -319,4 +321,4 @@ def Debugger():
 	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-# Debugger()
+Debugger()
