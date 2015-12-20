@@ -21,6 +21,7 @@ class MSymbolStylePicker(QWidget):
 	def setUpUI(self):
 		self.styleView  = MSymbolStyleView()
 		self.styleCombo = QComboBox()
+		self.size       = QSpinBox()
 		text = ["Circle",  "CircleX", "Cross", "Diamond",  "DiamondCross","Square",
 				"SquareX", "InvertedTriangle", "Triangle", "X", "Asterisk"]
 		self.styleCombo.addItems(text)
@@ -28,11 +29,17 @@ class MSymbolStylePicker(QWidget):
 		hbox = QHBoxLayout()
 		hbox.addWidget(self.styleView)
 		hbox.addWidget(self.styleCombo)
+		hbox.addWidget(self.size)
 		self.styleCombo.currentIndexChanged.connect(self.changeSymbol)
+		self.size.valueChanged.connect(self.changeSize)
 		self.setLayout(hbox)
 
 	def changeSymbol(self):
-		self.styleView.setPlotAreaVal(self.styleCombo.currentText())
+		self.styleView.setScatterSymbol(self.styleCombo.currentText())
+
+	def changeSize(self):
+		self.styleView.symbol_val(size = self.size.value())
+
 
 class MSymbolStyleView(QWidget):
 	def __init__(self, style = "circle", parent = None):
@@ -40,6 +47,7 @@ class MSymbolStyleView(QWidget):
 		self.html     = None
 		self.plotArea = None
 		self.scatter  = None
+		
 		self.setUpUI()
 		self.initPlotArea(style = style)
 		self.setFixedSize(130, 130)
@@ -81,7 +89,7 @@ class MSymbolStyleView(QWidget):
 		self.drawSymbol(self.html)
 		return self.html
 
-	def setPlotAreaVal(self, val = "Circle"):
+	def setScatterSymbol(self, val = "Circle"):
 		models    = bokeh.models.glyphs
 		
 		changeVal = self.scatter.glyph.changed_properties_with_values()
@@ -99,6 +107,41 @@ class MSymbolStyleView(QWidget):
 			"Asterisk"        : models.Asterisk(**changeVal)}
 		
 		self.scatter.set(glyph = glyph[val])
+		self.html = vplot( self.plotArea )
+		self.drawSymbol(self.html)
+		return self.html
+
+
+	# def symbol_outLine(self, color = None, width = None, visible = None):
+	# 	if color:
+	# 		self.scatter.line_color  = color
+	# 	if width   is not None:
+	# 		self.scatter.line_width  = width
+	# 	if visible is not None:
+	# 		self.scatter.line_alpha  = 255 if visible <= 1 else 0
+			
+	# 	self.outLine.update({'color'   : self.scatter.line_color})
+	# 	self.outLine.update({'width'   : self.scatter.line_width})
+	# 	self.outLine.update({'visible' : self.scatter.line_alpha})
+	# 	return self.outLine
+
+	def symbol_val(self, color   = None,   size    = None,
+						 outLine = None,   visible = None):
+		symbol = self.scatter.glyph
+		if color:
+			symbol.fill_color = color
+		if size is not None:
+			symbol.size = size	
+		# if outLine:
+		# 	self.symbol_outLine(**outLine)
+		if visible is not None:
+			symbol.visible = visible	
+
+		# self.val.update({'color'   : symbol.fill_color})
+		# self.val.update({'size'    : symbol.size})
+		# # self.val.update({'outLine' : self.outLine})
+		# self.val.update({'visible' : symbol.visible})
+		# return self.val
 		self.html = vplot( self.plotArea )
 		self.drawSymbol(self.html)
 		return self.html
