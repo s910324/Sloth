@@ -172,7 +172,7 @@ class PlotWindowWidget(QMainWindow):
 
 			axisWrapper = bokehAxis(plotArea, index)
 			plotWrapper.axis.append(axisWrapper)
-
+			# axisWrapper.axis.major_label_orientation = 3.141
 			other = "y" if index == 2 else ""
 			text  = "x" if index == 1 else other
 

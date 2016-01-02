@@ -5,7 +5,7 @@ from PySide.QtGui   import *
 from PySide.QtCore  import *
 
 
-class MColorView(QWidget):
+class MTextStylrtView(QWidget):
 	colorChanged = Signal(list)
 	def __init__(self, color = None, parent = None):
 		super(MColorView, self).__init__(parent)
@@ -36,7 +36,7 @@ class MColorView(QWidget):
 		vbox0 = QVBoxLayout()
 
 		hbox1 = QHBoxLayout()
-		self.axisTitleLable   = CLableWidget(text = "TITLE", color = "#FF0066", checkble = True, checkStat = True)
+		self.axisTitleLable   = CLableWidget(text = "TITLE",    color = "#FF0066")
 		self.axisTitleText    = QLineEdit()
 		self.axisTitleItalic  = QCheckBox()
 		self.axisTitleBold    = QCheckBox()
@@ -78,16 +78,13 @@ class MColorView(QWidget):
 		hbox0 = QHBoxLayout()
 		vbox0 = QVBoxLayout()
 
-		hbox1              = QHBoxLayout()
-		axisLable          = CLableWidget(text = "AXIS", color = "#FF0066", checkble = True, checkStat = True)
-		smallColor         = smallColorView()
-		axisTitleLabel     = CLableWidget(text = "TITLE", color = "#FF0066", checkble = True, checkStat = True)
+		hbox1         = QHBoxLayout()
+		axisLable     = CLableWidget(text = "AXIS", color = "#FF0066")
+		self.axisVisibe    = QCheckBox()
 		self.axisFromCtrl  = QDoubleSpinBox()
 		self.axisToCtrl    = QDoubleSpinBox()
 		hbox1.addWidget(axisLable)
-		smallColor.setFixedWidth(25)
-		hbox1.addWidget(smallColor)
-		hbox1.addWidget(axisTitleLabel)
+		hbox1.addWidget(self.axisVisibe)
 		hbox1.addStretch()
 		vbox0.addLayout(hbox1)
 		vbox0.addSpacing(5)
@@ -136,7 +133,7 @@ class MColorView(QWidget):
 		vbox0 = QVBoxLayout()
 
 		hbox1         = QHBoxLayout()
-		axisLable     = CLableWidget(text = "MajorTK", color = "#FF0066", checkble = True, checkStat = True)
+		axisLable     = CLableWidget(text = "MajorTK", color = "#FF0066")
 		self.axisVisibe    = QCheckBox()
 		self.axisFromCtrl  = QDoubleSpinBox()
 		self.axisToCtrl    = QDoubleSpinBox()
@@ -182,7 +179,6 @@ class MColorView(QWidget):
 		hbox0.addSpacing(15)
 		hbox0.addLayout(vbox0)
 		return hbox0
-
 	def initColorView(self):
 		x, y, w, h1, h2        = 5,8,15,130, 130
 		self.labelColorView    = objColorView(x, y,                   w, h1, color = self.labelColor,   obj = "label")
@@ -226,26 +222,12 @@ class MColorView(QWidget):
 
 
 class CLableWidget(QWidget):
-	def __init__(self, w = 62, h = 22, text = None, color = "#F0F0F0", bgcolor = "#1c1c1c", checkble = False, checkStat = False):	
+	def __init__(self, w = 57, h = 22, text = None, color = "#F0F0F0", bgcolor = "#1c1c1c"):	
 		super(CLableWidget, self).__init__()
-
-		self.text         = text
-		fontDatabase      = QFontDatabase()
-		self.color        = color
-		self.bgcolor      = bgcolor
-		self.bdcolor      = bgcolor
-		self.Hoverbdcolor = bgcolor
-
-		#checkRELEATD
-
-		self.alignment    = Qt.AlignCenter
-		self.checkStat    = checkStat
-		self.checkEnabled = checkble
-		if checkble:
-			self.enableCheck()
-
-		self.checkBGcolor = '#f0f0f0'
-
+		self.text    = text
+		fontDatabase = QFontDatabase()
+		self.color   = color
+		self.bgcolor = bgcolor
 		fontDatabase.addApplicationFont("./MFont/disposabledroid-bb.regular.ttf")
 
 		if w:
@@ -261,124 +243,23 @@ class CLableWidget(QWidget):
 
 
 	def paint(self, painter):
-		painter.setRenderHint(QPainter.Antialiasing)
-		size           = self.size()
-		self.drawRect  = QRect(1, 1, size.width()-2, size.height()-2)
-		self.textRect  = QRect(15, 1, size.width()-2-15, size.height()-2) if self.checkEnabled else self.drawRect
-				
-		pen            = QPen()
-		brush          = QBrush(QColor(self.bgcolor))
+		size       = self.size()
+		self.rect  = QRectF(1, 1, size.width()-2, size.height()-2)
+
+		painter.setRenderHint(QPainter.Antialiasing)		
+		pen        = QPen()
+		brush      = QBrush(QColor(self.bgcolor))
 		brush.setStyle(Qt.Dense5Pattern)
 		pen.setWidth(0)
-		pen.setColor(self.bdcolor)
+		pen.setColor(self.bgcolor)
 		painter.setBrush(brush)
 		painter.setPen(pen)
-		painter.drawRect(self.drawRect)
+		painter.drawRect(self.rect)
 		pen.setColor(self.color)
 		painter.setPen(pen)
 		painter.setFont(QFont('disposabledroidBB', 10))
-		painter.drawText(self.textRect, Qt.AlignCenter, self.text) 
+		painter.drawText(self.rect, Qt.AlignCenter, self.text) 
 
-		self.drawCheckWidget(painter)
-
-	def drawCheckWidget(self, painter):
-		if self.checkEnabled:
-			pen   = QPen()
-			brush = QBrush(QColor("#f0f0f0"))
-			pen.setWidth(0)
-			pen.setColor(self.bgcolor)
-			
-			brush.setStyle(Qt.SolidPattern)
-			painter.setBrush(brush)
-			painter.setPen(pen)
-			painter.drawRect(QRect(3,5,10,10))
-
-			if not self.checkStat:
-				pen.setWidth(0)
-				pen.setColor("#f0f0f0")
-				brush      = QBrush(QColor(self.checkBGcolor))
-				brush.setStyle(Qt.Dense2Pattern)
-				painter.setBrush(brush)
-				painter.setPen(pen)
-				painter.drawRect(QRectF(4.5,6.5,7,7))
-			else:
-				pen.setColor(QColor('#FF0066'))
-				pen.setJoinStyle(Qt.RoundJoin)
-				pen.setWidth(2)
-				points  = [QPoint(6,8), QPoint(8,13), QPoint(14,4)]
-				Polygon = QPolygon(points)
-				painter.setPen(pen)
-				painter.drawPolyline(Polygon)
-
-	def enableCheck(self):
-		self.checkEnabled = True
-		self.Hoverbdcolor = '#FF0066'
-
-	def mousePressEvent(self, event):
-		if event.button() == Qt.LeftButton and self.checkEnabled :
-			self.checkStat = not self.checkStat
-			print self.checkStat
-
-	def enterEvent(self,event):
-		self.bdcolor      = self.Hoverbdcolor
-		self.checkBGcolor = '#ff0066'
-
-	def leaveEvent(self,event):
-		self.bdcolor      = self.bgcolor
-		self.checkBGcolor = '#f0f0f0'
-
-class smallColorView(QWidget):
-	colorChanged  = Signal(list)
-	def __init__(self, color = '#000000'):	
-		super(smallColorView, self).__init__()
-		self.color   = color
-		self.bdcolor      = '#1c1c1c'
-		self.Hoverbdcolor = '#8E0054'
-	def paintEvent(self, event):
-		self.painter = QPainter()
-		self.painter.begin(self)
-		self.drawWidget()
-		self.painter.end()
-
-	def drawWidget(self):
-		painter      = self.painter
-		painter.setRenderHint(QPainter.Antialiasing)
-		[x, y, w, h] = [1, 1, self.size().width()-6, self.size().height()-2]
-		peak         = 8
-		hpeak        = peak/2
-		spare        = ((h-peak)/2)
-
-		self.points  = [QPointF(x,y),         QPointF(w+x, y),    
-						QPointF(w+x,spare+y), QPointF(hpeak +w+x,spare+hpeak+y), QPointF(w+x,spare+peak+y), 
-						QPointF(w+x,h+y),     QPointF(+x, h+y)]
-				
-		pen          = QPen()
-		brush        = QBrush(QColor(self.color))
-		pen.setWidth(2)
-		pen.setColor(self.bdcolor)
-		painter.setBrush(brush)
-		painter.setPen(pen)
-		Polygon = QPolygonF(self.points, fillRule=Qt.WindingFill )
-		painter.drawPolygon(Polygon)
-
-	def changeColor(self, color):
-		self.color = color
-
-	def mousePressEvent(self, event):
-		if event.button() == Qt.LeftButton:
-			self.showColorDialog()
-
-	def enterEvent(self,event):
-		self.bdcolor, self.Hoverbdcolor = self.Hoverbdcolor, self.bdcolor
-
-	def leaveEvent(self,event):
-		self.bdcolor, self.Hoverbdcolor = self.Hoverbdcolor, self.bdcolor
-
-
-	def showColorDialog(self):
-		self.colour_chooser = QColorDialog()
-		self.colour_chooser.currentColorChanged.connect(self.changeColor)
-		self.colour_chooser.show()
 
 
 class objColorView(object):

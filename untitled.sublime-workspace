@@ -4,6 +4,110 @@
 		"selected_items":
 		[
 			[
+				"My",
+				"MyWidget	(class)"
+			],
+			[
+				"si",
+				"size	(statement)"
+			],
+			[
+				"ga",
+				"graphics	(module)"
+			],
+			[
+				"lab",
+				"lambda	(keyword)"
+			],
+			[
+				"tr",
+				"trigger_action	(function)"
+			],
+			[
+				"w",
+				"widget	(param)"
+			],
+			[
+				"bo",
+				"BoxLayout	(class)"
+			],
+			[
+				"h",
+				"height	(statement)"
+			],
+			[
+				"b",
+				"button	(module)"
+			],
+			[
+				"ac",
+				"AccordionApp	(class)"
+			],
+			[
+				"s",
+				"size	(statement)"
+			],
+			[
+				"add",
+				"addStretch	(function)"
+			],
+			[
+				"QCom",
+				"QComboBox	(class)"
+			],
+			[
+				"Si",
+				"SIZE"
+			],
+			[
+				"Qdou",
+				"QDoubleSpinBox	(class)"
+			],
+			[
+				"adds",
+				"addSpacing	(function)"
+			],
+			[
+				"axistit",
+				"axisTitleFont	(statement)"
+			],
+			[
+				"setf",
+				"setFixedHeight	(function)"
+			],
+			[
+				"setFix",
+				"setFixedWidth	(function)"
+			],
+			[
+				"QCh",
+				"QCheckBox	(class)"
+			],
+			[
+				"ev",
+				"event	(param)"
+			],
+			[
+				"hbo",
+				"hbox2	(statement)"
+			],
+			[
+				"QDou",
+				"QDoubleSpinBox	(class)"
+			],
+			[
+				"setF",
+				"setFixedHeight	(function)"
+			],
+			[
+				"dens",
+				"Dense5Pattern	(class)"
+			],
+			[
+				"addS",
+				"addStretch	(function)"
+			],
+			[
 				"Qline",
 				"QLineEdit	(class)"
 			],
@@ -56,18 +160,6 @@
 				"drawImage	(function)"
 			],
 			[
-				"w",
-				"width"
-			],
-			[
-				"add",
-				"addLayout	(function)"
-			],
-			[
-				"adds",
-				"addSpacing	(function)"
-			],
-			[
 				"QRect",
 				"QRectF	(class)"
 			],
@@ -114,10 +206,6 @@
 			[
 				"setP",
 				"setPlotAreaVal	(function)"
-			],
-			[
-				"setF",
-				"setFixedSize	(function)"
 			],
 			[
 				"setC",
@@ -196,10 +284,6 @@
 				"tickIn	(param)"
 			],
 			[
-				"s",
-				"size	(param)"
-			],
-			[
 				"chk",
 				"chkValid	(function)"
 			],
@@ -214,10 +298,6 @@
 			[
 				"bok",
 				"bokehSymbol	(import)"
-			],
-			[
-				"bo",
-				"bokehLine"
 			],
 			[
 				"N",
@@ -304,10 +384,6 @@
 				"paintLabel	(function)"
 			],
 			[
-				"dens",
-				"Dense3Pattern	(class)"
-			],
-			[
 				"QG",
 				"QGraphicsItem	(class)"
 			],
@@ -336,10 +412,6 @@
 				"borderfill"
 			],
 			[
-				"b",
-				"borderfill	(statement)"
-			],
-			[
 				"ya",
 				"yaxis_maximum	(statement)"
 			],
@@ -354,10 +426,6 @@
 			[
 				"plot_xa",
 				"plot_xaxis_minorTick	(function)"
-			],
-			[
-				"si",
-				"title_size"
 			],
 			[
 				"Not",
@@ -446,74 +514,6 @@
 			[
 				"de",
 				"drawRect	(function)"
-			],
-			[
-				"h",
-				"html"
-			],
-			[
-				"he",
-				"height	Style CSS"
-			],
-			[
-				"back",
-				"background-color"
-			],
-			[
-				"borde",
-				"border-style"
-			],
-			[
-				"le",
-				"left"
-			],
-			[
-				"al",
-				"text-align"
-			],
-			[
-				"m",
-				"MatplotlibExporter	(class)"
-			],
-			[
-				"cons",
-				"console.log('$0');"
-			],
-			[
-				"setCn",
-				"setCentralWidget	(function)"
-			],
-			[
-				"setu",
-				"setUpToolBar	(function)"
-			],
-			[
-				"if",
-				"ifmain	if __name__ == '__main__'"
-			],
-			[
-				"Mi",
-				"MinimumExpanding	(class)"
-			],
-			[
-				"bl",
-				"blockSignals"
-			],
-			[
-				"ch",
-				"changeColor	(function)"
-			],
-			[
-				"col",
-				"colorChanged"
-			],
-			[
-				"Ty",
-				"type	(class)"
-			],
-			[
-				"color",
-				"ColorView	(statement)"
 			]
 		]
 	},
@@ -523,7 +523,15 @@
 			"file": "bokehPlotter/bokehp.py",
 			"settings":
 			{
-				"buffer_size": 9418,
+				"buffer_size": 9471,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bokehPlotter/dir/axis",
+			"settings":
+			{
+				"buffer_size": 7447,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,7 +571,7 @@
 			"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MMuitlSelector.py",
 			"settings":
 			{
-				"buffer_size": 6156,
+				"buffer_size": 9240,
 				"line_ending": "Unix"
 			}
 		},
@@ -573,6 +581,15 @@
 			{
 				"buffer_size": 2088,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "label:\n	font size\n	font \n	font style(bold, italic)\n	font color\n\naxis:\n	axis color\n	axis width\n	axis visibility\n	axis start & ends\n	axis format(linear, nl, log10, log2)\n\nmajortick:\n	tick width\n	tick color\n	tick in & out\n	ticks / steps\n	\n	tick font:\n		major_label_orientation (number int and float)\n		standoff\n		align( left, right or center )\n		tick label format( %d, %f, %s)\n		tick font visibility\n		tick font size\n		tick font \n		tick font style(bold, italic)\n		tick font color	\n\nminortick:\n	tick width\n	tick color\n	tick in & out\n	ticks / steps\n\n	tick font:\n		tick font visibility\n		tick font size\n		tick font \n		tick font style(bold, italic)\n		tick font color		",
+			"settings":
+			{
+				"buffer_size": 661,
+				"line_ending": "Unix",
+				"name": "label:"
 			}
 		},
 		{
@@ -592,23 +609,31 @@
 			}
 		},
 		{
-			"file": "bokehPlotter/BokehGraphEditor/viewLineList.py",
-			"settings":
-			{
-				"buffer_size": 2885,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
 			"settings":
 			{
 				"buffer_size": 5576,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "/home/rawr/Downloads/m/main.py",
+			"settings":
+			{
+				"buffer_size": 1871,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/rawr/Downloads/Adobe Photoshop CC 2015 (20150529.r.88) (32+64Bit) + Crack/ReadMe.txt",
+			"settings":
+			{
+				"buffer_size": 1808,
+				"line_ending": "Windows"
+			}
 		}
 	],
-	"build_system": "Packages/User/Cpp-11.sublime-build",
+	"build_system": "Packages/NASM x86 Assembly/NASM.sublime-build",
 	"build_system_choices":
 	[
 		[
@@ -641,6 +666,22 @@
 			[
 				"Packages/C++11/C++11.sublime-build",
 				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/NASM x86 Assembly/NASM.sublime-build",
+					""
+				],
+				[
+					"Packages/NASM x86 Assembly/NASM.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/NASM x86 Assembly/NASM.sublime-build",
+				"Run"
 			]
 		],
 		[
@@ -679,16 +720,16 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 322.0,
-		"last_filter": "",
+		"height": 392.0,
+		"last_filter": "ins",
 		"selected_items":
 		[
 			[
-				"pci",
+				"ins",
 				"Package Control: Install Package"
 			],
 			[
-				"ins",
+				"pci",
 				"Package Control: Install Package"
 			],
 			[
@@ -749,18 +790,64 @@
 	},
 	"file_history":
 	[
-		"/home/rawr/github/temp_shit/Trapezoid/polyangle.py",
+		"/home/rawr/Downloads/examples/widgets/carousel_buttons.py",
+		"/home/rawr/Downloads/m/buildozer.spec",
+		"/home/rawr/Downloads/m/main.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/accordion_1.py",
+		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/viewLineList.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/fruit_detail_view.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_cascade_images.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/colorpicker.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/3Drendering/main.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/keyboard/main.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_cascade.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_cascade_dict.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_ops.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_master_detail.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_kv.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_composite.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_simple.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/fixtures.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/RST_Editor/main.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/tutorials/pong/main.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/demo/camera_puzzle.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/container/main.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/application/app_with_kv_in_template1.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/application/app_suite.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/application/app_with_build.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/application/app_with_kv.py",
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/animation/animate.py",
+		"/home/rawr/Downloads/m/n/buildozer.spec",
+		"/home/rawr/Desktop/Untitled Folder/buildozer.spec",
+		"/home/rawr/Desktop/main.py",
+		"/home/rawr/Desktop/buildozer.spec",
+		"/home/rawr/Downloads/log.text",
+		"/usr/local/bin/buildozer",
+		"/home/rawr/Desktop/test.py",
+		"/home/rawr/Desktop/kivys.py",
+		"/home/rawr/Android/Sdk/SDK Readme.txt",
+		"/home/rawr/Desktop/calc-sum.asm",
+		"/home/rawr/Desktop/hello.asm",
+		"/home/rawr/Desktop/linux-ex/first.asm",
+		"/home/rawr/ProgramFiles/labplot-2.0.1/INSTALL",
+		"/home/rawr/Downloads/labplot-kf5-2.1.0/INSTALL",
+		"/home/rawr/Downloads/MagicPlotStudent/magicplot.sh",
+		"/home/rawr/Desktop/linux-ex/asm_io.inc",
+		"/home/rawr/Desktop/first.asm",
+		"/home/rawr/Desktop/hello.o",
+		"/home/rawr/Downloads/pysam-0.8.4/INSTALL",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/axis",
+		"/home/rawr/github/Sloth/NightlyBuild.py",
+		"/home/rawr/Downloads/moodleReportCrawler.py",
+		"/home/rawr/github/temp_shit/Trapezoid/polyangle.py",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/plotArea",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehSymbol.py",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehLine.py",
-		"/home/rawr/Desktop/test.py",
 		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/EditorWindow.py",
 		"/home/rawr/Desktop/asd.html",
 		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/Symbol",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/Line",
-		"/home/rawr/github/Sloth/NightlyBuild.py",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehAxis.py",
 		"/home/rawr/github/Sloth/bokehPlotter/__init__.py",
 		"/home/rawr/github/Changer/Changer.py",
@@ -769,9 +856,6 @@
 		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/camera/main.py",
 		"/home/rawr/ProgramFiles/buildozer/buildozer/default (copy).spec",
 		"/home/rawr/ProgramFiles/buildozer/buildozer/default.spec",
-		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/application/app_with_kv.py",
-		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/application/app_suite.py",
-		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/3Drendering/main.py",
 		"/home/rawr/ProgramFiles/android-studio 2/bin/studio.sh",
 		"/etc/terminfo/README",
 		"/home/rawr/ProgramFiles/processing-3.0.1/processing",
@@ -833,54 +917,11 @@
 		"/home/rawr/Desktop/a.py",
 		"/home/rawr/Desktop/comp.py",
 		"/home/rawr/Desktop/Contours.py",
-		"/home/rawr/github/AutoSchedule/AutoSchedule.py",
-		"/home/rawr/Downloads/CPP/CV.cpp",
-		"/home/rawr/Downloads/opencv-3.0.0/modules/highgui/src/window_QT.h",
-		"/home/rawr/Desktop/SubWinList.py",
-		"/home/rawr/Desktop/abc.py",
-		"/home/rawr/github/Sloth/graphSelectorListEditor.py",
-		"/home/rawr/github/Sloth/expTableWidget.py",
-		"/home/rawr/github/Sloth/graphSelectorWindow.py",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MLineListWidget.py",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/MViewBoxListWidget.py",
-		"/home/rawr/github/Sloth/GraphEditor/MaterialDesignList/viewBoxListWidget.py",
-		"/home/rawr/github/NodeGUI (copy)/NodeGUI2.py",
-		"/home/rawr/github/NodeGUI (copy)/JNode.py",
-		"/home/rawr/github/NodeGUI (copy)/HoverScene.py",
-		"/home/rawr/github/NodeGUI (copy)/PysideGraph.py",
-		"/home/rawr/github/NodeGUI (copy)/ErrorClass.py",
-		"/home/rawr/github/NodeGUI (copy)/Untitled Document",
-		"/home/rawr/github/AutoSchedule/style.qss",
-		"/home/rawr/github/Changer/README.md",
-		"/home/rawr/github/AutoSchedule/README.md",
-		"/home/rawr/Google Drive/codework/WSpre/wsPRE2.py",
-		"/home/rawr/Google Drive/codework/WSpre/t.py",
-		"/home/rawr/Google Drive/codework/schedule/wsGUI.py",
-		"/home/rawr/Google Drive/codework/schedule_v2/wsGUI.py",
-		"/home/rawr/github/revealEditor/README.md",
-		"/home/rawr/github/revealEditor/Reveal Editor.py",
-		"/home/rawr/github/revealEditor/css/theme/README.md",
-		"/home/rawr/github/NodeGUI/README.md",
-		"/home/rawr/github/revealEditor/js.py",
-		"/home/rawr/Downloads/CPP/grade.cpp",
-		"/home/rawr/.config/sublime-text-3/Installed Packages/C++11.sublime-package",
-		"/home/rawr/Downloads/CPP/GradeBook.h",
-		"/home/rawr/Downloads/CPP/GradeBook.cpp",
-		"/home/rawr/Downloads/CPP/MObject.cpp",
-		"/home/rawr/Downloads/CPP/MObject.h",
-		"/home/rawr/Downloads/CPP/Object.h",
-		"/home/rawr/Downloads/CPP/Object.cpp",
-		"/home/rawr/Downloads/pp.cpp",
-		"/home/rawr/Downloads/CPP/pp",
-		"/home/rawr/Desktop/Untitled Document",
-		"/home/rawr/Desktop/zz.py",
-		"/home/rawr/.config/sublime-text-3/Packages/C++11/C++11.sublime-settings",
-		"/home/rawr/.config/sublime-text-3/Packages/User/C++11.sublime-build",
-		"/home/rawr/.config/sublime-text-3/Packages/C++11/messages/install.txt"
+		"/home/rawr/github/AutoSchedule/AutoSchedule.py"
 	],
 	"find":
 	{
-		"height": 30.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -894,6 +935,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"layo",
 			"s",
 			"previewRect",
 			"range",
@@ -1020,11 +1062,10 @@
 			"set",
 			"color",
 			"', '",
-			"glyph",
-			"color"
+			"glyph"
 		],
 		"highlight": true,
-		"in_selection": true,
+		"in_selection": false,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
@@ -1120,7 +1161,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -1129,15 +1170,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9418,
+						"buffer_size": 9471,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8844,
-								8844
+								5410,
+								5410
 							]
 						],
 						"settings":
@@ -1146,14 +1187,42 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6160.0,
+						"translation.y": 2841.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "bokehPlotter/dir/axis",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7447,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1000,
+								1000
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1088.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
 					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MSymbolStylePicker.py",
 					"semi_transient": false,
 					"settings":
@@ -1175,14 +1244,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1167.0,
+						"translation.y": 1616.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "bokehPlotter/bokehSymbol.py",
 					"semi_transient": false,
 					"settings":
@@ -1204,14 +1273,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1056.0,
+						"translation.y": 816.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "bokehPlotter/dir/Symbol",
 					"semi_transient": false,
 					"settings":
@@ -1232,14 +1301,14 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 45.0,
+						"translation.y": 37.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
 					"semi_transient": false,
 					"settings":
@@ -1251,8 +1320,8 @@
 						"selection":
 						[
 							[
-								3474,
-								3474
+								3049,
+								3049
 							]
 						],
 						"settings":
@@ -1261,27 +1330,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2486.0,
+						"translation.y": 1720.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MMuitlSelector.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6156,
+						"buffer_size": 9240,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2788,
-								2788
+								855,
+								855
 							]
 						],
 						"settings":
@@ -1290,20 +1359,20 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1914.0,
+						"translation.y": 51.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 6,
 			"sheets":
 			[
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "bokehPlotter/bokehPlot.py",
 					"semi_transient": false,
 					"settings":
@@ -1315,8 +1384,8 @@
 						"selection":
 						[
 							[
-								1876,
-								1939
+								1163,
+								1163
 							]
 						],
 						"settings":
@@ -1325,14 +1394,42 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 983.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 661,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								205,
+								218
+							]
+						],
+						"settings":
+						{
+							"auto_name": "label:",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 102.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "bokehPlotter/bokehAxis.py",
 					"semi_transient": false,
 					"settings":
@@ -1344,8 +1441,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								222,
+								222
 							]
 						],
 						"settings":
@@ -1357,11 +1454,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "bokehPlotter/BokehGraphEditor/lineControlWidget.py",
 					"semi_transient": false,
 					"settings":
@@ -1386,40 +1483,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "bokehPlotter/BokehGraphEditor/viewLineList.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2885,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2561,
-								2561
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1254.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
 					"semi_transient": false,
 					"settings":
@@ -1431,8 +1499,8 @@
 						"selection":
 						[
 							[
-								336,
-								336
+								465,
+								465
 							]
 						],
 						"settings":
@@ -1444,7 +1512,64 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/home/rawr/Downloads/m/main.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1871,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1634,
+								1634
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 867.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/home/rawr/Downloads/Adobe Photoshop CC 2015 (20150529.r.88) (32+64Bit) + Crack/ReadMe.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1808,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 102.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -1478,7 +1603,7 @@
 		"cols":
 		[
 			0.0,
-			0.871156661785,
+			0.0732064421669,
 			1.0
 		],
 		"rows":
@@ -1490,7 +1615,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 237.0
+		"height": 203.0
 	},
 	"output.find_results":
 	{
@@ -1530,7 +1655,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
