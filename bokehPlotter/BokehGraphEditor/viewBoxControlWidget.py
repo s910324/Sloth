@@ -3,188 +3,195 @@ from   PySide.QtGui       import *
 from   PySide.QtCore      import *
 from   QLineNumber        import *
 from   viewLineList       import *
+import types
+class scroll(QScrollArea):
+	def __init__(self, parent=None):
+		super(scroll, self).__init__(parent)
+		payload = viewBoxControlWidget()
+		self.setFixedWidth(430)
+		self.setContentsMargins(0,0,0,0)
+		self.setWidget(payload)
 
 class viewBoxControlWidget (QWidget):
 	def __init__(self, parent=None):
 		super(viewBoxControlWidget , self).__init__(parent)
-		box0 = self.setupLineUI()
-		box1 = self.setupSymbolUI()
+
+		box0 = self.setupGraphUI()
+		box1 = self.setupGridUI()
+		box2 = self.setupAxisUI()
 		boxZ = QVBoxLayout()
 		boxZ.addLayout(box0)
 		boxZ.addLayout(box1)
-		# self.setLayout(boxZ)
+		boxZ.addLayout(box2)
+		boxZ.addStretch()
+		self.setLayout(boxZ)
+		self.activeVlineListWidget = None
 
 
-	def setupLineUI(self):
+	def setupGraphUI(self):
 
-		nameLable      = QLabel('Line Name:')
-		nameLable.setFixedWidth(100)
-		self.nameLine  = QLineEdit()
-		self.lineVisi  = QCheckBox('show')
-		hbox0          = QHBoxLayout()
-		hbox0.addWidget(nameLable)
-		hbox0.addWidget(self.nameLine)
-		hbox0.addWidget(self.lineVisi)
+		self.titleVisi = QCheckBox('Title Text:')
+		self.titleLine = QLineEdit()
+		self.titleEdit = QPushButton('...')
 
-		pos1Label0 = QLabel('Position1 (X, Y):     [')
-		pos1Label0.setFixedWidth(100)
-		pos1Label1 = QLabel(', ')
-		pos1Label2 = QLabel(']')
+		self.titleVisi.setFixedWidth(85)
+		self.titleEdit.setFixedWidth(25)
+		hbox0          = MultiHBoxLayout(self.titleVisi, self.titleLine, self.titleEdit )
 
-		pos2Label0 = QLabel('Position2 (X, Y):     [')
-		pos2Label0.setFixedWidth(100)
-		pos2Label1 = QLabel(', ')
-		pos2Label2 = QLabel(']')
+		hbox1            = MultiHBoxLayout()
+		bdcLabel         = QLabel('Border Color')
+		bdmLabel         = QLabel('Border Margins')
+		bgcLabel         = QLabel('Background')
+		bdcLabel.setAlignment(Qt.AlignHCenter)
+		bdmLabel.setAlignment(Qt.AlignHCenter)
+		bgcLabel.setAlignment(Qt.AlignHCenter)
 
-		self.pos1x = QLineNumber()
-		self.pos1y = QLineNumber()
-		self.pos2x = QLineNumber()
-		self.pos2y = QLineNumber()
+		self.bgColorLine   = QLineEdit()
+		self.bdColorLine   = QLineEdit()
+		self.bdMarginCombo = QComboBox()
+		self.bgColorLine.setFixedWidth(120)
+		self.bdColorLine.setFixedWidth(120)
+		self.bdMarginCombo.setFixedWidth(120)	
 
-		hbox1      = QHBoxLayout()
-		hbox1.addWidget(pos1Label0)
-		hbox1.addWidget(self.pos1x)
-		hbox1.addWidget(pos1Label1)
-		hbox1.addWidget(self.pos1y)
-		hbox1.addWidget(pos1Label2)
+		v1 = MultiVBoxLayout( bdcLabel, self.bdColorLine   )
+		v2 = MultiVBoxLayout( bgcLabel, self.bgColorLine   )
+		v3 = MultiVBoxLayout( bdmLabel, self.bdMarginCombo )
+		hbox1.addLayouts(v1, v2, v3)
 
-		hbox2      = QHBoxLayout()
-		hbox2.addWidget(pos2Label0)
-		hbox2.addWidget(self.pos2x)
-		hbox2.addWidget(pos2Label1)
-		hbox2.addWidget(self.pos2y)
-		hbox2.addWidget(pos2Label2)		
+		hbox2           = MultiHBoxLayout()
+		resLable        = QLabel('Graph Size( W x H ):')
+		xLable          = QLabel('x')
 
-		hbox3           = QHBoxLayout()
-		vboxA           = QVBoxLayout()
-		lCLable         = QLabel('Line Color')
-		lCLable.setAlignment(Qt.AlignHCenter)
-		self.lColorLine = QLineEdit()
-		self.lColorLine.setFixedWidth(120)
-		vboxA.addWidget(lCLable)
-		vboxA.addWidget(self.lColorLine)
+		self.Gwidth     = QLineEdit()
+		self.GHeight    = QLineEdit()	
+		xLable.setFixedWidth(6)
+		resLable .setFixedWidth(120)
+		hbox2.addWidgets(resLable, self.Gwidth, xLable, self.GHeight)
 
-		vboxB           = QVBoxLayout()
-		lWLable         = QLabel('Line Width')
-		lWLable.setAlignment(Qt.AlignHCenter)
-		self.lWidthLine = QLineEdit()
-		self.lWidthLine.setFixedWidth(120)
-		vboxB.addWidget(lWLable)
-		vboxB.addWidget(self.lWidthLine)	
-
-		vboxC = QVBoxLayout()
-		lSLable         = QLabel('Line Style')
-		lSLable.setAlignment(Qt.AlignHCenter)
-		self.lStyleLine = QComboBox()
-		self.lStyleLine.setFixedWidth(120)
-		vboxC.addWidget(lSLable)
-		vboxC.addWidget(self.lStyleLine)
-
-		hbox3.addLayout(vboxA)
-		hbox3.addLayout(vboxB)
-		hbox3.addLayout(vboxC)
-
-		vbox           = QVBoxLayout()
+		vbox = QVBoxLayout()
 		vbox.addLayout(hbox0)
 		vbox.addLayout(self.HLine())
-
 		vbox.addLayout(hbox1)
+		vbox.addLayout(self.HLine())
 		vbox.addLayout(hbox2)
 		vbox.addLayout(self.HLine())
-
-		vbox.addLayout(hbox3)
-		vbox.addLayout(self.HLine())
 		vbox.addSpacing(25)
-		groupBox = QGroupBox('Line Options:')
-		groupBox.setLayout(vbox)
+		# groupBox = QGroupBox('Graph Options:')
+		groupBox = MGroupBox('Graph Options:')
+		groupBox.addLayout(vbox)
 		box = QVBoxLayout()
 		box.addWidget(groupBox)
 		return box
 
 
-	def setupSymbolUI(self):
-		hbox0           = QHBoxLayout()
-		self.symbolVisi = QCheckBox('show Symbol')
+	def setupGridUI(self):
 
-		vboxA           = QVBoxLayout()
-		sCLable         = QLabel('Symbol Color')
-		sCLable.setAlignment(Qt.AlignHCenter)
-		self.sColorLine = QLineEdit()
-		self.sColorLine.setFixedWidth(120)
-		vboxA.addWidget(sCLable)
-		vboxA.addWidget(self.sColorLine)
+		self.showMajorGrid = QCheckBox("major Tick")
+		self.showMinorGrid = QCheckBox("minor Tick")
+		self.showMajorGrid.setFixedWidth(120)
+		self.showMinorGrid.setFixedWidth(120)
+		h0 =  MultiHBoxLayout( 0, self.showMajorGrid, 30, self.showMinorGrid )
 
-		vboxB           = QVBoxLayout()
-		sZLable         = QLabel('Symbol Size')
-		sZLable.setAlignment(Qt.AlignHCenter)
-		self.sSizeLine  = QLineEdit()
-		self.sSizeLine.setFixedWidth(120)
-		vboxB.addWidget(sZLable)
-		vboxB.addWidget(self.sSizeLine)	
-
-		vboxC           = QVBoxLayout()
-		sSLable         = QLabel('Symbol Style')
-		sSLable.setAlignment(Qt.AlignHCenter)
-		self.sStyleLine = QComboBox()
-		self.sStyleLine.setFixedWidth(120)
-		vboxC.addWidget(sSLable)
-		vboxC.addWidget(self.sStyleLine)
 		
-		hbox0.addLayout(vboxA)
-		hbox0.addLayout(vboxB)
-		hbox0.addLayout(vboxC)	
+		GCLabel           = QLabel("Grid Color:")
+		self.majorGCLine  = QLineEdit()
+		self.minorGCLine  = QLineEdit()
+		self.majorGCLine.setFixedWidth(120)
+		self.minorGCLine.setFixedWidth(120)		
+		h1 = MultiHBoxLayout(  GCLabel, 0, self.majorGCLine, 30, self.minorGCLine)
 
 
+		GWLabel           = QLabel("Line Style:")
+		self.majorGWSpin  = QSpinBox()
+		self.minorGWSpin  = QSpinBox()
+
+		self.majorGSCombo = QComboBox()
+		self.minorGSCombo = QComboBox()	
+
+		self.majorGWSpin.setFixedWidth(40)
+		self.minorGWSpin.setFixedWidth(40)
+
+		self.majorGSCombo.setFixedWidth(80)
+		self.minorGSCombo.setFixedWidth(80)	
+
+		h2 = MultiHBoxLayout(  GWLabel, 0, self.majorGWSpin, self.majorGSCombo, 35, self.minorGWSpin, self.minorGSCombo)
+
+		h2.setSpacing(0)
 
 
-		hbox1             = QHBoxLayout()
-		self.outlineVisi  = QCheckBox('show Symbol Outline')
-
-		vboxM           = QVBoxLayout()
-		oCLable         = QLabel('Outline Color')
-		oCLable.setAlignment(Qt.AlignHCenter)
-		self.oColorLine = QLineEdit()
-		self.oColorLine.setFixedWidth(120)
-		vboxM.addWidget(oCLable)
-		vboxM.addWidget(self.oColorLine)
-
-		vboxN           = QVBoxLayout()
-		oWLable         = QLabel('Outline Width')
-		oWLable.setAlignment(Qt.AlignHCenter)
-		self.oWidthLine  = QLineEdit()
-		self.oWidthLine.setFixedWidth(120)
-		vboxN.addWidget(oWLable)
-		vboxN.addWidget(self.oWidthLine)	
-
-		vboxO           = QVBoxLayout()
-		oSLable         = QLabel('Outline Style')
-		oSLable.setAlignment(Qt.AlignHCenter)
-		self.oStyleLine = QComboBox()
-		self.oStyleLine.setFixedWidth(120)
-		vboxO.addWidget(oSLable)
-		vboxO.addWidget(self.oStyleLine)
+	
 
 
-		hbox1.addLayout(vboxM)
-		hbox1.addLayout(vboxN)
-		hbox1.addLayout(vboxO)	
+		v0   = MultiVBoxLayout(h0, h1, self.HLine(), h2, self.HLine())
+		group = MGroupBox('Grid Options:')
+		group.addLayout(v0)
+		box = QHBoxLayout()
+		box.addWidget(group)
 
-		groupBox = QGroupBox('Symbol Options:')
-		vboxZ    = QVBoxLayout()
-		vboxZ.addSpacing(10)
-		vboxZ.addWidget(self.symbolVisi)
-		vboxZ.addSpacing(10)
-		vboxZ.addLayout(hbox0)
-		vboxZ.addLayout(self.HLine())
-		vboxZ.addWidget(self.outlineVisi)
-		vboxZ.addSpacing(10)
-		vboxZ.addLayout(hbox1)
-		vboxZ.addLayout(self.HLine())
-		vboxZ.addStretch()
-		groupBox.setLayout(vboxZ)
-		box      = QVBoxLayout()
-		box.addWidget(groupBox)
 		return box
+
+
+	def setupAxisUI(self):
+		groupBox     = MGroupBox('Axis Options:')
+		self.axisTab = MAxisTabWidget()
+		groupBox.addWidget(self.axisTab)
+		box = MultiVBoxLayout(groupBox)
+
+		return box
+
+
+
+
+
+	def setPanelVal(self, name  = None, color  = None, width   = None,
+						  style = None, symbol = None, visible = None, viewNum = None):
+		if name is not None:
+			self.nameLine.setText(name)
+		if color:
+			self.lColorLine.setText(str(color))
+		if width is not None:
+			self.lWidthLine.setText(str(width))
+		# if style:			
+		# 	self.lStyleLine.set
+		if symbol:
+			self.symbol     = symbol
+			self.symbol_val = symbol.symbol_val()
+			self.oColorLine.setText(self.symbol_val['outLine']['color'])
+			self.oWidthLine.setText(str(self.symbol_val['outLine']['width']))
+			self.outlineVisi.setChecked(self.symbol_val['outLine']['visible'])
+			self.sColorLine.setText(self.symbol_val['color'])
+			self.sSizeLine.setText(str(self.symbol_val['size']))
+			self.symbolVisi.setChecked(self.symbol_val['visible'])
+
+		if visible:
+			self.lineVisi.setChecked(True)
+		else:
+			self.lineVisi.setChecked(False)
+		return self.getPanelVal()
+
+
+	def getPanelVal(self):
+		self.outLine_val = {'color'   : self.oColorLine.text(),
+							'width'   : float(self.oWidthLine.text()),	
+							'visible' : self.outlineVisi.isChecked()}	
+
+		self.symbol_val  = {'color'   : self.sColorLine.text(),
+							'size'    : float(self.sSizeLine.text()),
+							'outLine' : self.outLine_val,
+							'visible' : self.symbolVisi.isChecked()}						
+		
+		self.symbol.symbol_val(**self.symbol_val)
+		self.val         = {'name'    : self.nameLine.text(),
+							'color'   : self.lColorLine.text(),
+							'width'   : float(self.lWidthLine.text()),
+							'style'   : None,
+							'symbol'  : self.symbol, 
+							'visible' : self.lineVisi.isChecked(), 
+							'viewNum' : None}
+		return self.val
+
+
+
 
 	def HLine(self):
 		vbox  = QVBoxLayout()
@@ -205,3 +212,172 @@ class viewBoxControlWidget (QWidget):
 		toto.setFrameShadow(QFrame.Sunken)
 		# toto.setStyleSheet('border: 1px solid #303030; background-color: #303030;')
 		return toto		
+
+class MultiHBoxLayout(QHBoxLayout):
+	def __init__(self, *args):
+		super(MultiHBoxLayout, self).__init__()
+		if args:
+			self.addWidgets(*args)
+
+	def addWidgets(self, *args):
+		for widget in args:
+			try:
+				if widget == 0 :
+					self.addStretch()
+				elif type(widget) == types.IntType:
+					self.addSpacing(widget)
+				else:
+					self.addWidget(widget)
+			except:
+				self.addLayout(widget)
+
+	def addLayouts(self, *args):
+		self.addWidgets(*args)
+
+
+class MultiVBoxLayout(QVBoxLayout):
+	def __init__(self, *args):
+		super(MultiVBoxLayout, self).__init__()
+		if args:
+			self.addWidgets(*args)
+
+	def addWidgets(self, *args):
+		for widget in args:
+			try:
+				if widget == 0 :
+					self.addStretch()
+				elif type(widget) == types.IntType:
+					self.addSpacing(widget)
+				else:
+					self.addWidget(widget)
+			except:
+				self.addLayout(widget)
+
+	def addLayouts(self, *args):
+		self.addWidgets(*args)
+
+
+class MAxisTabWidget(QTabWidget):
+	def __init__(self, parent = None):
+		super(MAxisTabWidget, self).__init__(parent)
+		self.addAxis()
+		self.addAxis()
+		self.addAxis()
+		self.addAxis()
+
+	def addAxis(self):
+		self.addTab(MAxisTab(), 'test')
+
+class MAxisTab(QWidget):
+	def __init__(self, parent = None):
+		super(MAxisTab, self).__init__(parent)	
+		pass
+
+class MGroupBox(QWidget):
+	def __init__(self, title = None, parent = None):
+		super(MGroupBox, self).__init__(parent)	
+		
+		self.MTitle = MGroupTitle(title)
+		self.Midget = QWidget()
+		self.v1     = QVBoxLayout()
+		self.v2     = QVBoxLayout()
+		self.h1     = QHBoxLayout()
+		self.v1.addWidget(self.MTitle)
+		self.v1.addLayout(self.h1)
+		self.v1.addWidget(self.Midget)
+		self.Midget.setLayout(self.v2)
+		self.h1.addSpacing(25)
+
+
+		self.v1.setSpacing(0)
+		self.h1.setSpacing(0)
+		self.v1.setContentsMargins(0,0,0,0)
+		self.h1.setContentsMargins(0,0,0,0)
+		self.setContentsMargins(0,0,0,0)
+		self.setLayout(self.v1)
+		self.MTitle.statChanged.connect(self.changeVisibility)
+
+	def changeVisibility(self, stat):
+		self.Midget.setVisible(stat)	
+
+	def addWidget(self, widget = None):
+		try:
+			self.v2.addWidget(widget)
+		except:
+			self.v2.addLayout(widget)
+
+	def addLayout(self, widget = None):	
+		self.addWidget(widget)
+
+class MGroupTitle(QWidget):
+	statChanged = Signal(bool)
+	def __init__(self, title = None, parent = None):
+		super(MGroupTitle, self).__init__(parent)	
+		self.setFixedHeight(20)
+
+		self.setContentsMargins(0,0,0,0)
+		self.title = title
+		self.stat  = True
+		m = QHBoxLayout()
+		m.setContentsMargins(0,0,0,0)
+		m.setSpacing(0)
+		l = QLabel(title)
+		l.setFont(QFont('Helvetica [Cronyx]', 10, QFont.Bold))
+		m.addSpacing(35)
+		m.addWidget(l)
+		self.setLayout(m)
+		
+
+	def paintEvent(self, event):
+		painter = QPainter()
+		painter.begin(self)
+		self.drawWidget(painter)
+		painter.end() 
+
+	def drawWidget(self, painter):
+		painter.setRenderHint(QPainter.Antialiasing)
+		w, h     = self.size().width(), self.size().height()-2
+		x, y     = self.pos().x(), self.pos().y()+1
+		self.ctrlRect = QRectF(x+3, y+2, h-4, h-4)
+
+		pen = QPen(QColor("#353535"))
+		br  = QBrush(QColor("#353535"))
+		br.setStyle(Qt.Dense4Pattern)
+		pen.setWidthF(0.1)
+		painter.setPen(pen)
+		painter.setBrush(br)
+		painter.drawEllipse(self.ctrlRect)
+		painter.drawRect(QRect(x+25, y, w, h))
+
+
+		
+		pen = QPen()
+		pen.setColor(QColor("#E2065F"))
+		painter.setPen(pen)	
+		painter.setFont(QFont('Helvetica [Cronyx]', 12, QFont.Bold))
+		self.statTXT = "-" if self.stat else "+"
+		painter.drawText(self.ctrlRect, Qt.AlignCenter, self.statTXT )
+		pen.setColor(QColor("#CCC"))
+		painter.setFont(QFont('Helvetica [Cronyx]', 10, QFont.Bold))
+		painter.setPen(pen)	
+		# painter.drawText(QRect(x+30, y, w, h), Qt.AlignLeft|Qt.AlignVCenter, self.title)
+
+
+	def mousePressEvent(self, event):
+		if self.ctrlRect.contains(event.pos()):
+			self.stat = not self.stat
+			self.statChanged.emit(self.stat)
+			self.update()
+
+
+def run():
+	app        = QApplication(sys.argv)
+	MainWindow = viewBoxControlWidget()
+	MainWindow = scroll()
+	MainWindow.show()
+	import os
+	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
+	print "File Path: " + os.path.realpath(__file__)
+	app.exec_()
+	
+run()		

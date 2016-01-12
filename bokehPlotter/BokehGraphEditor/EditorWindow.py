@@ -126,4 +126,4 @@ def Debugger():
 	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-# Debugger()
+Debugger()

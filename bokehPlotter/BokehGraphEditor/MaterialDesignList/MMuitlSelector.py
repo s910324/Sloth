@@ -3,6 +3,7 @@ import types        as types
 from PySide         import QtGui
 from PySide.QtGui   import *
 from PySide.QtCore  import *
+from MMutiWidget    import MMultiWidget
 
 
 class MColorView(QWidget):
@@ -35,8 +36,33 @@ class MColorView(QWidget):
 		hbox0 = QHBoxLayout()
 		vbox0 = QVBoxLayout()
 
+		hboxN = QHBoxLayout()
+		d = MMultiWidget(bdcolor = '#aaa')
+
+		d.addCheck(w=55)
+
+		d.addSep()
+		d.addLabel(text = "LABEL")
+		d.addSep()
+		d.addLabel(text = " ", w = 55)
+
+		hboxN.addWidget(d)
+		
+		vbox0.addLayout(hboxN)
+
+
 		hbox1 = QHBoxLayout()
 		self.axisTitleLable   = CLableWidget(text = "TITLE", color = "#FF0066", checkble = True, checkStat = True)
+		a = MMultiWidget()
+		# a.addCheck()
+		# a.addSep()
+		a.addLabel(text="text:",w = 55)
+		a.addSep()
+		a.addLine()
+		a.addSep()
+		a.addButton(text="edit",w = 55)
+		
+
 		self.axisTitleText    = QLineEdit()
 		self.axisTitleItalic  = QCheckBox()
 		self.axisTitleBold    = QCheckBox()
@@ -44,26 +70,51 @@ class MColorView(QWidget):
 		self.axisBoldLabel    = CLableWidget(w = 22, text = "B")
 		
 		
-		hbox1.addWidget(self.axisTitleLable)
-		hbox1.addWidget(self.axisTitleText)
-		hbox1.addWidget(self.axisItalicLabel )
-		hbox1.addWidget(self.axisTitleItalic)
-		hbox1.addWidget(self.axisBoldLabel)
-		hbox1.addWidget(self.axisTitleBold )
+		hbox1.addWidget(a)
+		# hbox1.addWidget(self.axisTitleText)
+		# hbox1.addWidget(self.axisItalicLabel )
+		# hbox1.addWidget(self.axisTitleItalic)
+		# hbox1.addWidget(self.axisBoldLabel)
+		# hbox1.addWidget(self.axisTitleBold )
 		
 		vbox0.addLayout(hbox1)
 		vbox0.addSpacing(5)
 
 		hbox2 = QHBoxLayout()
+		b = MMultiWidget()
+		b.addLabel(text="bold",w = 55)
+		b.addCheck()
+
+
+		c = MMultiWidget()
+		c.addLabel(text="italic",w = 55)
+		c.addCheck()
+
+		d = MMultiWidget()
+		d.addLabel(text="font",w = 55)
+		d.addLine(w = 55)
+		e = MMultiWidget()
+		e.addLabel(text="size",w = 55)
+		e.addLine(w = 55)
+
 		self.axisFontLabel    = CLableWidget(text = "FONT")
 		self.axisTitleFont    = QComboBox()
 		self.axisSizeLabel    = CLableWidget(text = "SIZE")
 		self.axisTitleSize    = QComboBox()
-		hbox2.addWidget(self.axisFontLabel)
-		hbox2.addWidget(self.axisTitleFont)
-		hbox2.addSpacing(35)
-		hbox2.addWidget(self.axisSizeLabel)
-		hbox2.addWidget(self.axisTitleSize)
+		# hbox2.addWidget(self.axisFontLabel)
+		# hbox2.addWidget(self.axisTitleFont)
+		hbox2.addWidget(b)
+		hbox2.addStretch()
+		hbox2.addWidget(c)
+		hbox2.addStretch()
+		hbox2.addWidget(d)
+		
+	
+		# hbox2.addWidget(e)
+		# hbox2.addSpacing(35)
+
+		# hbox2.addWidget(self.axisSizeLabel)
+		# hbox2.addWidget(self.axisTitleSize)
 		vbox0.addLayout(hbox2)
 		vbox0.addSpacing(45)
 
@@ -80,14 +131,13 @@ class MColorView(QWidget):
 
 		hbox1              = QHBoxLayout()
 		axisLable          = CLableWidget(text = "AXIS", color = "#FF0066", checkble = True, checkStat = True)
-		smallColor         = smallColorView()
-		axisTitleLabel     = CLableWidget(text = "TITLE", color = "#FF0066", checkble = True, checkStat = True)
+		
 		self.axisFromCtrl  = QDoubleSpinBox()
 		self.axisToCtrl    = QDoubleSpinBox()
 		hbox1.addWidget(axisLable)
-		smallColor.setFixedWidth(25)
-		hbox1.addWidget(smallColor)
-		hbox1.addWidget(axisTitleLabel)
+
+
+		
 		hbox1.addStretch()
 		vbox0.addLayout(hbox1)
 		vbox0.addSpacing(5)
@@ -343,7 +393,7 @@ class smallColorView(QWidget):
 	def drawWidget(self):
 		painter      = self.painter
 		painter.setRenderHint(QPainter.Antialiasing)
-		[x, y, w, h] = [1, 1, self.size().width()-6, self.size().height()-2]
+		[x, y, w, h] = [1, 2, self.size().width()-6, self.size().height()-4]
 		peak         = 8
 		hpeak        = peak/2
 		spare        = ((h-peak)/2)

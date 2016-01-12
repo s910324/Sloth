@@ -275,6 +275,9 @@ class PlotWindowWidget(QMainWindow):
 		offline   =  'file://' + os.getcwd() + '/BokehJS'
 		self.html = html.replace(online,  offline)
 		self.Web.setHtml(self.html)
+		f = open('./save.html', 'wb')
+		with f:
+			f.write(self.html)
 		self.Web.reload()
 
 
@@ -321,4 +324,4 @@ def Debugger():
 	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-Debugger()
+# Debugger()
