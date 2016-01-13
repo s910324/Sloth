@@ -4,8 +4,80 @@
 		"selected_items":
 		[
 			[
+				"w",
+				"widget	(forstmt)"
+			],
+			[
+				"wid",
+				"widget"
+			],
+			[
+				"setF",
+				"setFixedWidth"
+			],
+			[
+				"C",
+				"ColorLine"
+			],
+			[
+				"f",
+				"Fixed	(instance)"
+			],
+			[
 				"set",
-				"setSpacing"
+				"setHeightForWidth	(function)"
+			],
+			[
+				"exp",
+				"Expanding	(instance)"
+			],
+			[
+				"siz",
+				"setSizePolicy"
+			],
+			[
+				"ex",
+				"Expanding	(instance)"
+			],
+			[
+				"m",
+				"Minimum	(instance)"
+			],
+			[
+				"h",
+				"height"
+			],
+			[
+				"va",
+				"valueChanged"
+			],
+			[
+				"setC",
+				"setContentsMargins"
+			],
+			[
+				"view",
+				"viewBoxControlWidget	(class)"
+			],
+			[
+				"Multi",
+				"MultiVBoxLayout	(class)"
+			],
+			[
+				"MA",
+				"MAxisTabWidget	(class)"
+			],
+			[
+				"add",
+				"addSpacing"
+			],
+			[
+				"setFix",
+				"setFixedHeight"
+			],
+			[
+				"stat",
+				"statChanged"
 			],
 			[
 				"ad",
@@ -36,22 +108,6 @@
 				"AlignLeft	(class)"
 			],
 			[
-				"w",
-				"width"
-			],
-			[
-				"setFix",
-				"setFixedHeight	(function)"
-			],
-			[
-				"wid",
-				"widget"
-			],
-			[
-				"setF",
-				"setFixedWidth	(function)"
-			],
-			[
 				"ins",
 				"insertStretch	(function)"
 			],
@@ -76,20 +132,12 @@
 				"QTabWidget	(class)"
 			],
 			[
-				"add",
-				"addStretch	(function)"
-			],
-			[
 				"hbox",
 				"hbox2	(statement)"
 			],
 			[
 				"addB",
 				"addButton	(function)"
-			],
-			[
-				"h",
-				"hboxN	(statement)"
 			],
 			[
 				"setMi",
@@ -396,10 +444,6 @@
 				"setPlotAreaVal	(function)"
 			],
 			[
-				"setC",
-				"setContentsMargins	(function)"
-			],
-			[
 				"setU",
 				"setUpUI	(function)"
 			],
@@ -414,10 +458,6 @@
 			[
 				"sy",
 				"symbol	(statement)"
-			],
-			[
-				"va",
-				"valChanged"
 			],
 			[
 				"S",
@@ -474,46 +514,6 @@
 			[
 				"bok",
 				"bokehSymbol	(import)"
-			],
-			[
-				"N",
-				"None	(class)"
-			],
-			[
-				"sm",
-				"symbol	(statement)"
-			],
-			[
-				"g",
-				"GraphEditor	(module)"
-			],
-			[
-				"an",
-				"angle	(statement)"
-			],
-			[
-				"align",
-				"AlignVCenter	(class)"
-			],
-			[
-				"Solid",
-				"SolidPattern	(class)"
-			],
-			[
-				"No",
-				"None	(keyword)"
-			],
-			[
-				"se",
-				"setStyle	(function)"
-			],
-			[
-				"sol",
-				"SolidPattern	(class)"
-			],
-			[
-				"Cross",
-				"CrossPattern	(class)"
 			]
 		]
 	},
@@ -552,6 +552,14 @@
 			}
 		},
 		{
+			"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
+			"settings":
+			{
+				"buffer_size": 4933,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "bokehPlotter/bokehSymbol.py",
 			"settings":
 			{
@@ -564,14 +572,6 @@
 			"settings":
 			{
 				"buffer_size": 2224,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
-			"settings":
-			{
-				"buffer_size": 4933,
 				"line_ending": "Unix"
 			}
 		},
@@ -592,6 +592,14 @@
 			}
 		},
 		{
+			"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
+			"settings":
+			{
+				"buffer_size": 10379,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"contents": "label:\n	font size\n	font \n	font style(bold, italic)\n	font color\n\naxis:\n	axis color\n	axis width\n	axis visibility\n	axis start & ends\n	axis format(linear, nl, log10, log2)\n\nmajortick:\n	tick width\n	tick color\n	tick in & out\n	ticks / steps\n	\n	tick font:\n		major_label_orientation (number int and float)\n		standoff\n		align( left, right or center )\n		tick label format( %d, %f, %s)\n		tick font visibility\n		tick font size\n		tick font \n		tick font style(bold, italic)\n		tick font color	\n\nminortick:\n	tick width\n	tick color\n	tick in & out\n	ticks / steps\n\n	tick font:\n		tick font visibility\n		tick font size\n		tick font \n		tick font style(bold, italic)\n		tick font color		",
 			"settings":
 			{
@@ -601,10 +609,18 @@
 			}
 		},
 		{
-			"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
+			"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPickerMKII.py",
 			"settings":
 			{
-				"buffer_size": 8610,
+				"buffer_size": 3614,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MUtilities.py",
+			"settings":
+			{
+				"buffer_size": 5639,
 				"line_ending": "Unix"
 			}
 		}
@@ -766,6 +782,15 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
+		"/home/rawr/github/Sloth/bokehPlotter/dir/plotArea",
+		"/home/rawr/Downloads/ScriptEngine-0.0/scriptengine.py",
+		"/home/rawr/Downloads/lolcad-master/lolcad.py",
+		"/home/rawr/Downloads/lolcad-master/nurbs.py",
+		"/home/rawr/Downloads/lolcad-master/visualizer.py",
+		"/home/rawr/Downloads/lolcad-master/tests/data/cone.step",
+		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/MaterialDesignList/MMutiWidgetMKII.py",
+		"/home/rawr/github/Changer/Changer.py",
 		"/home/rawr/github/revealEditor/index (copy).html",
 		"/home/rawr/github/revealEditor/Reveal Editor.py",
 		"/home/rawr/github/Sloth/NightlyBuild.py",
@@ -781,7 +806,6 @@
 		"/home/rawr/github/revealEditor/js/reveal.js",
 		"/home/rawr/github/revealEditor/js.py",
 		"/home/rawr/github/Sloth/bokehPlotter/a.html",
-		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/MaterialDesignList/MMutiWidgetMKII.py",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehLine.py",
 		"/home/rawr/Desktop/test (copy).py",
 		"/home/rawr/github/NodeGUI/JNode.py",
@@ -834,15 +858,12 @@
 		"/home/rawr/Downloads/pysam-0.8.4/INSTALL",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/axis",
 		"/home/rawr/Downloads/moodleReportCrawler.py",
-		"/home/rawr/github/Sloth/bokehPlotter/dir/plotArea",
 		"/home/rawr/github/Sloth/bokehPlotter/bokehSymbol.py",
 		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/EditorWindow.py",
 		"/home/rawr/Desktop/asd.html",
-		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/Symbol",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/Line",
 		"/home/rawr/github/Sloth/bokehPlotter/__init__.py",
-		"/home/rawr/github/Changer/Changer.py",
 		"/home/rawr/github/Sloth/plotSubWin.py",
 		"/home/rawr/ProgramFiles/buildozer/buildozer/ buildozer.spec",
 		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/camera/main.py",
@@ -888,12 +909,7 @@
 		"/home/rawr/Desktop/bokehp compare",
 		"/home/rawr/Downloads/scipy-0.14.0/scipy/version.py",
 		"/home/rawr/Downloads/PyXRD-0.6.7/run.py",
-		"/home/rawr/Downloads/PyXRD-0.6.7/setup.py",
-		"/home/rawr/Downloads/PyXRD-0.6.7/run_tests.py",
-		"/home/rawr/.wine/dosdevices/c:/power cell/AN_RU20.RAW",
-		"/etc/bumblebee/bumblebee.conf",
-		"/etc/bumblebee/sudo",
-		"/etc/bumblebee/gedit"
+		"/home/rawr/Downloads/PyXRD-0.6.7/setup.py"
 	],
 	"find":
 	{
@@ -911,6 +927,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Multi",
+			"Hl",
+			"Float",
+			"numpy.Float",
+			"Numeric",
 			"fill",
 			"self.vco",
 			"some",
@@ -1033,12 +1054,7 @@
 			"target",
 			"xaxis",
 			"self",
-			"self,",
-			"self.",
-			"hight",
-			"lable",
-			"major",
-			"back"
+			"self,"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1046,6 +1062,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"float",
+			"Float",
+			"numpy",
 			"baseWidget",
 			"",
 			"w",
@@ -1139,7 +1158,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -1168,7 +1187,7 @@
 						"translation.y": 274.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1197,7 +1216,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1225,7 +1244,7 @@
 						"translation.y": 36.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -1251,14 +1270,43 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2062.0,
+						"translation.y": 1533.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4933,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4202,
+								4202
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2406.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "bokehPlotter/bokehSymbol.py",
 					"semi_transient": false,
 					"settings":
@@ -1283,11 +1331,11 @@
 						"translation.y": 864.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "bokehPlotter/dir/Symbol",
 					"semi_transient": false,
 					"settings":
@@ -1311,42 +1359,13 @@
 						"translation.y": 37.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPicker.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4933,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4886,
-								4886
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2908.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -1362,8 +1381,8 @@
 						"selection":
 						[
 							[
-								7436,
-								7436
+								221,
+								221
 							]
 						],
 						"settings":
@@ -1375,7 +1394,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1404,11 +1423,40 @@
 						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 9,
+					"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10379,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2617,
+								2617
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 208.0,
+						"translation.y": 1350.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1419,8 +1467,8 @@
 						"selection":
 						[
 							[
-								248,
-								248
+								203,
+								203
 							]
 						],
 						"settings":
@@ -1429,27 +1477,27 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 324.0,
+						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
-					"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
+					"buffer": 11,
+					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MColorPickerMKII.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8610,
+						"buffer_size": 3614,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7936,
-								7936
+								669,
+								669
 							]
 						],
 						"settings":
@@ -1458,10 +1506,39 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5148.0,
+						"translation.y": 1944.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "bokehPlotter/BokehGraphEditor/MaterialDesignList/MUtilities.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5639,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2254,
+								2254
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2055.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1495,7 +1572,7 @@
 		"cols":
 		[
 			0.0,
-			0.16691068814,
+			0.0366032210835,
 			1.0
 		],
 		"rows":
@@ -1507,7 +1584,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 306.0
+		"height": 212.0
 	},
 	"output.find_results":
 	{
@@ -1517,7 +1594,7 @@
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 46.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
