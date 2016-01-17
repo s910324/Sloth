@@ -167,6 +167,8 @@ class MGroupBox(QWidget):
 	def addLayout(self, widget = None):	
 		self.addWidget(widget)
 
+		return self
+
 
 
 class MGroupTitle(QWidget):
