@@ -76,6 +76,7 @@ class viewBoxList(QListWidget):
 
 
 
+
 class viewBoxListWidget(QWidget):
 	doubleClicked = Signal(object)
 	def __init__(self, viewBox = None, item = None,  parent = None):
@@ -112,6 +113,10 @@ class viewBoxListWidget(QWidget):
 
 	def setDcFocus(self, focus = True):
 		self.header.setDcFocus(focus)
+
+	def getViewVal(self):
+		return self.viewBox.plot_spec()
+
 
 
 def run():

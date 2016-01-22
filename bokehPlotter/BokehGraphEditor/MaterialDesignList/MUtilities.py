@@ -138,19 +138,16 @@ class MGroupBox(QWidget):
 		
 		self.MTitle = MGroupTitle(title)
 		self.Midget = QWidget()
-		self.v1     = QVBoxLayout()
+		self.v1     = MVBoxLayout(self.MTitle, self.Midget, 25)
 		self.v2     = QVBoxLayout()
-		self.h1     = QHBoxLayout()
-		self.v1.addWidget(self.MTitle)
-		self.v1.addLayout(self.h1)
-		self.v1.addWidget(self.Midget)
-		self.Midget.setLayout(self.v2)
-		self.h1.addSpacing(25)
+		self.h1     = MHBoxLayout(30, self.v2)
+		
+
+
+		self.Midget.setLayout(self.h1)
 
 		self.v1.setSpacing(0)
-		self.h1.setSpacing(0)
 		self.v1.setContentsMargins(0,0,0,0)
-		self.h1.setContentsMargins(0,0,0,0)
 		self.setContentsMargins(0,0,0,0)
 		self.setLayout(self.v1)
 		self.MTitle.statChanged.connect(self.changeVisibility)

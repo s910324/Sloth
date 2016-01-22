@@ -20,12 +20,12 @@ class scroll(QScrollArea):
 class viewBoxControlWidget (QWidget):
 	def __init__(self, parent=None):
 		super(viewBoxControlWidget , self).__init__(parent)
-
+		self.setContentsMargins(0,0,0,0)
 		box0 = self.setupGraphUI()
 		box1 = self.setupGridUI()
 		box2 = self.setupAxisUI()
 		boxZ = MVBoxLayout()
-		boxZ.addWidgets(box0, MHLine(), box1, MHLine(), box2, 0)
+		boxZ.addWidgets(box0, MHLine(),  box1, MHLine(), box2, 0)
 		self.setLayout(boxZ)
 		self.activeVlineListWidget = None
 
@@ -40,7 +40,7 @@ class viewBoxControlWidget (QWidget):
 		self.titleEdit.setFixedWidth(25)
 		hbox0            = MHBoxLayout(self.titleVisi, self.titleLine, self.titleEdit )
 
-		vbox1            = MVBoxLayout()
+		vbox1            = MHBoxLayout()
 		bdcLabel         = QLabel('Border Color')
 		bdmLabel         = QLabel('Border Margins')
 		bgcLabel         = QLabel('Background')
@@ -49,9 +49,9 @@ class viewBoxControlWidget (QWidget):
 		self.bdColorLine   = MColorPicker()
 		self.bdMarginCombo = QComboBox()
 
-		h1 = MHBoxLayout( bdcLabel, bgcLabel, bdmLabel   ).setFixedWidth(120).setAlignment(Qt.AlignHCenter)
-		h2 = MHBoxLayout( self.bdColorLine, self.bgColorLine, self.bdMarginCombo   ).setFixedWidth(120)
-		vbox1.addLayouts(h1, h2)
+		v1 = MVBoxLayout( bdcLabel, bgcLabel, bdmLabel   ).setFixedWidth(120).setAlignment(Qt.AlignHCenter)
+		v2 = MVBoxLayout( self.bdColorLine, self.bgColorLine, self.bdMarginCombo   ).setFixedWidth(120)
+		vbox1.addLayouts(v1, v2)
 
 		hbox2           = MHBoxLayout()
 		resLable        = QLabel('Graph Size( W x H ):')
@@ -130,31 +130,20 @@ class viewBoxControlWidget (QWidget):
 
 
 
-	def setPanelVal(self, name  = None, color  = None, width   = None,
-						  style = None, symbol = None, visible = None, viewNum = None):
-		if name is not None:
-			self.nameLine.setText(name)
-		if color:
-			self.lColorLine.setText(str(color))
-		if width is not None:
-			self.lWidthLine.setText(str(width))
-		# if style:			
-		# 	self.lStyleLine.set
-		if symbol:
-			self.symbol     = symbol
-			self.symbol_val = symbol.symbol_val()
-			self.oColorLine.setText(self.symbol_val['outLine']['color'])
-			self.oWidthLine.setText(str(self.symbol_val['outLine']['width']))
-			self.outlineVisi.setChecked(self.symbol_val['outLine']['visible'])
-			self.sColorLine.setText(self.symbol_val['color'])
-			self.sSizeLine.setText(str(self.symbol_val['size']))
-			self.symbolVisi.setChecked(self.symbol_val['visible'])
+	def setPanelVal(self,  width      = None, height     = None, tools   = None, 
+						   background = None, borderfill = None, viewNum = None):
 
-		if visible:
-			self.lineVisi.setChecked(True)
-		else:
-			self.lineVisi.setChecked(False)
-		return self.getPanelVal()
+		if width is not None:
+			self.Gwidth.setValue(width)
+		if height is not None:
+			self.GHeight.setValue(height)
+		if background:
+			self.bgColorLine.setColor(background)
+		if borderfill:
+			self.bdColorLine.setColor(borderfill)
+		# if viewNum is not None:
+		# 	self.viewNum                 = viewNum
+		# return self.getPanelVal()
 
 
 	def getPanelVal(self):
@@ -195,38 +184,20 @@ class MAxisTabWidget(QTabWidget):
 class MAxisTab(QWidget):
 	def __init__(self, parent = None):
 		super(MAxisTab, self).__init__(parent)	
-		gbox1 = self.setupAxisTextUI()
-
-		boxz  = MVBoxLayout(gbox1, MHLine(), 0)
-		self.setLayout(boxz)
+		v1 = self.setupAxisTextUI()
+		self.setLayout(v1)
 
 	def setupAxisTextUI(self):
-		titleLabel     = QLabel('Axis Title:')
-		self.axisTitle = QLineEdit()
-		self.setBold   = QCheckBox('B')
-		self.setItalic = QCheckBox('I')
-
-		styleLabel     = QLabel('Size/Font:')
-		colorLabel     = QLabel('title color:')
-		self.textSize  = QSpinBox()
-		self.textFont  = QComboBox()
-		self.textColor = MColorPicker()
-		titleLabel.setFixedWidth(90)
-		styleLabel.setFixedWidth(90)
-		colorLabel.setFixedWidth(85)
-		self.textSize.setFixedWidth(40)
-		self.textFont.setFixedWidth(80)
-		self.setBold.setFixedWidth(35)
-		self.setItalic.setFixedWidth(35)
-		self.textColor.setFixedWidth(120)
-		h0 = MHBoxLayout(titleLabel, self.axisTitle)
-		h1 = MHBoxLayout(styleLabel, self.textSize, self.textFont, 0, self.setBold, 15, self.setItalic, 0)
-		h2 = MHBoxLayout(colorLabel, self.textColor,0 )
+		self.axisTitleChk  = QCheckBox('Axis Title:')
+		self.axisTitleEdit = QPushButton('...')
+		self.axisTitle     = QLineEdit()
+		self.axisTitleChk.setFixedWidth(85)
+		self.axisTitleEdit.setFixedWidth(25)
+		h0 = MHBoxLayout(self.axisTitleChk, self.axisTitle, self.axisTitleEdit)
 		h0.setSpacing(0)
-		h1.setSpacing(0)
-		v1 = MVBoxLayout(h0, MHLine(), h1, MHLine(), h2,  0)
-		textGroupBox = MGroupBox('Axis Text:').addLayout(v1)
-		return textGroupBox
+		v1 = MVBoxLayout(h0, 0)
+
+		return v1
 		
 
 
@@ -241,4 +212,4 @@ def run():
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
 	
-run()		
+# run()		

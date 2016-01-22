@@ -14,6 +14,7 @@ class EditorWindow(QGroupBox):
 		self.resize(650, 700)
 		self.setupLayout()
 		self.setUIEnable(False)
+		self.lcontrol.hide()
 
 
 	def setupLayout(self):
@@ -47,7 +48,7 @@ class EditorWindow(QGroupBox):
 		vbox          = QVBoxLayout()
 		vbox.addWidget(self.vcontrol)
 		vbox.addWidget(self.lcontrol)
-		self.vcontrol.hide()
+		
 		return vbox		
 
 	def setupSubmitUI(self):
@@ -69,20 +70,34 @@ class EditorWindow(QGroupBox):
 		self.lcontrol.setEnabled(state)
 
 
+
 	def addView(self, viewBox = None):
 		viewBoxListWidget = self.viewBoxList.addView(viewBox)
+		viewBoxListWidget.doubleClicked.connect(lambda widget = viewBoxListWidget : self.setPanelViewVal(widget))
 		return viewBoxListWidget
 
 	def addPlot(self, viewBoxNum = 0, line = None):
-		viewBox, vListWidget = self.viewBoxList.viewBoxDict[viewBoxNum]
-		vlineListWidget      = self.viewBoxList.addLine(viewBoxNum, line)
-		vlineListWidget.doubleClicked.connect(lambda widget = vlineListWidget : self.setPanelVal(widget))
+		vlineListWidget   = self.viewBoxList.addLine(viewBoxNum, line)
+		vlineListWidget.doubleClicked.connect(lambda widget = vlineListWidget : self.setPanelLineVal(widget))
 		return vlineListWidget
 
-	def setPanelVal(self, vlineListWidget):
+	def setPanelLineVal(self, vlineListWidget):
 		values               = vlineListWidget.getLineVal()
 		self.lcontrol.setPanelVal(**values)
 		self.lcontrol.activeVlineListWidget = vlineListWidget
+		self.vcontrol.hide()
+		self.lcontrol.show()
+		self.setUIEnable(True)
+
+	def setPanelViewVal(self, viewBoxListWidget):
+		values               = viewBoxListWidget.getViewVal()
+
+		for val in  values:
+			print val
+		self.vcontrol.setPanelVal(**values)
+		# self.vcontrol.activeVlineListWidget = vlineListWidget
+		self.lcontrol.hide()
+		self.vcontrol.show()
 		self.setUIEnable(True)
 
 	def setLineVal(self):
@@ -101,7 +116,8 @@ class EditorWindow(QGroupBox):
 		for index in viewBoxDict:
 			# plot, legend, viewBox = viewBoxDict[index]
 			# ItemWidget = self.addView(lineDict[index])
-			ItemWidget     = self.addView()
+			viewBox, rng   = viewBoxDict[index]
+			ItemWidget     = self.addView(viewBox)
 		for index in lineDict:
 			line           = lineDict[index]
 			try:
@@ -126,4 +142,4 @@ def Debugger():
 	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
 	print "File Path: " + os.path.realpath(__file__)
 	app.exec_()
-Debugger()
+# Debugger()
