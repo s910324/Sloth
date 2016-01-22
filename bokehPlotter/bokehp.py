@@ -53,7 +53,7 @@ class PlotWindowWidget(QMainWindow):
 
 
 	def initToolBar(self):
-		self.toolbar  = QToolBar()
+		self.toolbar       = QToolBar()
 		self.resetAction   = QAction('reset', self)
 		self.optionsAction = QAction('_Options', self)		
 		self.toolbar.addAction(self.resetAction)

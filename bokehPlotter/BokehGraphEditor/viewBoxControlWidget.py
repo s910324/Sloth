@@ -60,7 +60,9 @@ class viewBoxControlWidget (QWidget):
 		self.Gwidth     = QSpinBox()
 		self.GHeight    = QSpinBox()
 		self.Gwidth.setAlignment(Qt.AlignCenter)
+		self.Gwidth.setRange (20, 2048)
 		self.GHeight.setAlignment(Qt.AlignCenter)
+		self.GHeight.setRange (20, 2048)
 		xLable.setFixedWidth(6)
 		resLable .setFixedWidth(120)
 		hbox2.addWidgets(resLable, self.Gwidth, xLable, self.GHeight)
@@ -131,7 +133,8 @@ class viewBoxControlWidget (QWidget):
 
 
 	def setPanelVal(self,  width      = None, height     = None, tools   = None, 
-						   background = None, borderfill = None, viewNum = None):
+						   background = None, borderfill = None, viewNum = None,
+						   text       = None,  **kwargs):
 
 		if width is not None:
 			self.Gwidth.setValue(width)
@@ -141,9 +144,17 @@ class viewBoxControlWidget (QWidget):
 			self.bgColorLine.setColor(background)
 		if borderfill:
 			self.bdColorLine.setColor(borderfill)
-		# if viewNum is not None:
-		# 	self.viewNum                 = viewNum
-		# return self.getPanelVal()
+
+
+		if text is not None:
+			self.titleLine.setText(text)
+		# if color:
+		# 	self.plot.title_text_color      = color
+		# if style:
+		# 	self.plot.title_text_font_style = style
+		# if size is not None:
+		# 	self.plot.title_text_font_size  = str(size)+ "pt" * ("pt" not in str(size))
+
 
 
 	def getPanelVal(self):

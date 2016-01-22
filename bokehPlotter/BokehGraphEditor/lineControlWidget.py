@@ -16,7 +16,7 @@ class lineControlWidget (QWidget):
 
 
 	def setupLineUI(self):
-
+ 	
 		nameLable      = QLabel('Line Name:')
 		nameLable.setFixedWidth(100)
 		self.nameLine  = QLineEdit()
@@ -187,7 +187,7 @@ class lineControlWidget (QWidget):
 		return box
 
 	def setPanelVal(self, name  = None, color  = None, width   = None,
-						  style = None, symbol = None, visible = None, viewNum = None):
+						  style = None, symbol = None, visible = None, viewNum = None, **kwargs):
 		if name is not None:
 			self.nameLine.setText(name)
 		if color:
