@@ -2,40 +2,73 @@ from bokehAxis import bokehAxis
 class bokehPlot(object):
 	def __init__(self, plot, parent=None):
 		super(bokehPlot, self).__init__()
-		self.viewNum  = None
-		self.plot     = plot
-		self.axis     = []
+		self.viewNum    = None
+		self.plot       = plot
+		self.axis       = []
 
-		self.spec     = {'width'      : self.plot.plot_width,
-						 'height'     : self.plot.plot_height,
-						 'tools'      : self.plot.tools,
-						 'background' : self.plot.background_fill,
-						 'borderfill' : self.plot.border_fill,
-						 'viewNum'    : self.viewNum} 
+		self.title      = {'text'       : self.plot.title,
+						   'color'      : self.plot.title_text_color ,
+						   'style'      : self.plot.title_text_font_style,
+						   'size'       : self.plot.title_text_font_size}
+
+		# print self.plot.grid[0].grid_line_color
+
+
+		# self.xMajorGrid = {'color'      : self.plot.xgrid.grid_line_color,
+		# 				   'dash'       : self.plot.xgrid.grid_line_dash,
+		# 				   'width'      : self.plot.xgrid.grid_line_width}
+
+		# self.xMinorGrid = {'color'      : self.plot.xgrid.minor_grid_line_color,
+		# 				   'dash'       : self.plot.xgrid.minor_grid_line_dash,
+		# 				   'width'      : self.plot.xgrid.minor_grid_line_width}
+
+		# self.yMajorGrid = {'color'      : self.plot.ygrid.grid_line_color,
+		# 				   'dash'       : self.plot.ygrid.grid_line_dash,
+		# 				   'width'      : self.plot.ygrid.grid_line_width}
+
+		# self.yMinorGrid = {'color'      : self.plot.ygrid.minor_grid_line_color,
+		# 				   'dash'       : self.plot.ygrid.minor_grid_line_dash,
+		# 				   'width'      : self.plot.ygrid.minor_grid_line_width}
+
+		# self.grid       = {'xMajorGrid' : self.xMajorGrid,
+		# 				   'xMinorGrid' : self.xMinorGrid,
+		# 				   'yMajorGrid' : self.yMajorGrid,
+		# 				   'yMinorGrid' : self.yMinorGrid}
+
+
+		self.spec       = {'width'      : self.plot.plot_width,
+						   'height'     : self.plot.plot_height,
+						   'tools'      : self.plot.tools,
+						   'background' : self.plot.background_fill_color,
+						   'borderfill' : self.plot.border_fill_color,
+						   'viewNum'    : self.viewNum}#,
+						   # 'title'      : self.title,
+						   # 'grid'       : self.grid}					 
 		
-		self.title    = {'text'       : self.plot.title,
-						 'color'      : self.plot.title_text_color ,
-						 'style'      : self.plot.title_text_font_style,
-						 'size'       : self.plot.title_text_font_size}
+
 
 	def plot_spec(self,  width      = None, height     = None, tools   = None, 
-						 background = None, borderfill = None, viewNum = None):
+						 background = None, borderfill = None, viewNum = None,
+						 title      = None):
 		if width is not None:
-			self.plot.plot_width         = width
+			self.plot.plot_width            = width
 		if height is not None:
-			self.plot.plot_height        = height
+			self.plot.plot_height           = height
 		if background:
-			self.plot.background_fill    = background
+			self.plot.background_fill_color = background
 		if borderfill:
-			self.plot.border_fill        = borderfill
+			self.plot.border_fill_color     = borderfill
 		if viewNum is not None:
-			self.viewNum                 = viewNum
+			self.viewNum                    = viewNum
+		if title:
+			self.title                      = self.plot_title(**title)
 
 		self.spec.update({'width'      : self.plot.plot_width})
 		self.spec.update({'height'     : self.plot.plot_height})
-		self.spec.update({'background' : self.plot.background_fill})
-		self.spec.update({'borderfill' : self.plot.border_fill})
+		self.spec.update({'background' : self.plot.background_fill_color})
+		self.spec.update({'borderfill' : self.plot.border_fill_color})
 		self.spec.update({'viewNum'    : self.viewNum})
+		self.spec.update({'title'      : self.title})
 		return self.spec
 
 

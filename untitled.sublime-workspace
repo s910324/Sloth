@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"rea",
+				"read	function"
+			],
+			[
+				"x",
+				"xgrid	function"
+			],
+			[
 				"setC",
 				"setColor"
 			],
@@ -460,10 +468,6 @@
 				"changeSymbol	(function)"
 			],
 			[
-				"x",
-				"x_range	(statement)"
-			],
-			[
 				"sty",
 				"styleCombo	(statement)"
 			],
@@ -510,10 +514,6 @@
 			[
 				"o",
 				"optionWindow	(statement)"
-			],
-			[
-				"cl",
-				"close	(function)"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "bokehPlotter/bokehp.py",
 			"settings":
 			{
-				"buffer_size": 9540,
+				"buffer_size": 9543,
 				"line_ending": "Unix"
 			}
 		},
@@ -532,14 +532,6 @@
 			"settings":
 			{
 				"buffer_size": 3972,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "bokehPlotter/dir/axis",
-			"settings":
-			{
-				"buffer_size": 7447,
 				"line_ending": "Unix"
 			}
 		},
@@ -553,26 +545,34 @@
 			}
 		},
 		{
-			"file": "bokehPlotter/dir/Symbol",
-			"settings":
-			{
-				"buffer_size": 2224,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "bokehPlotter/bokehPlot.py",
 			"settings":
 			{
-				"buffer_size": 2088,
+				"buffer_size": 3409,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "import sys\nimport types\nfrom   PySide.QtGui       import *\nfrom   PySide.QtCore      import *\nfrom   QLineNumber        import *\nfrom   viewLineList       import *\nfrom   MaterialDesignList.MColorPickerMKII import MColorPicker\nfrom   MaterialDesignList.MUtilities       import *\n\n\n\nclass scroll(QScrollArea):\n	def __init__(self, parent=None):\n		super(scroll, self).__init__(parent)\n		payload = viewBoxControlWidget()\n		self.setFixedWidth(430)\n		self.setContentsMargins(0,0,0,0)\n		self.setWidget(payload)\n\nclass viewBoxControlWidget (QWidget):\n	def __init__(self, parent=None):\n		super(viewBoxControlWidget , self).__init__(parent)\n		self.setContentsMargins(0,0,0,0)\n		box0 = self.setupGraphUI()\n		box1 = self.setupGridUI()\n		box2 = self.setupAxisUI()\n		boxZ = MVBoxLayout()\n		boxZ.addWidgets(box0, MHLine(),  box1, MHLine(), box2, 0)\n		self.setLayout(boxZ)\n		self.activeVlineListWidget = None\n\n\n	def setupGraphUI(self):\n\n		self.titleVisi = QCheckBox('Title Text:')\n		self.titleLine = QLineEdit()\n		self.titleEdit = QPushButton('...')\n\n		self.titleVisi.setFixedWidth(85)\n		self.titleEdit.setFixedWidth(25)\n		hbox0            = MHBoxLayout(self.titleVisi, self.titleLine, self.titleEdit )\n\n		vbox1            = MHBoxLayout()\n		bdcLabel         = QLabel('Border Color')\n		bdmLabel         = QLabel('Border Margins')\n		bgcLabel         = QLabel('Background')\n\n		self.bgColorLine   = MColorPicker()\n		self.bdColorLine   = MColorPicker()\n		self.bdMarginCombo = QComboBox()\n\n		v1 = MVBoxLayout( bdcLabel, bgcLabel, bdmLabel   ).setFixedWidth(120).setAlignment(Qt.AlignHCenter)\n		v2 = MVBoxLayout( self.bdColorLine, self.bgColorLine, self.bdMarginCombo   ).setFixedWidth(120)\n		vbox1.addLayouts(v1, v2)\n\n		hbox2           = MHBoxLayout()\n		resLable        = QLabel('Graph Size( W x H ):')\n		xLable          = QLabel('x')\n\n		self.Gwidth     = QSpinBox()\n		self.GHeight    = QSpinBox()\n		self.Gwidth.setAlignment(Qt.AlignCenter)\n		self.GHeight.setAlignment(Qt.AlignCenter)\n		xLable.setFixedWidth(6)\n		resLable .setFixedWidth(120)\n		hbox2.addWidgets(resLable, self.Gwidth, xLable, self.GHeight)\n\n		vbox = MVBoxLayout(hbox0, MHLine(), vbox1, MHLine(), hbox2, 25 )\n		groupBox = MGroupBox('Graph Options:')\n		groupBox.addLayout(vbox)\n		box = QVBoxLayout()\n		box.addWidget(groupBox)\n		return box\n\n\n	def setupGridUI(self):\n\n		self.showMajorGrid = QCheckBox(\"Show Major Grid\")\n		self.showMinorGrid = QCheckBox(\"Show Minor Grid\")\n		h0 =  MHBoxLayout( 0, self.showMajorGrid, 25, self.showMinorGrid ).setFixedWidth(120)\n\n		\n		GCLabel           = QLabel(\"Grid Color:\")\n		self.majorGCLine  = MColorPicker()\n		self.minorGCLine  = MColorPicker()\n		self.majorGCLine.setFixedWidth(120)\n		self.minorGCLine.setFixedWidth(120)		\n		h1 = MHBoxLayout(  GCLabel, 0, self.majorGCLine, 30, self.minorGCLine)\n\n\n		GWLabel           = QLabel(\"Line Style:\")\n		self.majorGWSpin  = QSpinBox()\n		self.minorGWSpin  = QSpinBox()\n\n		self.majorGSCombo = QComboBox()\n		self.minorGSCombo = QComboBox()	\n\n		self.majorGWSpin.setFixedWidth(40)\n		self.minorGWSpin.setFixedWidth(40)\n\n		self.majorGSCombo.setFixedWidth(80)\n		self.minorGSCombo.setFixedWidth(80)	\n\n		h2 = MHBoxLayout(  GWLabel, 0, self.majorGWSpin, self.majorGSCombo, 35, self.minorGWSpin, self.minorGSCombo)\n\n		h2.setSpacing(0)\n\n\n	\n\n\n		v0   = MVBoxLayout(h0, MHLine(), h1, MHLine(), h2, 25)\n		group = MGroupBox('Grid Options:')\n		group.addLayout(v0)\n		box = QHBoxLayout()\n		box.addWidget(group)\n\n		return box\n\n\n	def setupAxisUI(self):\n		groupBox     = MGroupBox('Axis Options:')\n		self.axisTab = MAxisTabWidget()\n		groupBox.addWidget(self.axisTab)\n		box = MVBoxLayout(groupBox)\n\n		return box\n\n\n\n\n\n	def setPanelVal(self,  width      = None, height     = None, tools   = None, \n						   background = None, borderfill = None, viewNum = None):\n\n		if width is not None:\n			self.plot.plot_width         = width\n		if height is not None:\n			self.plot.plot_height        = height\n		if background:\n			self.plot.background_fill    = background\n		if borderfill:\n			self.plot.border_fill        = borderfill\n		if viewNum is not None:\n			self.viewNum                 = viewNum\n		# return self.getPanelVal()\n\n\n	def getPanelVal(self):\n		self.outLine_val = {'color'   : self.oColorLine.text(),\n							'width'   : float(self.oWidthLine.text()),	\n							'visible' : self.outlineVisi.isChecked()}	\n\n		self.symbol_val  = {'color'   : self.sColorLine.text(),\n							'size'    : float(self.sSizeLine.text()),\n							'outLine' : self.outLine_val,\n							'visible' : self.symbolVisi.isChecked()}						\n		\n		self.symbol.symbol_val(**self.symbol_val)\n		self.val         = {'name'    : self.nameLine.text(),\n							'color'   : self.lColorLine.text(),\n							'width'   : float(self.lWidthLine.text()),\n							'style'   : None,\n							'symbol'  : self.symbol, \n							'visible' : self.lineVisi.isChecked(), \n							'viewNum' : None}\n		return self.val\n\n\n\n\n\nclass MAxisTabWidget(QTabWidget):\n	def __init__(self, parent = None):\n		super(MAxisTabWidget, self).__init__(parent)\n		self.addAxis()\n		self.addAxis()\n		self.addAxis()\n		self.addAxis()\n\n	def addAxis(self):\n		self.addTab(MAxisTab(), 'x axis')\n\nclass MAxisTab(QWidget):\n	def __init__(self, parent = None):\n		super(MAxisTab, self).__init__(parent)	\n		v1 = self.setupAxisTextUI()\n		self.setLayout(v1)\n\n	def setupAxisTextUI(self):\n		self.axisTitleChk  = QCheckBox('Axis Title:')\n		self.axisTitleEdit = QPushButton('...')\n		self.axisTitle     = QLineEdit()\n		self.axisTitleChk.setFixedWidth(85)\n		self.axisTitleEdit.setFixedWidth(25)\n		h0 = MHBoxLayout(self.axisTitleChk, self.axisTitle, self.axisTitleEdit)\n		h0.setSpacing(0)\n		v1 = MVBoxLayout(h0, 0)\n\n		return v1\n		\n\n\n\ndef run():\n	app        = QApplication(sys.argv)\n	MainWindow = viewBoxControlWidget()\n	MainWindow = scroll()\n	MainWindow.show()\n	import os\n	print \"   *-*-*-*-* deBug mode is on *-*-*-*-*\"\n	print \"File Path: \" + os.path.realpath(__file__)\n	app.exec_()\n	\n# run()		",
+			"file": "bokehPlotter/dir/plotArea",
 			"settings":
 			{
-				"buffer_size": 5865,
+				"buffer_size": 4344,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/rawr/Desktop/test.py",
+			"settings":
+			{
+				"buffer_size": 880,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bokehPlotter/dir/grid",
+			"settings":
+			{
+				"buffer_size": 1235,
 				"line_ending": "Unix"
 			}
 		},
@@ -596,7 +596,7 @@
 			"file": "bokehPlotter/BokehGraphEditor/viewBoxList.py",
 			"settings":
 			{
-				"buffer_size": 3914,
+				"buffer_size": 3915,
 				"line_ending": "Unix"
 			}
 		},
@@ -790,6 +790,9 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/github/Sloth/bokehPlotter/dir/grid",
+		"/home/rawr/github/Sloth/bokehPlotter/dir/Symbol",
+		"/home/rawr/github/Sloth/bokehPlotter/dir/axis",
 		"/home/rawr/Desktop/test.py",
 		"/home/rawr/.config/sublime-text-3/Packages/User/SublimePython.sublime-settings",
 		"/home/rawr/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
@@ -874,11 +877,9 @@
 		"/home/rawr/Desktop/first.asm",
 		"/home/rawr/Desktop/hello.o",
 		"/home/rawr/Downloads/pysam-0.8.4/INSTALL",
-		"/home/rawr/github/Sloth/bokehPlotter/dir/axis",
 		"/home/rawr/Downloads/moodleReportCrawler.py",
 		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/EditorWindow.py",
 		"/home/rawr/Desktop/asd.html",
-		"/home/rawr/github/Sloth/bokehPlotter/dir/Symbol",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/Line",
 		"/home/rawr/github/Sloth/bokehPlotter/__init__.py",
 		"/home/rawr/github/Sloth/plotSubWin.py",
@@ -916,8 +917,7 @@
 		"/home/rawr/Desktop/m.py",
 		"/home/rawr/github/NodeGUI/JackNode.py",
 		"/home/rawr/github/NodeGUI/HoverScene.py",
-		"/home/rawr/Downloads/untitled.py",
-		"/home/rawr/Downloads/strd_nist_fit.py"
+		"/home/rawr/Downloads/untitled.py"
 	],
 	"find":
 	{
@@ -935,6 +935,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"background",
+			"oren",
+			"orientation",
+			"background_fill",
+			"', '",
+			"grid",
 			"activeVlineListWidget",
 			"setLineVal",
 			"self.lineIDDict",
@@ -1056,13 +1062,7 @@
 			"major",
 			"axis",
 			"', '",
-			"axis",
-			"lab",
-			"', '",
-			"xaxis",
-			"label",
-			"xaxis",
-			"self"
+			"axis"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1070,6 +1070,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"\n",
 			"float",
 			"Float",
 			"numpy",
@@ -1157,7 +1158,7 @@
 			"	\n",
 			""
 		],
-		"reverse": true,
+		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -1175,15 +1176,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9540,
+						"buffer_size": 9543,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2720,
-								2720
+								4067,
+								4067
 							]
 						],
 						"settings":
@@ -1191,8 +1192,8 @@
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 1478.0,
+						"translation.x": -0.0,
+						"translation.y": 1980.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1221,42 +1222,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2565.0,
+						"translation.y": 2508.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "bokehPlotter/dir/axis",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7447,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1000,
-								1000
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 95.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1280,52 +1253,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "bokehPlotter/dir/Symbol",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2224,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								289,
-								289
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 37.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
+					"buffer": 3,
 					"file": "bokehPlotter/bokehPlot.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2088,
+						"buffer_size": 3409,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1546,
-								1546
+								2057,
+								2057
 							]
 						],
 						"settings":
@@ -1334,26 +1279,55 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 594.0,
+						"translation.y": 1122.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 4,
+					"file": "bokehPlotter/dir/plotArea",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5865,
+						"buffer_size": 4344,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								981,
-								981
+								4307,
+								4307
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 7630.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/home/rawr/Desktop/test.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 880,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								554,
+								554
 							]
 						],
 						"settings":
@@ -1361,18 +1335,46 @@
 							"syntax": "Packages/Python/Python.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 535.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 6,
+					"file": "bokehPlotter/dir/grid",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1235,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								719,
+								719
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 924.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
 				{
 					"buffer": 7,
 					"file": "bokehPlotter/BokehGraphEditor/lineControlWidget.py",
@@ -1396,10 +1398,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 43.0,
-						"translation.y": 4055.0,
+						"translation.y": 4451.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1415,8 +1417,8 @@
 						"selection":
 						[
 							[
-								3846,
-								3846
+								6131,
+								6131
 							]
 						],
 						"settings":
@@ -1425,10 +1427,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2860.0,
+						"translation.y": 2794.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1437,15 +1439,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3914,
+						"buffer_size": 3915,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3725,
-								3725
+								3909,
+								3909
 							]
 						],
 						"settings":
@@ -1454,10 +1456,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2112.0,
+						"translation.y": 2472.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1486,7 +1488,7 @@
 						"translation.y": 1422.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1578,7 +1580,7 @@
 		"cols":
 		[
 			0.0,
-			0.470409346022,
+			0.558430179355,
 			1.0
 		],
 		"rows":
@@ -1590,7 +1592,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 212.0
+		"height": 167.0
 	},
 	"output.find_results":
 	{
@@ -1600,7 +1602,7 @@
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 114.0
 	},
 	"save_all_on_build": true,
 	"select_file":

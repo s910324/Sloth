@@ -115,6 +115,7 @@ class viewBoxListWidget(QWidget):
 		self.header.setDcFocus(focus)
 
 	def getViewVal(self):
+
 		combine = self.viewBox.plot_spec().copy()
 		combine.update( self.viewBox.plot_title())
 		return combine

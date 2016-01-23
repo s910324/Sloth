@@ -131,6 +131,7 @@ class PlotWindowWidget(QMainWindow):
 
 
 		html      = file_html(html, CDN, "my plot")
+		
 		online    = 'http://cdn.pydata.org/bokeh/release'
 		offline   =  'file://' + os.getcwd() + '/BokehJS'
 		self.html = html.replace(online,  offline)
@@ -241,7 +242,7 @@ class PlotWindowWidget(QMainWindow):
 			viewNum = viewNum
 			)
 		
-		plotArea.legend.orientation           = "top_left"
+		plotArea.legend.location              = "top_left"
 		plotArea.legend.background_fill_alpha = 0.5
 		plotArea.legend.border_line_width     = 1
 		plotArea.legend.border_line_color     = "#C8C8C8"
