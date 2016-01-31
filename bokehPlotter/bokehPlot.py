@@ -39,8 +39,10 @@ class bokehPlot(object):
 		self.spec       = {'width'      : self.plot.plot_width,
 						   'height'     : self.plot.plot_height,
 						   'tools'      : self.plot.tools,
-						   'background' : self.plot.background_fill_color,
-						   'borderfill' : self.plot.border_fill_color,
+						   'background' : self.plot.background_fill
+,
+						   'borderfill' : self.plot.border_fill
+,
 						   'viewNum'    : self.viewNum}#,
 						   # 'title'      : self.title,
 						   # 'grid'       : self.grid}					 
@@ -55,9 +57,9 @@ class bokehPlot(object):
 		if height is not None:
 			self.plot.plot_height           = height
 		if background:
-			self.plot.background_fill_color = background
+			self.plot.background_fill       = background
 		if borderfill:
-			self.plot.border_fill_color     = borderfill
+			self.plot.border_fill           = borderfill
 		if viewNum is not None:
 			self.viewNum                    = viewNum
 		if title:
@@ -65,8 +67,8 @@ class bokehPlot(object):
 
 		self.spec.update({'width'      : self.plot.plot_width})
 		self.spec.update({'height'     : self.plot.plot_height})
-		self.spec.update({'background' : self.plot.background_fill_color})
-		self.spec.update({'borderfill' : self.plot.border_fill_color})
+		self.spec.update({'background' : self.plot.background_fill})
+		self.spec.update({'borderfill' : self.plot.border_fill})
 		self.spec.update({'viewNum'    : self.viewNum})
 		self.spec.update({'title'      : self.title})
 		return self.spec

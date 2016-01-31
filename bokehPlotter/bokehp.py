@@ -242,7 +242,7 @@ class PlotWindowWidget(QMainWindow):
 			viewNum = viewNum
 			)
 		
-		plotArea.legend.location              = "top_left"
+		plotArea.legend.orientation           = "top_left"
 		plotArea.legend.background_fill_alpha = 0.5
 		plotArea.legend.border_line_width     = 1
 		plotArea.legend.border_line_color     = "#C8C8C8"
