@@ -39,12 +39,10 @@ class bokehPlot(object):
 		self.spec       = {'width'      : self.plot.plot_width,
 						   'height'     : self.plot.plot_height,
 						   'tools'      : self.plot.tools,
-						   'background' : self.plot.background_fill
-,
-						   'borderfill' : self.plot.border_fill
-,
-						   'viewNum'    : self.viewNum}#,
-						   # 'title'      : self.title,
+						   'background' : self.plot.background_fill,
+						   'borderfill' : self.plot.border_fill,
+						   'viewNum'    : self.viewNum,
+						   'title'      : self.title}#,
 						   # 'grid'       : self.grid}					 
 		
 

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import sys
 import types
+import time
 import pickle
 import numpy as np
 import os
@@ -50,6 +51,7 @@ class PlotWindowWidget(QMainWindow):
 		self.initToolBar()
 		self.optionWindow     = None
 		self.show()
+
 
 
 	def initToolBar(self):
@@ -256,15 +258,15 @@ class PlotWindowWidget(QMainWindow):
 	def insertPlot(self, plotSets):
 		plotSets = [wrapper.plot for wrapper in plotSets]
 		layout   = vplot( *plotSets )
-		output_file("les_mis.html")
+		# output_file("les_mis.html") ?????????????????
 		# show(layout)
 		for plot in plotSets:
 			plot.toolbar_location = None
 		return layout
 
 	def resetGraph(self):
-
-
+		self.Web = QWebView()
+		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)
 		plotPack = []
 		for ID in self.plotIDDict:
 			plotWrap, rng = self.plotIDDict[ID]
@@ -277,9 +279,18 @@ class PlotWindowWidget(QMainWindow):
 		self.html = html.replace(online,  offline)
 		self.Web.setHtml(self.html)
 		f = open('./save.html', 'wb')
-		with f:
+		if f:
 			f.write(self.html)
-		self.Web.reload()
+
+		page  = self.Web.page()
+		frame = page.mainFrame()
+		time.sleep(1)
+		frame.loadFinished.connect(self.Web.reload)
+
+		
+		# self.Web.reload()
+
+		self.setCentralWidget(self.Web)
 
 
 	def saveCrew(self, dataSet):

@@ -60,7 +60,8 @@ class EditorWindow(QGroupBox):
 		hbox.addStretch()
 		hbox.addWidget(self.applyPB)
 		hbox.addWidget(self.canclePB)
-		self.applyPB.clicked.connect(self.setLineVal)
+		# self.applyPB.clicked.connect(self.setLineVal)
+		self.applyPB.clicked.connect(self.setGlobalVal)
 		return hbox
 
 	def setUIEnable(self, state = True):
@@ -81,8 +82,10 @@ class EditorWindow(QGroupBox):
 		vlineListWidget.doubleClicked.connect(lambda widget = vlineListWidget : self.setPanelLineVal(widget))
 		return vlineListWidget
 
+
+
 	def setPanelLineVal(self, vlineListWidget):
-		values               = vlineListWidget.getLineVal()
+		values  = vlineListWidget.getLineVal()
 		self.lcontrol.setPanelVal(**values)
 		self.lcontrol.activeVlineListWidget = vlineListWidget
 		self.vcontrol.hide()
@@ -90,12 +93,12 @@ class EditorWindow(QGroupBox):
 		self.setUIEnable(True)
 
 	def setPanelViewVal(self, viewBoxListWidget):
-		values               = viewBoxListWidget.getViewVal()
+		values = viewBoxListWidget.getViewVal()
 
 		for val in  values:
 			print val
 		self.vcontrol.setPanelVal(**values)
-		# self.vcontrol.activeVlineListWidget = vlineListWidget
+		self.vcontrol.activeViewBoxListWidget = viewBoxListWidget
 		self.lcontrol.hide()
 		self.vcontrol.show()
 		self.setUIEnable(True)
@@ -105,10 +108,20 @@ class EditorWindow(QGroupBox):
 		if vlineListWidget:
 			values               = self.lcontrol.getPanelVal()
 			vlineListWidget.setLineVal(values)
-			self.valChanged.emit()
+			# self.valChanged.emit()
 
+	def setViewVal(self):
+		viewBoxListWidget = self.vcontrol.activeViewBoxListWidget
+		if viewBoxListWidget:
+			values               = self.vcontrol.getPanelVal()
+			viewBoxListWidget.setViewVal(values)
+			# self.valChanged.emit()
 
-
+	def  setGlobalVal(self):
+		self.setLineVal()
+		self.setViewVal()
+		self.valChanged.emit()
+		
 	def importPlotItems(self,viewBoxDict = None, lineDict = None):
 		ItemWidgets = []
 		# try:

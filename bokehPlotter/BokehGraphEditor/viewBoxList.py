@@ -120,7 +120,9 @@ class viewBoxListWidget(QWidget):
 		combine.update( self.viewBox.plot_title())
 		return combine
 
-
+	def setViewVal(self, val):
+		# name, color, width, style, symbol, visible, viewNum 
+		return self.viewBox.plot_spec(**val)
 
 def run():
 	app = QApplication(sys.argv)

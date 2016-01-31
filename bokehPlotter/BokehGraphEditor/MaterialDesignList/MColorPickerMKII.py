@@ -48,6 +48,9 @@ class MColorPicker(QWidget):
 		self.ColorView.blockSignals(oldSignal)
 		return color
 
+	def getColor(self):
+		return self.ColorView.choosed_color
+
 class MColorView(QWidget):
 	colorChanged  = Signal(str)
 	def __init__(self, color = None, parent = None):

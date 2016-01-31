@@ -27,7 +27,7 @@ class viewBoxControlWidget (QWidget):
 		boxZ = MVBoxLayout()
 		boxZ.addWidgets(box0, MHLine(),  box1, MHLine(), box2, 0)
 		self.setLayout(boxZ)
-		self.activeVlineListWidget = None
+		self.activeViewBoxListWidget = None
 
 
 	def setupGraphUI(self):
@@ -158,24 +158,30 @@ class viewBoxControlWidget (QWidget):
 
 
 	def getPanelVal(self):
-		self.outLine_val = {'color'   : self.oColorLine.text(),
-							'width'   : float(self.oWidthLine.text()),	
-							'visible' : self.outlineVisi.isChecked()}	
+		width      = self.Gwidth.value()
+		height     = self.GHeight.value()
+		background = self.bgColorLine.getColor()
+		borderfill = self.bdColorLine.getColor()
+		print borderfill
+		text       = self.titleLine.text()
 
-		self.symbol_val  = {'color'   : self.sColorLine.text(),
-							'size'    : float(self.sSizeLine.text()),
-							'outLine' : self.outLine_val,
-							'visible' : self.symbolVisi.isChecked()}						
 		
-		self.symbol.symbol_val(**self.symbol_val)
-		self.val         = {'name'    : self.nameLine.text(),
-							'color'   : self.lColorLine.text(),
-							'width'   : float(self.lWidthLine.text()),
-							'style'   : None,
-							'symbol'  : self.symbol, 
-							'visible' : self.lineVisi.isChecked(), 
-							'viewNum' : None}
-		return self.val
+		color,style,size  = None, None, None
+		title = {'text'       : text       if text       else None,
+				 'color'      : color      if color      else None,
+				 'style'      : style      if style      else None,
+				 'size'       : size       if size       else None}
+	
+		viewNum, tools = None, None
+		spec  = {'width'      : width      if width      else None,
+				 'height'     : height     if height     else None,
+				 'tools'      : tools      if tools      else None,
+				 'background' : background if background else None,
+				 'borderfill' : borderfill if borderfill else None,
+				 'viewNum'    : viewNum    if viewNum    else None,
+				 'title'      : title      if title      else None}
+
+		return spec
 
 
 
