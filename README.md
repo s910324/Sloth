@@ -13,8 +13,12 @@
 |Python2|>=2.7.3|
 |PySide|>=1.2.2|
 |Pandas|>=0.16.0|
-|Bokeh| >=0.10.0|
+|Bokeh| ==0.10.0|
 |PyQtGraph| >=0.9.10|
+
+**Note:**
+*Bokeh Version > 0.10.0 Will Cause Graph rendering<br>
+Issues Due to the Incompatibility between QWebKit and Bokeh(0.11.0).*
 
 
 ### Youtube Demo
