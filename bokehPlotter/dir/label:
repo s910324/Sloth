@@ -1,0 +1,42 @@
+label:
+	font size
+	font 
+	font style(bold, italic)
+	font color
+
+axis:
+	axis color
+	axis width
+	axis visibility
+	axis start & ends
+	axis format(linear, nl, log10, log2)
+
+majortick:
+	tick width
+	tick color
+	tick in & out
+	ticks / steps
+	
+	tick font:
+		major_label_orientation (number int and float)
+		standoff
+		align( left, right or center )
+		tick label format( %d, %f, %s)
+		tick font visibility
+		tick font size
+		tick font 
+		tick font style(bold, italic)
+		tick font color	
+
+minortick:
+	tick width
+	tick color
+	tick in & out
+	ticks / steps
+
+	tick font:
+		tick font visibility
+		tick font size
+		tick font 
+		tick font style(bold, italic)
+		tick font color		

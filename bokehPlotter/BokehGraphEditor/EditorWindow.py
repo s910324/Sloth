@@ -11,7 +11,8 @@ class EditorWindow(QGroupBox):
 	onClosed   = Signal()
 	def __init__(self, parent=None):
 		super(EditorWindow, self).__init__(parent)
-		self.resize(650, 700)
+		self.setFixedWidth(750)
+		self.resize(600, 750)
 		self.setupLayout()
 		self.setUIEnable(False)
 		self.lcontrol.hide()
@@ -45,8 +46,11 @@ class EditorWindow(QGroupBox):
 	def setupControl(self):
 		self.lcontrol = lineControlWidget()
 		self.vcontrol = viewBoxControlWidget()
+		scroll        = QScrollArea()
+		scroll.setFixedWidth(460)
+		scroll.setWidget(self.vcontrol)
 		vbox          = QVBoxLayout()
-		vbox.addWidget(self.vcontrol)
+		vbox.addWidget(scroll)
 		vbox.addWidget(self.lcontrol)
 		
 		return vbox		

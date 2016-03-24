@@ -285,11 +285,7 @@ class PlotWindowWidget(QMainWindow):
 		page  = self.Web.page()
 		frame = page.mainFrame()
 		time.sleep(1)
-		frame.loadFinished.connect(self.Web.reload)
-
-		
-		# self.Web.reload()
-
+		frame.loadFinished.connect(self.Web.reload) #this should proceed by multi thread
 		self.setCentralWidget(self.Web)
 
 
@@ -324,6 +320,44 @@ class PlotWindowWidget(QMainWindow):
 
 	def lock(self) :
 		self.lock = True	
+
+		
+# class reloadThread(QThread):
+# 	def __init__(self, plotIDDict = None, parent=None):
+# 		super(reloadThread ,self).__init__(parent) 
+# 		self.Web = QWebView()
+# 		self.Web.setContextMenuPolicy(Qt.CustomContextMenu)
+
+# 	def run(self):
+# 		plotPack = []
+# 		for ID in self.plotIDDict:
+# 			plotWrap, rng = self.plotIDDict[ID]
+# 			plotPack.append(plotWrap)
+
+# 		html      = self.insertPlot(plotPack)	
+# 		html      = file_html(html, CDN, "my plot")
+# 		online    = 'http://cdn.pydata.org/bokeh/release'
+# 		offline   =  'file://' + os.getcwd() + '/BokehJS'
+# 		self.html = html.replace(online,  offline)
+# 		self.Web.setHtml(self.html)
+# 		f = open('./save.html', 'wb')
+# 		if f:
+# 			f.write(self.html)
+
+# 		page  = self.Web.page()
+# 		frame = page.mainFrame()
+# 		time.sleep(1)
+# 		frame.loadFinished.connect(self.Web.reload) #this should proceed by multi thread
+# 		self.setCentralWidget(self.Web)
+
+# 	def insertPlot(self, plotSets):
+# 		plotSets = [wrapper.plot for wrapper in plotSets]
+# 		layout   = vplot( *plotSets )
+# 		# output_file("les_mis.html") ?????????????????
+# 		# show(layout)
+# 		for plot in plotSets:
+# 			plot.toolbar_location = None
+# 		return layout
 
 def Debugger():
 	app  = QApplication(sys.argv)

@@ -17,3 +17,16 @@ class QLineNumber(QLineEdit):
 		except ValueError:
 			self.setStyleSheet("border: 1px solid red;")
 			return None
+
+def Debugger():
+	import sys
+	import os
+	app  = QApplication(sys.argv)
+	form = QLineNumber()
+	form.show()
+	
+
+	print "   *-*-*-*-* deBug mode is on *-*-*-*-*"
+	print "File Path: " + os.path.realpath(__file__)
+	app.exec_()
+# Debugger()

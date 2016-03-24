@@ -9,13 +9,6 @@ from   MaterialDesignList.MUtilities       import *
 
 
 
-class scroll(QScrollArea):
-	def __init__(self, parent=None):
-		super(scroll, self).__init__(parent)
-		payload = viewBoxControlWidget()
-		self.setFixedWidth(430)
-		self.setContentsMargins(0,0,0,0)
-		self.setWidget(payload)
 
 class viewBoxControlWidget (QWidget):
 	def __init__(self, parent=None):
@@ -212,7 +205,97 @@ class MAxisTab(QWidget):
 		self.axisTitleEdit.setFixedWidth(25)
 		h0 = MHBoxLayout(self.axisTitleChk, self.axisTitle, self.axisTitleEdit)
 		h0.setSpacing(0)
-		v1 = MVBoxLayout(h0, 0)
+
+		self.axisLineChk   = QCheckBox("Show Axis Line")
+		ARLabel            = QLabel("Axis Range:")
+		dashLabel          = QLabel(" - ")
+		self.axisUPRngLine = QLineNumber()
+		self.axisDNRngLine = QLineNumber()
+		self.axisUPRngLine.setFixedWidth(80)
+		self.axisDNRngLine.setFixedWidth(80)
+		h1 = MHBoxLayout( self.axisLineChk, 0)
+		h2 = MHBoxLayout(  ARLabel, 0, self.axisUPRngLine, dashLabel, self.axisDNRngLine)
+
+
+		AWLabel            = QLabel("Axis Style (width/format):")
+		self.axisWSpin     = QSpinBox()
+		self.axisSCombo    = QComboBox()
+		self.axisWSpin.setFixedWidth(40)
+		self.axisSCombo.setFixedWidth(80)
+		h3 = MHBoxLayout(  AWLabel, 0, self.axisWSpin, self.axisSCombo)
+
+
+		ACLabel            = QLabel("Axis Color:")
+		self.axisCLine     = MColorPicker()
+		self.axisCLine.setFixedWidth(120)
+		h4 = MHBoxLayout(  ACLabel, 0, self.axisCLine)
+
+		AMajorTkLabel      = QLabel("Major Tick Step:")
+		self.AMajorTkLine  = QLineNumber()
+		self.AMajorTkAdvPB = QPushButton("...")
+		self.AMajorTkLine.setFixedWidth(80)
+		self.AMajorTkAdvPB.setFixedWidth(30)
+
+		AMinorTkLabel      = QLabel("Minor Tick Step:")
+		self.AMinorTkLine  = QLineNumber()
+		self.AMinorTkAdvPB = QPushButton("...")
+		self.AMinorTkLine.setFixedWidth(80)
+		self.AMinorTkAdvPB.setFixedWidth(30)
+
+		h5 = MHBoxLayout(  AMajorTkLabel, 0, self.AMajorTkLine, self.AMajorTkAdvPB)
+		h6 = MHBoxLayout(  AMinorTkLabel, 0, self.AMinorTkLine, self.AMinorTkAdvPB)
+
+
+
+		MajorTkChk         = QCheckBox("Show Major Tick")
+		h7a = MHBoxLayout(  MajorTkChk, 0)
+
+		MajorTkCLabel      = QLabel("Major Tick Width:")
+		self.MajorTkCLine  = MColorPicker()
+		self.MajorTkCLine.setFixedWidth(120)
+		h7b = MHBoxLayout(  MajorTkCLabel, 0, self.MajorTkCLine)
+
+		MajorTkWLabel      = QLabel("Major Tick Width:")
+		MajorTkWidthLine   = QLineNumber()
+		MajorTkWidthLine.setFixedWidth(80)
+		h7c = MHBoxLayout(  MajorTkWLabel, 0, MajorTkWidthLine)
+
+		MajorTkInLabel     = QLabel("Major Tick IN:")
+		MajorTkOutLabel    = QLabel("  Out:")
+		MajorTkInLine      = QLineNumber()
+		MajorTkOutLine     = QLineNumber()
+		MajorTkInLine.setFixedWidth(80)
+		MajorTkOutLine.setFixedWidth(80)
+		h7d = MHBoxLayout(  MajorTkInLabel, 0, MajorTkInLine, MajorTkOutLabel, MajorTkOutLine)
+
+
+
+		MinorTkChk         = QCheckBox("Show Minor Tick")
+		h8a = MHBoxLayout(  MinorTkChk, 0)
+
+		MinorTkCLabel      = QLabel("Minor Tick Width:")
+		self.MinorTkCLine  = MColorPicker()
+		self.MinorTkCLine.setFixedWidth(120)
+		h8b = MHBoxLayout(  MinorTkCLabel, 0, self.MinorTkCLine)
+
+		MinorTkWLabel      = QLabel("Minor Tick Width:")
+		MinorTkWidthLine   = QLineNumber()
+		MinorTkWidthLine.setFixedWidth(80)
+		h8c = MHBoxLayout(  MinorTkWLabel, 0, MinorTkWidthLine)
+
+		MinorTkInLabel     = QLabel("Minor Tick IN:")
+		MinorTkOutLabel    = QLabel("  Out:")
+		MinorTkInLine      = QLineNumber()
+		MinorTkOutLine     = QLineNumber()
+		MinorTkInLine.setFixedWidth(80)
+		MinorTkOutLine.setFixedWidth(80)
+		h8d = MHBoxLayout(  MinorTkInLabel, 0, MinorTkInLine, MinorTkOutLabel, MinorTkOutLine)
+		
+		v1 = MVBoxLayout(h0, MHLine(),
+			h1,  5, h2,  5, h3,  5, h4, 15, h5, 5, h6, MHLine(),
+			h7a, 5, h7b, 5, h7c, 5, h7d, MHLine(),
+			h8a, 5, h8b, 5, h8c, 5, h8d, MHLine(),
+		 0)
 
 		return v1
 		
