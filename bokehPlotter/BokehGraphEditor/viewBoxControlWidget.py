@@ -271,7 +271,7 @@ class MAxisTab(QWidget):
 		MajorTkOutLine.setFixedWidth(80)
 		h2d = MHBoxLayout(  MajorTkInLabel, 0, MajorTkInLine, MajorTkOutLabel, MajorTkOutLine)
 
-		h2e = MHBoxLayout(0, QLabel("---- Major Tick Label Font ----"), 0)
+		h2e = MHBoxLayout(MHLine(), QLabel("Major Tick Font"),MHLine())
 		self.MajorTkLBold = QCheckBox('B')
 		self.MajorTkLItal = QCheckBox('I')
 		self.MajorTkLSize = QSpinBox()
@@ -301,7 +301,7 @@ class MAxisTab(QWidget):
 		MinorTkOutLine.setFixedWidth(80)
 		h3d = MHBoxLayout(  MinorTkInLabel, 0, MinorTkInLine, MinorTkOutLabel, MinorTkOutLine)
 
-		h3e = MHBoxLayout(0, QLabel("---- Minor Tick Label Font ----"), 0)
+		h3e = MHBoxLayout(MHLine(), QLabel("Minor Tick Font"), MHLine())
 		self.MinorTkLBold = QCheckBox('B')
 		self.MinorTkLItal = QCheckBox('I')
 		self.MinorTkLSize = QSpinBox()
