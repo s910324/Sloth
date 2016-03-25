@@ -184,12 +184,12 @@ class MAxisTabWidget(QTabWidget):
 	def __init__(self, parent = None):
 		super(MAxisTabWidget, self).__init__(parent)
 		self.addAxis()
-		self.addAxis()
-		self.addAxis()
-		self.addAxis()
 
 	def addAxis(self):
-		self.addTab(MAxisTab(), 'x axis')
+		self.addTab(MAxisTab(), 'X Bottom Axis')
+		self.addTab(MAxisTab(), 'X Top Axis')
+		self.addTab(MAxisTab(), 'Y Bottom Axis')
+		self.addTab(MAxisTab(), 'Y Top Axis')
 
 class MAxisTab(QWidget):
 	def __init__(self, parent = None):
