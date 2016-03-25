@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"Mar",
+				"Major"
+			],
+			[
+				"QCh",
+				"QCheckBox	class"
+			],
+			[
+				"set",
+				"setFixedWidth"
+			],
+			[
+				"v",
+				"vcontrol"
+			],
+			[
+				"QNu",
+				"QLineNumber	class"
+			],
+			[
 				"reu",
 				"return	keyword"
 			],
@@ -142,10 +162,6 @@
 			[
 				"C",
 				"ColorLine"
-			],
-			[
-				"set",
-				"setHeightForWidth	(function)"
 			],
 			[
 				"exp",
@@ -436,10 +452,6 @@
 				"setFixedHeight	(function)"
 			],
 			[
-				"QCh",
-				"QCheckBox	(class)"
-			],
-			[
 				"ev",
 				"event	(param)"
 			],
@@ -502,18 +514,6 @@
 			[
 				"QSp",
 				"QSpinBox	(class)"
-			],
-			[
-				"style",
-				"styleView	(statement)"
-			],
-			[
-				"cha",
-				"changeSymbol	(function)"
-			],
-			[
-				"sty",
-				"styleCombo	(statement)"
 			]
 		]
 	},
@@ -531,7 +531,7 @@
 			"file": "bokehPlotter/BokehGraphEditor/viewBoxControlWidget.py",
 			"settings":
 			{
-				"buffer_size": 6363,
+				"buffer_size": 9287,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "bokehPlotter/BokehGraphEditor/EditorWindow.py",
 			"settings":
 			{
-				"buffer_size": 4326,
+				"buffer_size": 4439,
 				"line_ending": "Unix"
 			}
 		},
@@ -573,6 +573,15 @@
 			{
 				"buffer_size": 3383,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "axis title [...]\n\nshow/hide axis(B)\naxis range \naxis style/width/format\nmajor tick step\nminor tick step\n\nmajor tick color\n	width\n	tick in\n	tick out\n	[show]font [...]\n	\n\nminor tick color\n	width\n	tick in\n	tick out\n	[show]font [...]\n	",
+			"settings":
+			{
+				"buffer_size": 231,
+				"line_ending": "Unix",
+				"name": "axis title [...]"
 			}
 		}
 	],
@@ -757,6 +766,7 @@
 	},
 	"file_history":
 	[
+		"/home/rawr/github/Sloth/bokehPlotter/BokehGraphEditor/QLineNumber.py",
 		"/home/rawr/github/Sloth/bokehPlotter/dir/plotArea",
 		"/home/rawr/Desktop/test.cpp",
 		"/home/rawr/github/OpenShift/setup.py",
@@ -883,8 +893,7 @@
 		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_kv.py",
 		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_composite.py",
 		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/list_simple.py",
-		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/fixtures.py",
-		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/RST_Editor/main.py"
+		"/home/rawr/ProgramFiles/Kivy-1.9.0/examples/widgets/lists/fixtures.py"
 	],
 	"find":
 	{
@@ -902,6 +911,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"h7",
+			"h7a, 5, h7b, 5, h7c, 5, h7d, MHLine(),",
+			"h7",
+			"Major",
+			"major",
+			"scroll",
+			"number",
 			"cancle",
 			"atic void main(String args[]){\n		System.out.println(\"good\");\n	}\n	\n",
 			"reset",
@@ -1022,21 +1038,17 @@
 			"scene",
 			"elf.scene",
 			"QPaint",
-			"Qpainter",
-			"drawRect",
-			"painter",
-			"paint",
-			"print",
-			"div",
-			"saveData",
-			"saveCrew"
+			"Qpainter"
 		],
 		"highlight": true,
-		"in_selection": false,
+		"in_selection": true,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
 		[
+			"h8",
+			"Minor",
+			"minor",
 			"border_fill\n",
 			"background_fill\n",
 			"\n",
@@ -1165,7 +1177,7 @@
 						"translation.y": 132.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1174,15 +1186,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6363,
+						"buffer_size": 9287,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6056,
-								6056
+								9019,
+								9019
 							]
 						],
 						"settings":
@@ -1191,10 +1203,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4322.0,
+						"translation.y": 5832.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1219,16 +1231,16 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 858.0,
+						"translation.y": 462.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1237,15 +1249,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4326,
+						"buffer_size": 4439,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4326,
-								4326
+								1248,
+								1248
 							]
 						],
 						"settings":
@@ -1254,10 +1266,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 462.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1273,8 +1285,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								2338,
+								2338
 							]
 						],
 						"settings":
@@ -1283,10 +1295,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1056.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1302,8 +1314,8 @@
 						"selection":
 						[
 							[
-								17,
-								17
+								227,
+								227
 							]
 						],
 						"settings":
@@ -1315,7 +1327,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1331,8 +1343,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								478,
+								478
 							]
 						],
 						"settings":
@@ -1345,6 +1357,34 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 231,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								231,
+								231
+							]
+						],
+						"settings":
+						{
+							"auto_name": "axis title [...]",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1378,7 +1418,7 @@
 		"cols":
 		[
 			0.0,
-			0.484895833334,
+			0.593750000001,
 			1.0
 		],
 		"rows":
@@ -1390,7 +1430,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 187.0
+		"height": 191.0
 	},
 	"output.find_results":
 	{
@@ -1400,7 +1440,7 @@
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 114.0
+		"height": 70.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1434,7 +1474,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},

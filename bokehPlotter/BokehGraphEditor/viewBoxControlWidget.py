@@ -198,13 +198,17 @@ class MAxisTab(QWidget):
 		self.setLayout(v1)
 
 	def setupAxisTextUI(self):
-		self.axisTitleChk  = QCheckBox('Axis Title:')
-		self.axisTitleEdit = QPushButton('...')
+		self.axisTitleChk  = QCheckBox('Show Axis Title')
 		self.axisTitle     = QLineEdit()
+		self.axisTitleBold = QCheckBox('B')
+		self.axisTitleItal = QCheckBox('I')
+		self.axixTitleSize = QSpinBox()
+		self.axixTitleFont = QComboBox()
 		self.axisTitleChk.setFixedWidth(85)
-		self.axisTitleEdit.setFixedWidth(25)
-		h0 = MHBoxLayout(self.axisTitleChk, self.axisTitle, self.axisTitleEdit)
-		h0.setSpacing(0)
+		h0a = MHBoxLayout(self.axisTitleChk, 0)
+		h0b = MHBoxLayout(self.axisTitle)
+		h0c = MHBoxLayout(QLabel("Size"), self.axixTitleSize,0, QLabel("Font"), self.axixTitleFont, 0, self.axisTitleBold, self.axisTitleItal)
+
 
 		self.axisLineChk   = QCheckBox("Show Axis Line")
 		ARLabel            = QLabel("Axis Range:")
@@ -213,8 +217,8 @@ class MAxisTab(QWidget):
 		self.axisDNRngLine = QLineNumber()
 		self.axisUPRngLine.setFixedWidth(80)
 		self.axisDNRngLine.setFixedWidth(80)
-		h1 = MHBoxLayout( self.axisLineChk, 0)
-		h2 = MHBoxLayout(  ARLabel, 0, self.axisUPRngLine, dashLabel, self.axisDNRngLine)
+		h1a = MHBoxLayout( self.axisLineChk, 0)
+		h1b = MHBoxLayout(  ARLabel, 0, self.axisUPRngLine, dashLabel, self.axisDNRngLine)
 
 
 		AWLabel            = QLabel("Axis Style (width/format):")
@@ -222,43 +226,42 @@ class MAxisTab(QWidget):
 		self.axisSCombo    = QComboBox()
 		self.axisWSpin.setFixedWidth(40)
 		self.axisSCombo.setFixedWidth(80)
-		h3 = MHBoxLayout(  AWLabel, 0, self.axisWSpin, self.axisSCombo)
+		h1c = MHBoxLayout(  AWLabel, 0, self.axisWSpin, self.axisSCombo)
 
 
 		ACLabel            = QLabel("Axis Color:")
 		self.axisCLine     = MColorPicker()
 		self.axisCLine.setFixedWidth(120)
-		h4 = MHBoxLayout(  ACLabel, 0, self.axisCLine)
+		h1d = MHBoxLayout(  ACLabel, 0, self.axisCLine)
 
 		AMajorTkLabel      = QLabel("Major Tick Step:")
 		self.AMajorTkLine  = QLineNumber()
 		self.AMajorTkAdvPB = QPushButton("...")
 		self.AMajorTkLine.setFixedWidth(80)
 		self.AMajorTkAdvPB.setFixedWidth(30)
+		h1e = MHBoxLayout(  AMajorTkLabel, 0, self.AMajorTkLine, self.AMajorTkAdvPB)
 
 		AMinorTkLabel      = QLabel("Minor Tick Step:")
 		self.AMinorTkLine  = QLineNumber()
 		self.AMinorTkAdvPB = QPushButton("...")
 		self.AMinorTkLine.setFixedWidth(80)
 		self.AMinorTkAdvPB.setFixedWidth(30)
-
-		h5 = MHBoxLayout(  AMajorTkLabel, 0, self.AMajorTkLine, self.AMajorTkAdvPB)
-		h6 = MHBoxLayout(  AMinorTkLabel, 0, self.AMinorTkLine, self.AMinorTkAdvPB)
+		h1f = MHBoxLayout(  AMinorTkLabel, 0, self.AMinorTkLine, self.AMinorTkAdvPB)
 
 
 
 		MajorTkChk         = QCheckBox("Show Major Tick")
-		h7a = MHBoxLayout(  MajorTkChk, 0)
+		h2a = MHBoxLayout(  MajorTkChk, 0)
 
 		MajorTkCLabel      = QLabel("Major Tick Width:")
 		self.MajorTkCLine  = MColorPicker()
 		self.MajorTkCLine.setFixedWidth(120)
-		h7b = MHBoxLayout(  MajorTkCLabel, 0, self.MajorTkCLine)
+		h2b = MHBoxLayout(  MajorTkCLabel, 0, self.MajorTkCLine)
 
 		MajorTkWLabel      = QLabel("Major Tick Width:")
 		MajorTkWidthLine   = QLineNumber()
 		MajorTkWidthLine.setFixedWidth(80)
-		h7c = MHBoxLayout(  MajorTkWLabel, 0, MajorTkWidthLine)
+		h2c = MHBoxLayout(  MajorTkWLabel, 0, MajorTkWidthLine)
 
 		MajorTkInLabel     = QLabel("Major Tick IN:")
 		MajorTkOutLabel    = QLabel("  Out:")
@@ -266,22 +269,29 @@ class MAxisTab(QWidget):
 		MajorTkOutLine     = QLineNumber()
 		MajorTkInLine.setFixedWidth(80)
 		MajorTkOutLine.setFixedWidth(80)
-		h7d = MHBoxLayout(  MajorTkInLabel, 0, MajorTkInLine, MajorTkOutLabel, MajorTkOutLine)
+		h2d = MHBoxLayout(  MajorTkInLabel, 0, MajorTkInLine, MajorTkOutLabel, MajorTkOutLine)
+
+		h2e = MHBoxLayout(0, QLabel("---- Major Tick Label Font ----"), 0)
+		self.MajorTkLBold = QCheckBox('B')
+		self.MajorTkLItal = QCheckBox('I')
+		self.MajorTkLSize = QSpinBox()
+		self.MajorTkLFont = QComboBox()
+		h2f = MHBoxLayout(QLabel("Size"), self.MajorTkLSize,0, QLabel("Font"), self.MajorTkLFont, 0, self.MajorTkLBold, self.MajorTkLItal)
 
 
 
 		MinorTkChk         = QCheckBox("Show Minor Tick")
-		h8a = MHBoxLayout(  MinorTkChk, 0)
+		h3a = MHBoxLayout(  MinorTkChk, 0)
 
 		MinorTkCLabel      = QLabel("Minor Tick Width:")
 		self.MinorTkCLine  = MColorPicker()
 		self.MinorTkCLine.setFixedWidth(120)
-		h8b = MHBoxLayout(  MinorTkCLabel, 0, self.MinorTkCLine)
+		h3b = MHBoxLayout(  MinorTkCLabel, 0, self.MinorTkCLine)
 
 		MinorTkWLabel      = QLabel("Minor Tick Width:")
 		MinorTkWidthLine   = QLineNumber()
 		MinorTkWidthLine.setFixedWidth(80)
-		h8c = MHBoxLayout(  MinorTkWLabel, 0, MinorTkWidthLine)
+		h3c = MHBoxLayout(  MinorTkWLabel, 0, MinorTkWidthLine)
 
 		MinorTkInLabel     = QLabel("Minor Tick IN:")
 		MinorTkOutLabel    = QLabel("  Out:")
@@ -289,12 +299,22 @@ class MAxisTab(QWidget):
 		MinorTkOutLine     = QLineNumber()
 		MinorTkInLine.setFixedWidth(80)
 		MinorTkOutLine.setFixedWidth(80)
-		h8d = MHBoxLayout(  MinorTkInLabel, 0, MinorTkInLine, MinorTkOutLabel, MinorTkOutLine)
+		h3d = MHBoxLayout(  MinorTkInLabel, 0, MinorTkInLine, MinorTkOutLabel, MinorTkOutLine)
+
+		h3e = MHBoxLayout(0, QLabel("---- Minor Tick Label Font ----"), 0)
+		self.MinorTkLBold = QCheckBox('B')
+		self.MinorTkLItal = QCheckBox('I')
+		self.MinorTkLSize = QSpinBox()
+		self.MinorTkLFont = QComboBox()
+		h3f = MHBoxLayout(QLabel("Size"), self.MinorTkLSize,0, QLabel("Font"), self.MinorTkLFont, 0, self.MinorTkLBold, self.MinorTkLItal)
+
+
 		
-		v1 = MVBoxLayout(h0, MHLine(),
-			h1,  5, h2,  5, h3,  5, h4, 15, h5, 5, h6, MHLine(),
-			h7a, 5, h7b, 5, h7c, 5, h7d, MHLine(),
-			h8a, 5, h8b, 5, h8c, 5, h8d, MHLine(),
+		v1 = MVBoxLayout(
+			h0a, 5, h0b, 5, h0c, MHLine(),
+			h1a, 5, h1b, 5, h1c, 5, h1d, 15, h1e, 5, h1f, MHLine(),
+			h2a, 5, h2b, 5, h2c, 5, h2d, 15, h2e, 5, h2f, MHLine(),
+			h3a, 5, h3b, 5, h3c, 5, h3d, 15, h3e, 5, h3f, MHLine(),
 		 0)
 
 		return v1
