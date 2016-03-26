@@ -30,11 +30,20 @@ class viewBoxControlWidget (QWidget):
 		self.titleItal     = QCheckBox('I')
 		self.titleSize     = QSpinBox()
 		self.titleFont     = QComboBox()
+		self.titleColor    = MColorPicker()
+		self.titleColor.setFixedWidth(120)
+		self.titleBold.stateChanged.connect(lambda : self.titleItal.setChecked(False) if self.titleBold.isChecked() else self.titleItal.setChecked(self.titleItal.isChecked()))
+		self.titleItal.stateChanged.connect(lambda : self.titleBold.setChecked(False) if self.titleItal.isChecked() else self.titleBold.setChecked(self.titleBold.isChecked()))
+
 		
 		h0a = MHBoxLayout(self.titleVisi, 0)
 		h0b = MHBoxLayout(self.titleLine)
 		h0c = MHBoxLayout(QLabel("Size"), self.titleSize,0, QLabel("Font"), self.titleFont, 0, self.titleBold, self.titleItal)
+		l   = QLabel("Title Text Color")
+		l.setFixedWidth(120)
+		l.setAlignment(Qt.AlignHCenter)
 
+		h0d = MHBoxLayout(l , self.titleColor)
 
 		vbox1            = MHBoxLayout()
 		bdcLabel         = QLabel('Border Color')
@@ -63,7 +72,7 @@ class viewBoxControlWidget (QWidget):
 		resLable .setFixedWidth(120)
 		hbox2.addWidgets(resLable, self.Gwidth, xLable, self.GHeight)
 
-		vbox = MVBoxLayout(h0a, 5, h0b, 5, h0c, MHLine(), vbox1, MHLine(), hbox2, 25 )
+		vbox = MVBoxLayout(h0a, 5, h0b, 5, h0c, 5, h0d, MHLine(), vbox1, MHLine(), hbox2, 25 )
 		groupBox = MGroupBox('Graph Options:')
 		groupBox.addLayout(vbox)
 		box = QVBoxLayout()
@@ -145,7 +154,7 @@ class viewBoxControlWidget (QWidget):
 		print title
 
 		if title: 
-		#title visibility, font and color, need to connect submit val to frontend. [build 71]
+		#title visibility and font, need to connect submit val to frontend. [build 71]
 			if title['text'] is not None:
 				self.titleLine.setText(title['text'])
 
@@ -163,7 +172,8 @@ class viewBoxControlWidget (QWidget):
 				else:
 					self.titleItal.setChecked(False)
 
-
+			if title['color']:
+				self.titleColor.setColor(title['color'])
 
 	def getPanelVal(self):
 		width      = self.Gwidth.value()
@@ -171,9 +181,16 @@ class viewBoxControlWidget (QWidget):
 		background = self.bgColorLine.getColor()
 		borderfill = self.bdColorLine.getColor()
 		text       = self.titleLine.text()
+		size       = self.titleSize.value()		
+		color      = self.titleColor.getColor()
 
+		if   self.titleBold.checkState() == Qt.CheckState.Checked:
+			style  = 'bold'
+		elif self.titleItal.checkState() == Qt.CheckState.Checked:
+			style  = 'Italic'
+		else:
+			style  = 'normal'
 		
-		color,style,size  = None, None, None
 		title = {'text'       : text       if text       else None,
 				 'color'      : color      if color      else None,
 				 'style'      : style      if style      else None,

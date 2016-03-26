@@ -83,6 +83,7 @@ class bokehPlot(object):
 		if size is not None:
 			self.plot.title_text_font_size  = str(size)+ "pt" * ("pt" not in str(size))
 
+		
 		self.title.update({'text'  : self.plot.title})			
 		self.title.update({'color' : self.plot.title_text_color})			
 		self.title.update({'style' : self.plot.title_text_font_style})
