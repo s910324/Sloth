@@ -9,8 +9,8 @@ class bokehPlot(object):
 		self.title      = {'text'       : self.plot.title,
 						   'color'      : self.plot.title_text_color ,
 						   'style'      : self.plot.title_text_font_style,
-						   'size'       : self.plot.title_text_font_size}
-
+						   'size'       : self.plot.title_text_font_size,
+						   'font'       : self.plot.title_text_font}
 		# print self.plot.grid[0].grid_line_color
 
 
@@ -73,7 +73,8 @@ class bokehPlot(object):
 
 
 	def plot_title(self, text  = None, color = None, 
-						 style = None, size  = None):
+						 style = None, size  = None,
+						 font  = None):
 		if text is not None:
 			self.plot.title                 = text
 		if color:
@@ -82,10 +83,12 @@ class bokehPlot(object):
 			self.plot.title_text_font_style = style
 		if size is not None:
 			self.plot.title_text_font_size  = str(size)+ "pt" * ("pt" not in str(size))
+		if font:
+			self.plot.titile_text_font      = font
 
-		
 		self.title.update({'text'  : self.plot.title})			
 		self.title.update({'color' : self.plot.title_text_color})			
 		self.title.update({'style' : self.plot.title_text_font_style})
 		self.title.update({'size'  : self.plot.title_text_font_size})
+		self.title.update({'font'  : self.plot.title_text_font})
 		return self.title

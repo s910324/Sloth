@@ -38,7 +38,7 @@ class viewBoxControlWidget (QWidget):
 		
 		h0a = MHBoxLayout(self.titleVisi, 0)
 		h0b = MHBoxLayout(self.titleLine)
-		h0c = MHBoxLayout(QLabel("Size"), self.titleSize,0, QLabel("Font"), self.titleFont, 0, self.titleBold, self.titleItal)
+		h0c = MHBoxLayout(QLabel("Font"), self.titleFont, 0,QLabel("Size"), self.titleSize,0, self.titleBold, self.titleItal)
 		l   = QLabel("Title Text Color")
 		l.setFixedWidth(120)
 		l.setAlignment(Qt.AlignHCenter)
@@ -174,6 +174,9 @@ class viewBoxControlWidget (QWidget):
 
 			if title['color']:
 				self.titleColor.setColor(title['color'])
+
+			if title['font']:
+				pass
 
 	def getPanelVal(self):
 		width      = self.Gwidth.value()
