@@ -63,7 +63,7 @@ class MHBoxLayout(QHBoxLayout):
 		return self
 
 	def setFixedHeight(self, Height = None):
-		if width:
+		if Height:
 			for widget in [ self.itemAt(i).widget() for i in xrange(self.count())]:
 				try:
 					widget.setFixedHeight(Height)
@@ -131,6 +131,7 @@ class MVBoxLayout(QVBoxLayout):
 					print "TypeError"
 
 		return self	
+	
 
 class MGroupBox(QWidget):
 	def __init__(self, title = None, parent = None):
