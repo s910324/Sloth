@@ -24,14 +24,17 @@ class viewBoxControlWidget (QWidget):
 
 
 	def setupGraphUI(self):
+		self.titleVisi     = QCheckBox('Show Title Text')
+		self.titleLine     = QLineEdit()
+		self.titleBold     = QCheckBox('B')
+		self.titleItal     = QCheckBox('I')
+		self.titleSize     = QSpinBox()
+		self.titleFont     = QComboBox()
+		
+		h0a = MHBoxLayout(self.titleVisi, 0)
+		h0b = MHBoxLayout(self.titleLine)
+		h0c = MHBoxLayout(QLabel("Size"), self.titleSize,0, QLabel("Font"), self.titleFont, 0, self.titleBold, self.titleItal)
 
-		self.titleVisi = QCheckBox('Title Text:')
-		self.titleLine = QLineEdit()
-		self.titleEdit = QPushButton('...')
-
-		self.titleVisi.setFixedWidth(85)
-		self.titleEdit.setFixedWidth(25)
-		hbox0            = MHBoxLayout(self.titleVisi, self.titleLine, self.titleEdit )
 
 		vbox1            = MHBoxLayout()
 		bdcLabel         = QLabel('Border Color')
@@ -60,7 +63,7 @@ class viewBoxControlWidget (QWidget):
 		resLable .setFixedWidth(120)
 		hbox2.addWidgets(resLable, self.Gwidth, xLable, self.GHeight)
 
-		vbox = MVBoxLayout(hbox0, MHLine(), vbox1, MHLine(), hbox2, 25 )
+		vbox = MVBoxLayout(h0a, 5, h0b, 5, h0c, MHLine(), vbox1, MHLine(), hbox2, 25 )
 		groupBox = MGroupBox('Graph Options:')
 		groupBox.addLayout(vbox)
 		box = QVBoxLayout()
@@ -127,7 +130,7 @@ class viewBoxControlWidget (QWidget):
 
 	def setPanelVal(self,  width      = None, height     = None, tools   = None, 
 						   background = None, borderfill = None, viewNum = None,
-						   text       = None,  **kwargs):
+						   title      = None, **kward):
 
 		if width is not None:
 			self.Gwidth.setValue(width)
@@ -139,14 +142,26 @@ class viewBoxControlWidget (QWidget):
 			self.bdColorLine.setColor(borderfill)
 
 
-		if text is not None:
-			self.titleLine.setText(text)
-		# if color:
-		# 	self.plot.title_text_color      = color
-		# if style:
-		# 	self.plot.title_text_font_style = style
-		# if size is not None:
-		# 	self.plot.title_text_font_size  = str(size)+ "pt" * ("pt" not in str(size))
+		print title
+
+		if title: 
+		#title visibility, font and color, need to connect submit val to frontend. [build 71]
+			if title['text'] is not None:
+				self.titleLine.setText(title['text'])
+
+			if title['size']['value']:
+				size = int(title['size']['value'][:-2])
+				self.titleSize.setValue(size)
+
+			if title['style'] is not None:
+				if 'bold' in title['style']:
+					self.titleBold.setChecked(True)
+				else:
+					self.titleBold.setChecked(False)
+				if 'italic' in title['style']:
+					self.titleItal.setChecked(True)
+				else:
+					self.titleItal.setChecked(False)
 
 
 
@@ -155,7 +170,6 @@ class viewBoxControlWidget (QWidget):
 		height     = self.GHeight.value()
 		background = self.bgColorLine.getColor()
 		borderfill = self.bdColorLine.getColor()
-		print borderfill
 		text       = self.titleLine.text()
 
 		
@@ -204,7 +218,7 @@ class MAxisTab(QWidget):
 		self.axisTitleItal = QCheckBox('I')
 		self.axixTitleSize = QSpinBox()
 		self.axixTitleFont = QComboBox()
-		self.axisTitleChk.setFixedWidth(85)
+		
 		h0a = MHBoxLayout(self.axisTitleChk, 0)
 		h0b = MHBoxLayout(self.axisTitle)
 		h0c = MHBoxLayout(QLabel("Size"), self.axixTitleSize,0, QLabel("Font"), self.axixTitleFont, 0, self.axisTitleBold, self.axisTitleItal)
@@ -271,7 +285,9 @@ class MAxisTab(QWidget):
 		MajorTkOutLine.setFixedWidth(80)
 		h2d = MHBoxLayout(  MajorTkInLabel, 0, MajorTkInLine, MajorTkOutLabel, MajorTkOutLine)
 
-		h2e = MHBoxLayout(MHLine(), QLabel("Major Tick Font"),MHLine())
+		label             = QLabel("Major Tick Font")
+		label.setAlignment(Qt.AlignHCenter)
+		h2e = MHBoxLayout(MHLine(), label, MHLine())
 		self.MajorTkLBold = QCheckBox('B')
 		self.MajorTkLItal = QCheckBox('I')
 		self.MajorTkLSize = QSpinBox()
@@ -301,7 +317,9 @@ class MAxisTab(QWidget):
 		MinorTkOutLine.setFixedWidth(80)
 		h3d = MHBoxLayout(  MinorTkInLabel, 0, MinorTkInLine, MinorTkOutLabel, MinorTkOutLine)
 
-		h3e = MHBoxLayout(MHLine(), QLabel("Minor Tick Font"), MHLine())
+		label             = QLabel("Minor Tick Font")
+		label.setAlignment(Qt.AlignHCenter)
+		h3e = MHBoxLayout(MHLine(), label, MHLine())
 		self.MinorTkLBold = QCheckBox('B')
 		self.MinorTkLItal = QCheckBox('I')
 		self.MinorTkLSize = QSpinBox()
@@ -320,8 +338,9 @@ class MAxisTab(QWidget):
 		return v1
 		
 
-
-
+	def setAxisValue(self):
+		pass
+	
 def run():
 	app        = QApplication(sys.argv)
 	MainWindow = viewBoxControlWidget()
