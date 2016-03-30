@@ -46,13 +46,13 @@ class MFontPicker (QWidget):
 
 	def showFontDialog(self):
 		self.enablePanel(False)
-		self.FDialog = MFontDialog()
+		self.FDialog = QFontDialog()
 		font         = self.FontIndc.text()
 		size         = int(self.SizeIndc.text())
-		self.FDialog.getFont(QFont(font, size))
-		# self.FDialog.onExit.connect()
-		
-		self.FDialog.show()
+		(font, ok)   = self.FDialog.getFont(QFont("Helvetica [Cronyx]", 10))
+		if ok : self.setPanelFont(font)
+		self.enablePanel(True)
+
 
 	def enablePanel(self, enable = True):
 		self.FontIndc.setEnabled(enable)
@@ -67,15 +67,14 @@ class MFontPicker (QWidget):
 		# self.FontBold.
 		# self.FontItal.
 
+	def setPanelFont(self, f):
+		fontName = f.family()
+		fontSize = f.pointSize()
+		self.FontIndc.setText(fontName)
+		self.SizeIndc.setText(str(fontSize))
+		print "selected font: %s - %dpt" % (fontName, fontSize)
 
 
-class MFontDialog (QFontDialog):
-	onExit = Signal()
-	def __init__(self, parent=None):
-		super(MFontDialog, self).__init__(parent)
-
-	def closeEvent(self, event):
-		self.onExit.emit()
 
 def Debugger():
 	app  = QApplication(sys.argv)
